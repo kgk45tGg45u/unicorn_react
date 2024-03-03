@@ -10,7 +10,7 @@
 
 # production
 /build
-/node_modules
+/node-postgres/backend/node_modules
 
 # misc
 .DS_Store
