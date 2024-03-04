@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify(data),
       });
       const res = await response.json();
-      console.log(res)
       if (res.token) {
         setToken(res.token);
         localStorage.setItem("site", res.token);
@@ -44,7 +43,6 @@ export const AuthProvider = ({ children }) => {
       const res = await response.json();
       if (res.message) {
         // Provide feedback to the user about the registration
-        console.log(res.message);
         navigate("/login"); // Redirect to login page after successful registration
       } else {
         throw new Error("Registration failed");
