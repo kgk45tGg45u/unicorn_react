@@ -50,13 +50,14 @@ app.post('/users/login', async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const token = jwt.sign({ email: user.email }, `${process.env.JWT_SECRET}`);
-    res.status(200).json({ token });
+    res.status(200).json({ token, user: { name: user.name } });
   } catch (error) {
     console.error("Error occurred during login:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
+// Register user route
 app.post('/users', async (req, res) => {
   const { name, email, password } = req.body;
 
