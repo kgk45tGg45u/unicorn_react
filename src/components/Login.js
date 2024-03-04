@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useAuth } from "../hooks/AuthProvider";
 
 export const Login = () => {

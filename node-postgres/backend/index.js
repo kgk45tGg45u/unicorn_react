@@ -8,7 +8,6 @@ const app = express();
 const port = 3001;
 
 // PostgreSQL configuration
-const { getUsers, createUser } = require('./userModel'); // Assuming userModel.js is in the same directory
 const Pool = require("pg").Pool;
 const pool = new Pool({
   user: "my_user",
