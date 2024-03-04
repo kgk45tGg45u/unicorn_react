@@ -1,5 +1,6 @@
 import { Header } from './components/Header.js'
 import { Login } from './components/Login.js'
+import { Register } from './components/Register.js'
 import {useState, useEffect} from 'react';
 import { AuthProvider } from './hooks/AuthProvider.js'
 
@@ -78,33 +79,8 @@ function App() {
       <AuthProvider>
         <Header />
         <Login />
+        <Register />
       </AuthProvider>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div>
-
-      {users ? users : 'There is no user data available'}
-      <br />
-      <button onClick={createUser}>Add user</button>
-      <br />
-      <button onClick={deleteUser}>Delete user</button>
-      <br />
-      <button onClick={updateUser}>Update user</button>
-    </div>
     </section>
   );
 }

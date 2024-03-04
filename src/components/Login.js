@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useAuth } from "../hooks/AuthProvider";
 
 export const Login = () => {
   const [input, setInput] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
+  const { loginAction } = useAuth();
+
   const handleSubmitEvent = (e) => {
     e.preventDefault();
-    if (input.username !== "" && input.password !== "") {
-      //dispatch action from hooks
+    if (input.email !== "" && input.password !== "") {
+      loginAction(input); // Call login action from AuthProvider with input
+      return;
     }
-    alert("please provide a valid input");
+    alert("Please provide a valid input");
   };
 
   const handleInput = (e) => {
@@ -29,13 +33,13 @@ export const Login = () => {
           {/* <!-- Email input --> */}
           <div className="form-outline mb-4">
             <label className="form-label" htmlFor="form2Example1">Email address</label>
-            <input type="email" id="form2Example1" className="form-control" onChange={handleInput} />
+            <input type="email" name="email" id="form2Example1" className="form-control" onChange={handleInput} />
           </div>
 
           {/* <!-- Password input --> */}
           <div className="form-outline mb-4">
             <label className="form-label" htmlFor="form2Example2">Password</label>
-            <input type="password" id="form2Example2" className="form-control" onChange={handleInput}/>
+            <input type="password" name="password" id="form2Example2" className="form-control" onChange={handleInput}/>
           </div>
 
           {/* <!-- 2 column grid layout for inline styling --> */}
@@ -55,7 +59,7 @@ export const Login = () => {
           </div>
 
           {/* <!-- Submit button --> */}
-          <button type="button" className="btn btn-primary btn-block mb-4">Sign in</button>
+          <button type="submit" className="btn btn-primary btn-block mb-4">Sign in</button>
 
           {/* <!-- Register buttons --> */}
           <div className="text-center">
