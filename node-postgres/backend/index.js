@@ -12,7 +12,7 @@ const Pool = require("pg").Pool;
 const pool = new Pool({
   user: "my_user",
   host: "localhost",
-  database: "unicorn",
+  database: "unicorn3",
   // password: process.env.REACT_APP_DATABASE_PASSWORD,
   port: 5432,
 });
@@ -50,7 +50,7 @@ app.post('/users/login', async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
     const token = jwt.sign({ email: user.email }, `${process.env.JWT_SECRET}`);
-    res.status(200).json({ token, user: { name: user.name } });
+    res.status(200).json({ token, user });
   } catch (error) {
     console.error("Error occurred during login:", error);
     res.status(500).json({ message: "Internal server error" });
