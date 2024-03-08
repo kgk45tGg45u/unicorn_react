@@ -32,7 +32,7 @@ export const Dashboard = () => {
       <div className="container">
         <p>Welcome {name}</p>
         <p>email : {email}</p>
-        <UploadImage />
+        {/* <UploadImage /> */}
       </div>
     </section>
   )

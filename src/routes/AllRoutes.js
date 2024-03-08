@@ -4,6 +4,8 @@ import { Register } from '../components/Register'
 import { ProtectedRoutes } from './ProtectedRoutes.js'
 import { Dashboard } from '../pages/Dashboard.js'
 import { Errorpage } from '../pages/404.js'
+import { UserProfile } from '../pages/UserProfile.js'
+
 
 export const AllRoutes = () => {
   return (
@@ -15,6 +17,7 @@ export const AllRoutes = () => {
         <Route path="404" element={<Errorpage />} />
 
         <Route path="dashboard" element={<ProtectedRoutes><Dashboard /></ProtectedRoutes>} />
+        <Route path="user" element={<ProtectedRoutes><UserProfile /></ProtectedRoutes>} />
       </Routes>
     </>
   )

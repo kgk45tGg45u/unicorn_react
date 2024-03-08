@@ -55,6 +55,27 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const editUser = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3001/users", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const res = await response.json();
+      if (res.message) {
+        // Provide feedback to the user about the registration
+      } else {
+        throw new Error("Registration failed");
+      }
+    } catch (err) {
+      console.error("Registration error:", err);
+      // Provide feedback to the user about the registration failure
+    }
+  };
+
   const logOut = () => {
     setUser(null);
     setToken("");
@@ -64,7 +85,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, registerAction, logOut }}>
+    <AuthContext.Provider value={{ token, user, loginAction, registerAction, editUser, logOut }}>
       {children}
     </AuthContext.Provider>
   );

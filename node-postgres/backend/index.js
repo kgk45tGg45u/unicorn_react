@@ -80,6 +80,22 @@ app.post('/users', async (req, res) => {
   }
 });
 
+// Edit user data
+app.put('/users', async (req, res) => {
+  const { id, name, address, email, password } = req.body;
+
+  try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newData = await pool.query('UPDATE users SET name = $1, email = $2, address = $3, password = $4 WHERE id = $5 RETURNING *', [name, email, address, hashedPassword, id])
+    res.status(201).json({ message: "User created successfully" });
+  } catch (error) {
+    console.error("Error occurred during operation:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 // Protected route example
 app.get('/dashboard', authenticateJWT, (req, res) => {
   res.status(200).json({ message: "Welcome to the dashboard!" });

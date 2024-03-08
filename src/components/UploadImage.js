@@ -38,6 +38,11 @@ export class UploadImage extends React.Component {
       // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
       // drawn on another canvas, or added to the DOM.
       const img = this.editor.getImageScaledToCanvas().toDataURL();
+      await fetch(`http://localhost:3001/api/upload`, {
+        method: 'POST',
+        body: JSON.stringify({data: img}),
+        headers: {'Content-type': 'application/json'},
+        })
     }
   }
 
