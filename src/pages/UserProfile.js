@@ -3,7 +3,9 @@ import Placeholder from '../assets/profile-image-placeholder.jpeg';
 import '../assets/UserProfile.css';
 
 export const UserProfile = () => {
-  const { result: user, loading, error } = useFetch(1, "", "users", "GET");
+  const currentUser = JSON.parse(localStorage.getItem("user"))
+  const id = currentUser.id
+  const { result: user, loading, error } = useFetch(id, "", "users", "GET");
 
   if (loading) {
     return <div>Loading...</div>;

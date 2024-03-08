@@ -4,12 +4,20 @@ import { useFetch } from '../hooks/useFetch'
 import '../assets/UserProfile.css'
 
 export const EditUserProfile = () => {
-  const { user } = useFetch(1, "", 1, "GET");
-  const [input, setInput] = useState({user});
+  const currentUser = JSON.parse(localStorage.getItem("user"))
+  const id = currentUser.id
+  const { result: user, loading } = useFetch(id, "", "users", "GET"); // Destructure loading from useFetch result
+  console.log(user);
   console.log(user)
 
-  useFetch(input.id, input, input.id, "PUT");
-  console.log("Successfully sent info to Fetch hook")
+  if (loading || !user) {
+    return <div>Loading...</div>;
+  }
+  // const [input, setInput] = useState({user});
+  // console.log(user)
+
+  // useFetch(input.id, input, input.id, "PUT");
+  // console.log("Successfully sent info to Fetch hook")
 
   // const handleUserEdit = () => {
   //   const editedUser = useFetch(1, input, 1, "PUT");
@@ -33,22 +41,34 @@ export const EditUserProfile = () => {
         <div className="py-4 h-100 d-flex align-items-center justify-content-center">
       <div className="bg-warning p-4 rounded-1">
         <form>
+
+          {/* <!-- Name input --> */}
+          <div className="form-outline mb-4">
+            <label className="form-label" htmlFor="email">Name</label>
+            <input type="email" name="email" id="email" value={user.user.name} className="form-control" />
+          </div>
+
           {/* <!-- Email input --> */}
           <div className="form-outline mb-4">
             <label className="form-label" htmlFor="email">Email address</label>
-            <input type="email" name="email" id="email" value={input.email} className="form-control" />
+            <input type="email" name="email" id="email" value={user.user.email} className="form-control" />
           </div>
 
           {/* <!-- address input --> */}
           <div className="form-outline mb-4">
             <label className="form-label" htmlFor="address">Address</label>
-            <input type="address" name="address" id="address" value={input.address} className="form-control" />
+            <input type="address" name="address" id="address" value={user.user.address} className="form-control" />
+          </div>
+
+          <div className="form-outline mb-4">
+            <label className="form-label" htmlFor="phone">Phone</label>
+            <input type="phone" name="phone" id="phone" value={user.user.phone} className="form-control" />
           </div>
 
           {/* <!-- Password input --> */}
           <div className="form-outline mb-4">
             <label className="form-label" htmlFor="password">Password</label>
-            <input type="password" name="password" id="password" value={input.password} className="form-control" />
+            <input type="password" name="password" id="password" className="form-control" />
           </div>
 
           {/* <!-- 2 column grid layout for inline styling --> */}
@@ -60,36 +80,10 @@ export const EditUserProfile = () => {
                 <label className="form-check-label" htmlFor="form2Example31"> Remember me </label>
               </div>
             </div>
-
-            <div className="col">
-              {/* <!-- Simple link --> */}
-              <a href="#!">Forgot password?</a>
-            </div>
           </div>
 
           {/* <!-- Submit button --> */}
-          <button type="submit" className="btn btn-primary btn-block mb-4">Sign in</button>
-
-          {/* <!-- Register buttons --> */}
-          <div className="text-center">
-            <p>Not a member? <a href="/register">Register</a></p>
-            <p>or sign up with:</p>
-            <button type="button" className="btn btn-link btn-floating mx-1">
-              <i className="fab fa-facebook-f"></i>
-            </button>
-
-            <button type="button" className="btn btn-link btn-floating mx-1">
-              <i className="fab fa-google"></i>
-            </button>
-
-            <button type="button" className="btn btn-link btn-floating mx-1">
-              <i className="fab fa-twitter"></i>
-            </button>
-
-            <button type="button" className="btn btn-link btn-floating mx-1">
-              <i className="fab fa-github"></i>
-            </button>
-          </div>
+          <button type="submit" className="btn btn-primary btn-block mb-4">Update</button>
         </form>
       </div>
     </div>

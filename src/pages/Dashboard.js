@@ -1,6 +1,5 @@
 import React from 'react'
 // import { useAuth } from '../hooks/AuthProvider'
-import { UploadImage } from '../components/UploadImage.js'
 import { EditUserProfile } from './EditUserProfile.js'
 
 export const Dashboard = () => {
@@ -34,7 +33,6 @@ export const Dashboard = () => {
         <p>Welcome {name}</p>
         <p>email : {email}</p>
         {/* <UploadImage /> */}
-        <EditUserProfile />
       </div>
     </section>
   )
