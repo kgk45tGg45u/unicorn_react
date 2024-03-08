@@ -55,10 +55,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const editUser = async (data) => {
+  const editUser = async (data, method) => {
     try {
       const response = await fetch("http://localhost:3001/users", {
-        method: "PUT",
+        method: `${method}`,
         headers: {
           "Content-Type": "application/json",
         },

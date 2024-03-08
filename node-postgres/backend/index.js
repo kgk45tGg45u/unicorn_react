@@ -80,6 +80,25 @@ app.post('/users', async (req, res) => {
   }
 });
 
+// Fetch user data
+app.get('/users/:id', async (req, res) => {
+  const { id } = req.params; // Use req.params to get the ID from the URL
+
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE id = $1', [id])
+    const user = result.rows[0];
+    if (user) {
+      res.status(200).json({ user });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Error occurred during operation:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 // Edit user data
 app.put('/users', async (req, res) => {
   const { id, name, address, email, password } = req.body;

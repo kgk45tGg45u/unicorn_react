@@ -1,6 +1,7 @@
 import React from 'react'
 // import { useAuth } from '../hooks/AuthProvider'
 import { UploadImage } from '../components/UploadImage.js'
+import { EditUserProfile } from './EditUserProfile.js'
 
 export const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -33,6 +34,7 @@ export const Dashboard = () => {
         <p>Welcome {name}</p>
         <p>email : {email}</p>
         {/* <UploadImage /> */}
+        <EditUserProfile />
       </div>
     </section>
   )
