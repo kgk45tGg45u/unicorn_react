@@ -1,68 +1,69 @@
-import { useState } from 'react'
 import { useFetch } from '../hooks/useFetch'
-// import Placeholder from '../assets/profile-image-placeholder.jpeg'
+import { useState, useEffect } from 'react'
 import '../assets/UserProfile.css'
+import { useNavigate } from 'react-router-dom'
 
 export const EditUserProfile = () => {
+  const [load, setLoad] = useState(false)
   const currentUser = JSON.parse(localStorage.getItem("user"))
   const id = currentUser.id
+  const navigate = useNavigate()
   const { result: user, loading } = useFetch(id, "", "users", "GET"); // Destructure loading from useFetch result
-  console.log(user);
-  console.log(user)
 
-  if (loading || !user) {
+  useEffect(() => {
+    setLoad(true)
+  }, [loading])
+
+  const handleUserEdit = (e) => {
+    e.preventDefault()
+    const newData = {
+      id: currentUser.id,
+      name: e.target.elements.name.value,
+      email: e.target.elements.email.value,
+      password: e.target.elements.password.value,
+      phone: e.target.elements.phone.value,
+      address: e.target.elements.address.value
+    }
+      console.log(newData)
+      navigate("/sending", { state: { value: newData } });
+    }
+
+  if (!load) {
     return <div>Loading...</div>;
   }
-  // const [input, setInput] = useState({user});
-  // console.log(user)
 
-  // useFetch(input.id, input, input.id, "PUT");
-  // console.log("Successfully sent info to Fetch hook")
+  if (!user) {
+    return <div>No user found</div>;
+  }
 
-  // const handleUserEdit = () => {
-  //   const editedUser = useFetch(1, input, 1, "PUT");
-  // }
-
-  // const handleInput = (e) => {
-  //   const { name, value } = e.target;
-  //   setInput((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  //   console.log(input)
-  //   setUser((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-
-  return (
+  if (load) {
+    return (
     <div className="container">
         <div className="py-4 h-100 d-flex align-items-center justify-content-center">
       <div className="bg-warning p-4 rounded-1">
-        <form>
+        <form onSubmit={handleUserEdit}>
 
           {/* <!-- Name input --> */}
           <div className="form-outline mb-4">
             <label className="form-label" htmlFor="email">Name</label>
-            <input type="email" name="email" id="email" value={user.user.name} className="form-control" />
+            <input type="name" name="name" id="name" defaultValue={user.user.name} className="form-control" />
           </div>
 
           {/* <!-- Email input --> */}
           <div className="form-outline mb-4">
             <label className="form-label" htmlFor="email">Email address</label>
-            <input type="email" name="email" id="email" value={user.user.email} className="form-control" />
-          </div>
-
-          {/* <!-- address input --> */}
-          <div className="form-outline mb-4">
-            <label className="form-label" htmlFor="address">Address</label>
-            <input type="address" name="address" id="address" value={user.user.address} className="form-control" />
+            <input type="email" name="email" id="email" defaultValue={user.user.email}className="form-control" />
           </div>
 
           <div className="form-outline mb-4">
             <label className="form-label" htmlFor="phone">Phone</label>
-            <input type="phone" name="phone" id="phone" value={user.user.phone} className="form-control" />
+            <input type="phone" name="phone" id="phone" defaultValue={user.user.phone} className="form-control" />
+          </div>
+
+          {/* <!-- password input --> */}
+          <div className="form-outline mb-4">
+            <label className="form-label" htmlFor="address">Address</label>
+            <input type="address" name="address" id="address" defaultValue={user.user.address} className="form-control" />
           </div>
 
           {/* <!-- Password input --> */}
@@ -89,3 +90,4 @@ export const EditUserProfile = () => {
     </div>
   </div>
 )}
+}

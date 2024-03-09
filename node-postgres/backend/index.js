@@ -101,13 +101,14 @@ app.get('/users/:id', async (req, res) => {
 
 // Edit user data
 app.put('/users', async (req, res) => {
-  const { id, name, address, email, password } = req.body;
+  const { id, name, email, password, phone, address } = req.body;
 
   try {
     // Hash the password
+    // console.log("Request body: ", req.body)
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newData = await pool.query('UPDATE users SET name = $1, email = $2, address = $3, password = $4 WHERE id = $5 RETURNING *', [name, email, address, hashedPassword, id])
+    // console.log(hashedPassword)
+    const newData = await pool.query('UPDATE users SET name = $1, email = $2, address = $3, phone= $4, password = $5 WHERE id = $6 RETURNING *', [name, email, address, phone, hashedPassword, id])
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     console.error("Error occurred during operation:", error);
