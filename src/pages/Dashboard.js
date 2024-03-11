@@ -1,9 +1,9 @@
-import React from 'react'
 import profilePlaceholder from '../assets/profile-image-placeholder.jpeg'
 import moneyBill from '../assets/SVG/money-bill-solid.svg'
 import unit from '../assets/SVG/industry-solid.svg'
 import council from '../assets/SVG/arrows-to-dot-solid.svg'
 import union from '../assets/SVG/building-flag-solid.svg'
+import savings from '../assets/SVG/piggy-bank-solid.svg'
 
 export const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -44,13 +44,16 @@ export const Dashboard = () => {
               </div>
             </div>
             <div className="col-3 col-md-3 text-center">
-            <div className="dashboard_icon">
+              <div className="dashboard_icon">
                 <img src={union} alt="Workers Union" />
                 <p>Union</p>
               </div>
             </div>
             <div className="col-3 col-md-3 text-center">
-              <p>Tokens</p>
+              <div className="dashboard_icon">
+                <img src={savings} alt="Saving and Debt" />
+                <p>Saving / Debt</p>
+              </div>
             </div>
           </div>
         </div>
