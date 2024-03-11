@@ -109,7 +109,7 @@ app.put('/users', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     // console.log(hashedPassword)
     const newData = await pool.query('UPDATE users SET name = $1, email = $2, address = $3, phone= $4, password = $5 WHERE id = $6 RETURNING *', [name, email, address, phone, hashedPassword, id])
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({ message: "User profile edited successfully" });
   } catch (error) {
     console.error("Error occurred during operation:", error);
     res.status(500).json({ message: "Internal server error" });

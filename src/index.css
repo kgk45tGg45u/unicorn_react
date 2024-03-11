@@ -11,3 +11,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.content {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+}
+
+.line {
+  position: absolute;
+  background-color: #124076;
+  top: -157px;
+  left: -315px;
+  height: 100%;
+  width: 250%;
+  border-top: 119px solid #f9e897;
+  z-index: 0;
+  transform-origin: left;
+  transform: rotate(41deg);
+}

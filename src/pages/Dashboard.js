@@ -11,7 +11,7 @@ export const Dashboard = () => {
     <section>
       <div className="container">
         <p>Welcome {name}</p>
-        <p>email : {email}</p>
+        <p>email: {email}</p>
         {/* <UploadImage /> */}
       </div>
     </section>
