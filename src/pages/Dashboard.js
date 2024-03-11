@@ -1,5 +1,9 @@
 import React from 'react'
 import profilePlaceholder from '../assets/profile-image-placeholder.jpeg'
+import moneyBill from '../assets/SVG/money-bill-solid.svg'
+import unit from '../assets/SVG/industry-solid.svg'
+import council from '../assets/SVG/arrows-to-dot-solid.svg'
+import union from '../assets/SVG/building-flag-solid.svg'
 
 export const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -9,29 +13,41 @@ export const Dashboard = () => {
   return (
     <section>
       <div className="container">
-        <div className="container row my-4 p-2 divbg rounded-3 shadow-lg">
-          <div className="col-7 p-1">
+        <div className="row my-4 p-2 divbg rounded-3 shadow-lg">
+          <div className="col">
             <p>Welcome {name}</p>
             <p>email: {email}</p>
           </div>
-          <div className="col-5 p-1">
+          <div className="col-auto">
             <img src={profilePlaceholder} alt="Profile" className="profile_img" />
           </div>
         </div>
 
-        <div className="container my-1 p-2 divbg rounded-3 shadow-lg">
-          <div className="row justify-content-md-center">
-            <div className="col-3 col-md-3 text-center">
-              <p>Tokens</p>
+        <div className="my-1 p-2 divbg rounded-3 shadow-lg">
+          <div className="row p-3">
+            <div className="col-3 m-0 col-md-3 text-center">
+              <div className="dashboard_icon">
+                <img src={moneyBill} alt="Tokens" />
+                <p>Tokens</p>
+              </div>
+            </div>
+            <div className="col-3 m-0 col-md-3 text-center">
+              <div className="dashboard_icon">
+                <img src={unit} alt="Working Unit" />
+                <p>Working Unit</p>
+              </div>
             </div>
             <div className="col-3 col-md-3 text-center">
-              <p>Tokens</p>
+              <div className="dashboard_icon">
+                <img src={council} alt="Workers Council" />
+                <p>Council</p>
+              </div>
             </div>
             <div className="col-3 col-md-3 text-center">
-              <p>Tokens</p>
-            </div>
-            <div className="col-3 col-md-3 text-center">
-              <p>Tokens</p>
+            <div className="dashboard_icon">
+                <img src={union} alt="Workers Union" />
+                <p>Union</p>
+              </div>
             </div>
             <div className="col-3 col-md-3 text-center">
               <p>Tokens</p>

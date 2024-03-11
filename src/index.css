@@ -19,7 +19,7 @@ code {
 }
 
 .line {
-  position: absolute;
+  position: fixed;
   background-color: #124076;
   top: -157px;
   left: -315px;
@@ -34,4 +34,13 @@ code {
 .divbg {
   background-color: #ffffff;
   opacity: .95;
+}
+
+.dashboard_icon {
+  img {width: 55px;}
+  p {
+    margin: 5px;
+    font-size: 12px;
+    font-weight: 600;
+  }
 }
