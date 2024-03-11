@@ -7,6 +7,7 @@ import { Errorpage } from '../pages/404.js'
 import { UserProfile } from '../pages/UserProfile.js'
 import { EditUserProfile } from '../pages/EditUserProfile.js'
 import { Sending } from '../pages/Sending.js'
+import { UnitProfile } from '../pages/UnitProfile.js'
 
 
 export const AllRoutes = () => {
@@ -22,6 +23,7 @@ export const AllRoutes = () => {
         <Route path="user" element={<ProtectedRoutes><UserProfile /></ProtectedRoutes>} />
         <Route path="edituser" element={<ProtectedRoutes><EditUserProfile /></ProtectedRoutes>} />
         <Route path="sending" element={<ProtectedRoutes><Sending /></ProtectedRoutes>} />
+        <Route path="unit" element={<ProtectedRoutes><UnitProfile /></ProtectedRoutes>} />
       </Routes>
     </>
   )
