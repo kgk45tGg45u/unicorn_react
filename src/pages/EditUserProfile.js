@@ -4,14 +4,14 @@ import '../assets/UserProfile.css'
 import { useNavigate } from 'react-router-dom'
 
 export const EditUserProfile = () => {
-  const [load, setLoad] = useState(false)
+  const [load, setLoad] = useState(true)
   const currentUser = JSON.parse(localStorage.getItem("user"))
   const id = currentUser.id
   const navigate = useNavigate()
   const { result: user, loading } = useFetch(id, "", "users", "GET"); // Destructure loading from useFetch result
 
   useEffect(() => {
-    setLoad(true)
+    setLoad(false)
   }, [loading])
 
   const handleUserEdit = (e) => {
@@ -25,10 +25,10 @@ export const EditUserProfile = () => {
       address: e.target.elements.address.value
     }
       console.log(newData)
-      navigate("/sending", { state: { value: newData } });
+      navigate("/update", { state: { value: newData } });
     }
 
-  if (!load) {
+  if (load) {
     return <div>Loading...</div>;
   }
 
@@ -36,7 +36,7 @@ export const EditUserProfile = () => {
     return <div>No user found</div>;
   }
 
-  if (load) {
+  if (!load) {
     return (
     <div className="container">
         <div className="py-4 h-100 d-flex align-items-center justify-content-center">

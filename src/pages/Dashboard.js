@@ -1,4 +1,5 @@
 import { useFetchUnitByUser } from '../hooks/useFetchUnitByUser'
+import { Link } from 'react-router-dom'
 
 import profilePlaceholder from '../assets/profile-image-placeholder.jpeg'
 import moneyBill from '../assets/SVG/money-bill-solid.svg'
@@ -52,7 +53,7 @@ export const Dashboard = () => {
               <div className="col-3 m-0 col-md-3 text-center">
                 <div className="dashboard_icon">
                   <img src={unit} alt="Working Unit" />
-                  <p>Working Unit</p>
+                  <p><Link to="/unit">Working Unit</Link></p>
                 </div>
               </div>
               <div className="col-3 col-md-3 text-center">

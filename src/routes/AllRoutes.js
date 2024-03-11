@@ -6,7 +6,7 @@ import { Dashboard } from '../pages/Dashboard.js'
 import { Errorpage } from '../pages/404.js'
 import { UserProfile } from '../pages/UserProfile.js'
 import { EditUserProfile } from '../pages/EditUserProfile.js'
-import { Sending } from '../pages/Sending.js'
+import { Update } from '../pages/Update.js'
 import { UnitProfile } from '../pages/UnitProfile.js'
 
 
@@ -21,8 +21,8 @@ export const AllRoutes = () => {
 
         <Route path="dashboard" element={<ProtectedRoutes><Dashboard /></ProtectedRoutes>} />
         <Route path="user" element={<ProtectedRoutes><UserProfile /></ProtectedRoutes>} />
-        <Route path="edituser" element={<ProtectedRoutes><EditUserProfile /></ProtectedRoutes>} />
-        <Route path="sending" element={<ProtectedRoutes><Sending /></ProtectedRoutes>} />
+        <Route path="user/edit" element={<ProtectedRoutes><EditUserProfile /></ProtectedRoutes>} />
+        <Route path="update" element={<ProtectedRoutes><Update /></ProtectedRoutes>} />
         <Route path="unit" element={<ProtectedRoutes><UnitProfile /></ProtectedRoutes>} />
       </Routes>
     </>
