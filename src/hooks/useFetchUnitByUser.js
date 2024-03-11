@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 
 const baseUrl = 'http://localhost:3001/';
 
-export const useFetch = (id, data, endpoint, method) => {
+export const useFetchUnitByUser = (id, data, endpoint, method) => {
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +17,7 @@ export const useFetch = (id, data, endpoint, method) => {
           },
         };
 
-        if (method === "POST") {
+        if (method === "POST" || method === "PUT") {
           options.body = JSON.stringify(data);
         }
 
@@ -33,11 +34,13 @@ export const useFetch = (id, data, endpoint, method) => {
       } catch (err) {
         console.error("Request error:", err);
         // Provide feedback to the user about the request failure
+      } finally {
+        setLoading(false); // Update loading state after fetch request is completed
       }
     };
 
     fetchData();
   }, [id, data, endpoint, method]);
 
-  return { result };
+  return { result, loading }; // Return loading state
 };
