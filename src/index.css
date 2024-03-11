@@ -30,3 +30,8 @@ code {
   transform-origin: left;
   transform: rotate(41deg);
 }
+
+.divbg {
+  background-color: #ffffff;
+  opacity: .95;
+}

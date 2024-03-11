@@ -45,7 +45,7 @@ export const EditUserProfile = () => {
 
           {/* <!-- Name input --> */}
           <div className="form-outline mb-4">
-            <label className="form-label" htmlFor="email">Name</label>
+            <label className="form-label" htmlFor="name">Name</label>
             <input type="name" name="name" id="name" defaultValue={user.user.name} className="form-control" />
           </div>
 

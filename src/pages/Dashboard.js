@@ -1,6 +1,4 @@
 import React from 'react'
-// import { useAuth } from '../hooks/AuthProvider'
-import { EditUserProfile } from './EditUserProfile.js'
 
 export const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -10,9 +8,30 @@ export const Dashboard = () => {
   return (
     <section>
       <div className="container">
-        <p>Welcome {name}</p>
-        <p>email: {email}</p>
-        {/* <UploadImage /> */}
+        <div className="container my-4 p-4 divbg rounded-3 shadow-lg">
+          <p>Welcome {name}</p>
+          <p>email: {email}</p>
+        </div>
+
+        <div className="container my-1 p-4 divbg rounded-3 shadow-lg">
+          <div className="row">
+            <div className="col-1">
+              <p>Tokens</p>
+            </div>
+            <div className="col-1">
+              <p>Tokens</p>
+            </div>
+            <div className="col-1">
+              <p>Tokens</p>
+            </div>
+            <div className="col-1">
+              <p>Tokens</p>
+            </div>
+            <div className="col-1">
+              <p>Tokens</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   )
