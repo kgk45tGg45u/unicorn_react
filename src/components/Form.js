@@ -12,6 +12,7 @@ export const Form = ({ inputs, buttons, action }) => {
         type={input.type}
         name={input.name}
         id={input.name}
+        defaultValue={input.defaultValue}
         className="form-control"
         onChange={input.onChange}
       />

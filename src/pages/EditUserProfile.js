@@ -2,6 +2,7 @@ import { useFetch } from '../hooks/useFetch'
 import { useState, useEffect } from 'react'
 import '../assets/UserProfile.css'
 import { useNavigate } from 'react-router-dom'
+import { Form } from '../components/Form'
 
 export const EditUserProfile = () => {
   const [load, setLoad] = useState(true)
@@ -13,6 +14,8 @@ export const EditUserProfile = () => {
   useEffect(() => {
     setLoad(false)
   }, [loading])
+
+  const buttons = ['Update']
 
   const handleUserEdit = (e) => {
     e.preventDefault()
@@ -37,57 +40,17 @@ export const EditUserProfile = () => {
   }
 
   if (!load) {
+    const inputs = [
+      { name: 'name', type: "text", defaultValue: user.user.name },
+      { name: 'email', type: "text", defaultValue: user.user.email },
+      { name: 'phone', type: "text", defaultValue: user.user.phone },
+      { name: 'password', type: "password" },
+      { name: 'address', type: "text", defaultValue: user.user.address}
+    ]
+
     return (
-    <div className="container">
-        <div className="py-4 h-100 d-flex align-items-center justify-content-center">
-      <div className="bg-warning p-4 rounded-1">
-        <form onSubmit={handleUserEdit}>
-
-          {/* <!-- Name input --> */}
-          <div className="form-outline mb-4">
-            <label className="form-label" htmlFor="name">Name</label>
-            <input type="name" name="name" id="name" defaultValue={user.user.name} className="form-control" />
-          </div>
-
-          {/* <!-- Email input --> */}
-          <div className="form-outline mb-4">
-            <label className="form-label" htmlFor="email">Email address</label>
-            <input type="email" name="email" id="email" defaultValue={user.user.email}className="form-control" />
-          </div>
-
-          <div className="form-outline mb-4">
-            <label className="form-label" htmlFor="phone">Phone</label>
-            <input type="phone" name="phone" id="phone" defaultValue={user.user.phone} className="form-control" />
-          </div>
-
-          {/* <!-- password input --> */}
-          <div className="form-outline mb-4">
-            <label className="form-label" htmlFor="address">Address</label>
-            <input type="address" name="address" id="address" defaultValue={user.user.address} className="form-control" />
-          </div>
-
-          {/* <!-- Password input --> */}
-          <div className="form-outline mb-4">
-            <label className="form-label" htmlFor="password">Password</label>
-            <input type="password" name="password" id="password" className="form-control" />
-          </div>
-
-          {/* <!-- 2 column grid layout for inline styling --> */}
-          <div className="row mb-4">
-            <div className="col d-flex justify-content-center">
-              {/* <!-- Checkbox --> */}
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="form2Example31" />
-                <label className="form-check-label" htmlFor="form2Example31"> Remember me </label>
-              </div>
-            </div>
-          </div>
-
-          {/* <!-- Submit button --> */}
-          <button type="submit" className="btn btn-primary btn-block mb-4">Update</button>
-        </form>
+      <div className="container">
+        <Form inputs={inputs} buttons={buttons} action={handleUserEdit} />
       </div>
-    </div>
-  </div>
 )}
 }
