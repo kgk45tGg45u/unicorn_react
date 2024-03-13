@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+
+// Do more research on CORS, see how to implement it and see whether CSURF makes more sense.
 const cors = require('cors');
 
 const app = express();
