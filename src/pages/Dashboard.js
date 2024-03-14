@@ -1,5 +1,6 @@
 import { useFetchUnitByUser } from '../hooks/useFetchUnitByUser'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../hooks/AuthProvider'
 
 import profilePlaceholder from '../assets/profile-image-placeholder.jpeg'
 import moneyBill from '../assets/SVG/money-bill-solid.svg'
@@ -13,6 +14,8 @@ export const Dashboard = () => {
   const id = user.id
   const { result: currentUnit, loading, error } = useFetchUnitByUser(id, "", "units", "GET");
   const name = user ? user.name : "";
+
+  const { logOut } = useAuth()
 
   if(error) {
     return (
@@ -36,6 +39,7 @@ export const Dashboard = () => {
             <div className="col">
               <p>Welcome {name}</p>
               <p>Current Unit: {currentUnit.unit.title}</p>
+              <button onClick={logOut}>Logout</button>
             </div>
             <div className="col-auto">
               <img src={profilePlaceholder} alt="Profile" className="profile_img" />
