@@ -7,7 +7,7 @@ import Placeholder from '../assets/profile-image-placeholder.jpeg';
 export const Header = () => {
   // const [dropdown, setDropdown] = useState(false);
   // const token = JSON.parse(sessionStorage.getItem("token"));
-  const { user, logOut } = useAuth()
+  const { user, logOut, loginAction } = useAuth()
   console.log(user)
 
   return (
@@ -75,7 +75,7 @@ export const Header = () => {
             </ul>
               }
             <form className="d-flex">
-              { user ? <button onClick={logOut} className="btn btn-secondary my-2 my-sm-1" type="submit">Logout</button> : ""}
+              { user ? <button onClick={logOut} className="btn btn-secondary my-2 my-sm-1" type="submit">Logout</button> : <button onClick={loginAction} className="btn btn-secondary my-2 my-sm-1" type="submit">Login</button>}
               {/* <input className="form-control me-sm-2" type="search" placeholder="Search" />
               <button className="btn btn-secondary my-2 my-sm-0" type="submit">Search</button> */}
             </form>

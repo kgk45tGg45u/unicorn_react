@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { Login } from '../components/Login'
 import { Register } from '../components/Register'
+import { Wizard } from '../components/Wizard'
 import { ProtectedRoutes } from './ProtectedRoutes.js'
 import { Dashboard } from '../pages/Dashboard.js'
 import { Errorpage } from '../pages/404.js'
@@ -24,6 +25,7 @@ export const AllRoutes = () => {
         <Route path="user/edit" element={<ProtectedRoutes><EditUserProfile /></ProtectedRoutes>} />
         <Route path="update" element={<ProtectedRoutes><Update /></ProtectedRoutes>} />
         <Route path="unit" element={<ProtectedRoutes><UnitProfile /></ProtectedRoutes>} />
+        <Route path="new-user-wizard" element={<ProtectedRoutes><Wizard /></ProtectedRoutes>} />
       </Routes>
     </>
   )

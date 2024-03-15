@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Wizard } from '../components/Wizard'
 
 export const Register = () => {
   const [input, setInput] = useState({
@@ -39,6 +40,8 @@ export const Register = () => {
   };
 
   return (
+    <div>
+      <Wizard />
     <div className="py-4 h-100 d-flex align-items-center justify-content-center">
       <div className="bg-warning p-4 rounded-1">
         <form onSubmit={handleSubmitEvent}>
@@ -58,5 +61,6 @@ export const Register = () => {
         </form>
       </div>
     </div>
+      </div>
   );
 };
