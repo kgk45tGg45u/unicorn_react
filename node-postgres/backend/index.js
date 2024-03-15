@@ -25,7 +25,6 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use(userRoutes)
-
 app.use(unitRoutes)
 
 // Root route
