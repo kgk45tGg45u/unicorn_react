@@ -8,7 +8,6 @@ export const Header = () => {
   // const [dropdown, setDropdown] = useState(false);
   // const token = JSON.parse(sessionStorage.getItem("token"));
   const { user, logOut, loginAction } = useAuth()
-  console.log(user)
 
   return (
     <header>

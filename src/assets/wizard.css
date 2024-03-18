@@ -1,10 +1,10 @@
 .wcontainer{
   margin-top: 180px;
   position: absolute;
-  background-color: #124176e0;
+  background-color: #124176f2;
   top: 0px;
   width: 80%;
   /* height: 70%; */
-  border-top: 2px solid #000000;
+  /* border-top: 2px solid #000000; */
   z-index: 2;
 }

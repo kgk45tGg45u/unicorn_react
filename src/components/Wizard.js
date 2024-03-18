@@ -80,7 +80,7 @@ export const Wizard = () => {
         <form>
           <div className="m-4 text-white">
             <h2>Personal Data</h2>
-            <label className="fs-5 mb-2 form-label" htmlFor="fullName">Full name</label>
+            <label className="fs-5 mb-2 form-label font-weight-bold" htmlFor="fullName">Full name</label>
               <div className="row">
                 <input type="text" id="fullName" name="name" ref={wname} className="col-9 mx-2" />
                 {nextActive.includes(0) ?
