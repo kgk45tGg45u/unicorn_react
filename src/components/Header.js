@@ -1,6 +1,6 @@
 import { useAuth } from '../hooks/AuthProvider'
 import { Link, NavLink } from "react-router-dom";
-import Placeholder from '../assets/profile-image-placeholder.jpeg';
+// import Placeholder from '../assets/profile-image-placeholder.jpeg';
 // import { DropdownLoggedOut, DropdownLoggedIn } from "../index";
 // import { useCart } from "../../context";
 
@@ -49,12 +49,12 @@ export const Header = () => {
               :
               <ul className="navbar-nav me-auto">
               <li className="nav-item">
-                <Link className="nav-link active" to="#">Home
+                <Link className="nav-link active" to="/">Home
                   <span className="visually-hidden">(current)</span>
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="#">Dashboard</Link>
+                <Link className="nav-link" to="/dashboard">Dashboard</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="#">Wallet</Link>
