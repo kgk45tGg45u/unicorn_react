@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UserWizard2 } from '../components/new_user_wizard/NewUserWizard-2'
+import { UserWizard1 } from '../components/new_user_wizard/NewUserWizard-1'
 
 export const Register = () => {
   const [input, setInput] = useState({
@@ -41,7 +41,7 @@ export const Register = () => {
 
   return (
     <div>
-      <UserWizard2 />
+      <UserWizard1 />
     <div className="py-4 h-100 d-flex align-items-center justify-content-center">
       <div className="bg-warning p-4 rounded-1">
         <form onSubmit={handleSubmitEvent}>

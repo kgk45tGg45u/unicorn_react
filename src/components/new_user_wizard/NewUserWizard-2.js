@@ -204,7 +204,7 @@ export const UserWizard2 = () => {
         }
 
         <div className="mt-4 mb-3 mx-4 text-white">
-          <h2>Personal Data</h2>
+          <h2>Work Data</h2>
         </div>
 
         <form className="form-inline my-3 mx-4">
@@ -212,7 +212,14 @@ export const UserWizard2 = () => {
             {(currentConfiguration.input_type === "text") &&
             <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
               <label htmlFor={currentConfiguration.input_id} className="text-white my-3">{currentConfiguration.grand_label}</label>
-              <input type={currentConfiguration.input_type} name={currentConfiguration.input_id} className="form-control" id={currentConfiguration.input_id} ref={inputData} aria-describedby={currentConfiguration.input_id}/>
+              <input
+                type={currentConfiguration.input_type}
+                name={currentConfiguration.input_id}
+                className="form-control"
+                id={currentConfiguration.input_id}
+                ref={inputData}
+                aria-describedby={currentConfiguration.input_id}
+              />
               <div className="form-text text-white"><small id={currentConfiguration.input_id}>{currentConfiguration.input_help}</small></div>
             </div>
             }
