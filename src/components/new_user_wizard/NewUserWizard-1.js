@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import '../assets/wizard.css';
+import '../../assets/wizard.css';
 
-export const UserWizard = () => {
+export const UserWizard2 = () => {
   const formConfigurations = [
     {
       grand_label: "Full Name",
