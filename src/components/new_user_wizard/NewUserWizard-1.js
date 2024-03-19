@@ -1,8 +1,8 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import '../../assets/wizard.css';
 
 export const UserWizard1 = () => {
-  const [moves, setMoves] = useState(false);
+  // const [moves, setMoves] = useState(false);
   const firstName = useRef()
   const lastName = useRef()
   const address = useRef()
