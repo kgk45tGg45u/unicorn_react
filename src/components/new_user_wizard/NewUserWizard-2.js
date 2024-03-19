@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import '../../assets/wizard.css';
 
 export const UserWizard2 = () => {
+  const [moves, setMoves] = useState(false);
+
   const formConfigurations = [
     {
       grand_label: "Full Name",
@@ -94,7 +96,7 @@ export const UserWizard2 = () => {
 
   const action = (e) => {
     e.preventDefault();
-
+    setMoves(true)
     if(currentConfigurationIndex === 1 && data.workingYesNo === "No"){
       console.log("The end")
       // The end logic
@@ -208,7 +210,7 @@ export const UserWizard2 = () => {
         <form className="form-inline my-3 mx-4">
           <div className="form-group mx-sm-3 mb-2 font-weight-bold">
             {(currentConfiguration.input_type === "text") &&
-            <div>
+            <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
               <label htmlFor={currentConfiguration.input_id} className="text-white my-3">{currentConfiguration.grand_label}</label>
               <input type={currentConfiguration.input_type} name={currentConfiguration.input_id} className="form-control" id={currentConfiguration.input_id} ref={inputData} aria-describedby={currentConfiguration.input_id}/>
               <div className="form-text text-white"><small id={currentConfiguration.input_id}>{currentConfiguration.input_help}</small></div>
@@ -216,7 +218,7 @@ export const UserWizard2 = () => {
             }
 
             {(currentConfiguration.input_type === "radio") &&
-              <>
+              <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
                 <label className="text-white my-3">{currentConfiguration.grand_label}</label>
                 {currentConfiguration.radioLabels.map((radiolabel, index) => (
                   <div key={index}>
@@ -241,7 +243,7 @@ export const UserWizard2 = () => {
                     <label className="mx-3 form-check-label text-white" htmlFor={`${currentConfiguration.input_id}_${index}`}>{radiolabel}</label>
                   </div>
                 ))}
-              </>
+              </div>
             }
           </div>
           <button onClick={action} type="submit" className="btn btn-primary mt-5 mb-3 mx-3">{currentConfiguration.action_button_label}</button>

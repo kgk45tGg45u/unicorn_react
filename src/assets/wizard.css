@@ -4,7 +4,29 @@
   background-color: #124176f2;
   top: 0px;
   width: 80%;
-  /* height: 70%; */
-  /* border-top: 2px solid #000000; */
   z-index: 2;
+  opacity: 0; /* Initially set opacity to 0 */
+  animation: fadeIn 0.5s ease forwards; /* Apply fadeIn animation */
+}
+
+.form-animation {
+  animation: moveIn 0.5s ease forwards; /* Apply moveIn animation to the form */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0; /* Start with opacity 0 */
+  }
+  to {
+    opacity: 0.97; /* End with opacity 0.97 */
+  }
+}
+
+@keyframes moveIn {
+  from {
+    transform: translateY(-20px); /* Start with a translateY of -20px */
+  }
+  to {
+    transform: translateY(0); /* End with a translateY of 0 */
+  }
 }
