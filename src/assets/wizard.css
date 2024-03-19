@@ -1,4 +1,15 @@
-.wcontainer{
+.wcontainer1{
+  margin-top: 180px;
+  position: absolute;
+  background-color: #124176f2;
+  top: -90px;
+  width: 80%;
+  z-index: 2;
+  opacity: 0; /* Initially set opacity to 0 */
+  animation: fadeIn 0.5s ease forwards; /* Apply fadeIn animation */
+}
+
+.wcontainer2{
   margin-top: 180px;
   position: absolute;
   background-color: #124176f2;

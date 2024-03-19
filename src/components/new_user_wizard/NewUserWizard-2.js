@@ -198,7 +198,7 @@ export const UserWizard2 = () => {
 
   return (
     <div className="py-4 d-flex align-items-center justify-content-center">
-      <div className="wcontainer rounded-3 shadow-lg">
+      <div className="wcontainer2 rounded-3 shadow-lg">
         {(currentConfigurationIndex === 10) &&
           <div>Thank you!</div>
         }
