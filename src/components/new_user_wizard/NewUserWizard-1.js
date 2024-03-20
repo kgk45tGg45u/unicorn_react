@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useUserWizard } from '../../hooks/UserWizardProvider'
-// import { UserWizard2 } from './NewUserWizard-2'
 import '../../assets/wizard.css';
 
 export const UserWizard1 = () => {

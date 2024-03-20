@@ -23,15 +23,10 @@ export const UserWizardProvider = ({ children }) => {
             userData: updatedUserData
         }
     })
-    console.log("in record method")
+
 }
 
-  // const record = (data) => {
-  //   setRecordData(prevData => ({
-  //     ...prevData,
-  //     data
-  //   }));
-  //   // setRecordData(data)
+
 
   // };
   useEffect(() => {
