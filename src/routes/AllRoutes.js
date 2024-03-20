@@ -26,7 +26,7 @@ export const AllRoutes = () => {
         <Route path="user/edit" element={<ProtectedRoutes><EditUserProfile /></ProtectedRoutes>} />
         <Route path="update" element={<ProtectedRoutes><Update /></ProtectedRoutes>} />
         <Route path="unit" element={<ProtectedRoutes><UnitProfile /></ProtectedRoutes>} />
-        <Route path="new-user-wizard" element={<ProtectedRoutes><UserWizard1 /></ProtectedRoutes>} />
+        <Route path="new-user-wizard-1" element={<ProtectedRoutes><UserWizard1 /></ProtectedRoutes>} />
         <Route path="new-user-wizard-2" element={<ProtectedRoutes><UserWizard2 /></ProtectedRoutes>} />
       </Routes>
     </>

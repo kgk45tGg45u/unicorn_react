@@ -1,8 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUserWizard } from '../../hooks/UserWizardProvider'
+import { UserWizard3 } from './NewUserWizard-3'
 import '../../assets/wizard.css';
 
 export const UserWizard2 = () => {
   const [moves, setMoves] = useState(false);
+  const { record } = useUserWizard()
+  const navigate = useNavigate()
 
   const formConfigurations = [
     {
@@ -100,6 +105,8 @@ export const UserWizard2 = () => {
     if(currentConfigurationIndex === 1 && data.workingYesNo === "No"){
       console.log("The end")
       // The end logic
+      record(data)
+      navigate(UserWizard3)
     }
 
     if(currentConfigurationIndex === 1 && data.workingYesNo === "Yes"){
@@ -130,6 +137,8 @@ export const UserWizard2 = () => {
     // Offering service?
     if(currentConfigurationIndex === 4 && data.producingYesNo === "No" && data.hasService === "No"){
       console.log("the end")
+      record(data)
+      navigate(UserWizard3)
     }
 
     if(currentConfigurationIndex === 4 && data.producingYesNo === "Yes" && data.hasService === "No"){
@@ -183,10 +192,14 @@ export const UserWizard2 = () => {
         [formConfigurations[currentConfigurationIndex].input_id]: inputData.current.value
       }));
       console.log("the end")
+      record(data)
+      navigate(UserWizard3)
     }
 
     if(currentConfigurationIndex === 10){
       console.log("the end")
+      record(data)
+      navigate(UserWizard3)
     }
   }
 

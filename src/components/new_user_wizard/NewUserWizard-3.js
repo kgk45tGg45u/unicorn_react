@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import '../../assets/wizard.css';
 
-export const UserWizard2 = () => {
+export const UserWizard3 = () => {
   const [moves, setMoves] = useState(false);
 
   const formConfigurations = [

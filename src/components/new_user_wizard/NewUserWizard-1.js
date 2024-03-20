@@ -1,8 +1,13 @@
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom'
+import { useUserWizard } from '../../hooks/UserWizardProvider'
+// import { UserWizard2 } from './NewUserWizard-2'
 import '../../assets/wizard.css';
 
 export const UserWizard1 = () => {
   // const [moves, setMoves] = useState(false);
+  const navigate = useNavigate()
+  const { record } = useUserWizard()
   const firstName = useRef()
   const lastName = useRef()
   const address = useRef()
@@ -12,6 +17,7 @@ export const UserWizard1 = () => {
 
   const action = (e) => {
     e.preventDefault();
+
     const personalData = {
       first_name: firstName.current.value,
       last_name: lastName.current.value,
@@ -20,7 +26,10 @@ export const UserWizard1 = () => {
       country: country.current.value,
       zip: zip.current.value
     }
-    console.log("data: ", personalData);
+
+    record(personalData)
+    navigate('/new-user-wizard-2')
+
   }
 
   return (
