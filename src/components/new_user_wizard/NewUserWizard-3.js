@@ -1,38 +1,50 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUserWizard } from '../../hooks/UserWizardProvider'
 import '../../assets/wizard.css';
 
 export const UserWizard3 = () => {
   const [moves, setMoves] = useState(false);
+  const { record, userData } = useUserWizard()
+  console.log(userData)
 
   const formConfigurations = [
     {
-      grand_label: "Full Name",
-      input_id: "fullname",
-      input_type: "text",
-      input_help: "Your full name will be confirmed with your ID through a confirmation process.",
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Do you currently provide a product or offer a service to public?",
-      input_id: "workingYesNo",
+      grand_label: "Do you produce this product constantly or based on individual orders?",
+      input_id: "constantlyProducing",
       input_type: "radio",
-      input_help: "",
-      radioLabels: ["Yes", "No"],
+      input_help: "If you are producing this product already in timely manner, choose 'constantly'. If you produce only after receiving order, choose 'on-demand'.",
+      radioLabels: ["Constantly", "On-demand"],
       action_button_label: "Next",
     },
     {
-      grand_label: "Do you currently produce a product?",
-      input_id: "producingYesNo",
-      input_type: "radio",
-      input_help: "",
-      radioLabels: ["Yes", "No"],
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Complete name or title of your main product",
-      input_id: "product1title",
+      grand_label: "How many/how much of this product do you produce per month?",
+      input_id: "productionAmount",
+      unit_id: "monthlyProductionUnit",
+      input_group: "custom",
       input_type: "text",
-      input_help: "Please enter the name of your main product. You can add or remove products later.",
+      input_help: "Enter the total amount of your production along with the corresponding unit.",
+      unitLabels: ["numbers", "KG", "Liters", "meters"],
+      action_button_label: "Next",
+    },
+    {
+      grand_label: "How much time on average do you work to produce one unit of this product?",
+      input_id: "timeNeededToProduce",
+      unit_id: "timeNeededToProduceUnit",
+      input_group: "custom",
+      input_type: "text",
+      input_help: "",
+      unitLabels: ["minute", "hour", "day", "week", "month"],
+      action_button_label: "Next",
+    },
+    {
+      grand_label: "How much time on average do you need to produce on unit of this product?",
+      input_id: "timeNeededToProduce",
+      unit_id: "timeNeededToProduceUnit",
+      input_group: "custom",
+      input_type: "text",
+      input_help: "",
+      unitLabels: ["minute", "hour", "day", "week", "month"],
       action_button_label: "Next",
     },
     {
@@ -91,6 +103,7 @@ export const UserWizard3 = () => {
 
   const [currentConfigurationIndex, setCurrentConfigurationIndex] = useState(1);
   const inputData = useRef()
+  const unitData = useRef()
   const inputRadioRefs = useRef({});
   const [data, setData] = useState({});
 
@@ -196,6 +209,8 @@ export const UserWizard3 = () => {
 
   const currentConfiguration = formConfigurations[currentConfigurationIndex];
 
+  if (userData[1].producingYesNo === "Yes"){
+
   return (
     <div className="py-4 d-flex align-items-center justify-content-center">
       <div className="wcontainer2 rounded-3 shadow-lg">
@@ -204,22 +219,37 @@ export const UserWizard3 = () => {
         }
 
         <div className="mt-4 mb-3 mx-4 text-white">
-          <h2>Service / Product Information</h2>
+          <h2>Product Information</h2>
+        </div>
+
+        <div className="mt-4 mb-3 mx-4 text-white">
+          <h4>Your main product name: {userData[1].product1title}</h4>
         </div>
 
         <form className="form-inline my-3 mx-4">
           <div className="form-group mx-sm-3 mb-2 font-weight-bold">
-            {(currentConfiguration.input_type === "text") &&
+            {(currentConfiguration.input_group === "custom") &&
             <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
               <label htmlFor={currentConfiguration.input_id} className="text-white my-3">{currentConfiguration.grand_label}</label>
-              <input
-                type={currentConfiguration.input_type}
-                name={currentConfiguration.input_id}
-                className="form-control"
-                id={currentConfiguration.input_id}
-                ref={inputData}
-                aria-describedby={currentConfiguration.input_id}
-              />
+              <div className="d-flex">
+                <div className="">
+                  <input
+                    type={currentConfiguration.input_type}
+                    name={currentConfiguration.input_id}
+                    className="form-control"
+                    id={currentConfiguration.input_id}
+                    ref={inputData}
+                    aria-describedby={currentConfiguration.input_id}
+                  />
+                </div>
+                <div className="align-content-end">
+                  <select id={currentConfiguration.unit_id} name={currentConfiguration.unit_id}>
+                    {currentConfiguration.unitLabels.map((unitlabel) => (
+                      <option value={unitlabel} ref={unitData}>{unitlabel}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
               <div className="form-text text-white"><small id={currentConfiguration.input_id}>{currentConfiguration.input_help}</small></div>
             </div>
             }
@@ -257,5 +287,70 @@ export const UserWizard3 = () => {
         </form>
       </div>
     </div>
-  );
+  )}
+
+  if (userData[1].hasService === "Yes") {
+
+    return (
+      <div className="py-4 d-flex align-items-center justify-content-center">
+        <div className="wcontainer2 rounded-3 shadow-lg">
+          {(currentConfigurationIndex === 10) &&
+            <div>Thank you!</div>
+          }
+
+          <div className="mt-4 mb-3 mx-4 text-white">
+            <h2>Service Information</h2>
+          </div>
+
+          <form className="form-inline my-3 mx-4">
+            <div className="form-group mx-sm-3 mb-2 font-weight-bold">
+              {(currentConfiguration.input_type === "text") &&
+              <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
+                <label htmlFor={currentConfiguration.input_id} className="text-white my-3">{currentConfiguration.grand_label}</label>
+                <input
+                  type={currentConfiguration.input_type}
+                  name={currentConfiguration.input_id}
+                  className="form-control"
+                  id={currentConfiguration.input_id}
+                  ref={inputData}
+                  aria-describedby={currentConfiguration.input_id}
+                />
+                <div className="form-text text-white"><small id={currentConfiguration.input_id}>{currentConfiguration.input_help}</small></div>
+              </div>
+              }
+
+              {(currentConfiguration.input_type === "radio") &&
+                <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
+                  <label className="text-white my-3">{currentConfiguration.grand_label}</label>
+                  {currentConfiguration.radioLabels.map((radiolabel, index) => (
+                    <div key={index}>
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name={currentConfiguration.input_id}
+                        id={`${currentConfiguration.input_id}_${index}`}
+                        value={radiolabel}
+                        checked={data[currentConfiguration.input_id] === radiolabel}
+                        ref={(el) => {
+                          // Store refs for each radio button group
+                          if (!inputRadioRefs.current[currentConfiguration.input_id]) {
+                            inputRadioRefs.current[currentConfiguration.input_id] = [];
+                          }
+                          inputRadioRefs.current[currentConfiguration.input_id][index] = el;
+                        }}
+                        onChange={() => {
+                          setData({ ...data, [currentConfiguration.input_id]: radiolabel });
+                        }}
+                      />
+                      <label className="mx-3 form-check-label text-white" htmlFor={`${currentConfiguration.input_id}_${index}`}>{radiolabel}</label>
+                    </div>
+                  ))}
+                </div>
+              }
+            </div>
+            <button onClick={action} type="submit" className="btn btn-primary mt-5 mb-3 mx-3">{currentConfiguration.action_button_label}</button>
+          </form>
+        </div>
+      </div>
+    )}
 };

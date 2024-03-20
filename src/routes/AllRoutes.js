@@ -3,6 +3,7 @@ import { Login } from '../components/Login'
 import { Register } from '../components/Register'
 import { UserWizard1 } from '../components/new_user_wizard/NewUserWizard-1.js'
 import { UserWizard2 } from '../components/new_user_wizard/NewUserWizard-2.js'
+import { UserWizard3 } from '../components/new_user_wizard/NewUserWizard-3.js'
 import { ProtectedRoutes } from './ProtectedRoutes.js'
 import { Dashboard } from '../pages/Dashboard.js'
 import { Errorpage } from '../pages/404.js'
@@ -28,6 +29,7 @@ export const AllRoutes = () => {
         <Route path="unit" element={<ProtectedRoutes><UnitProfile /></ProtectedRoutes>} />
         <Route path="new-user-wizard-1" element={<ProtectedRoutes><UserWizard1 /></ProtectedRoutes>} />
         <Route path="new-user-wizard-2" element={<ProtectedRoutes><UserWizard2 /></ProtectedRoutes>} />
+        <Route path="new-user-wizard-3" element={<ProtectedRoutes><UserWizard3 /></ProtectedRoutes>} />
       </Routes>
     </>
   )
