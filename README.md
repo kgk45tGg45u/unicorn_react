@@ -40,7 +40,7 @@ Using the ticketing system renders Unicorn a democratic structure. Founding a bu
 
 #### Database Structure
 
-The database schema will be uploaded here soon.
+The database schema to be implemented: [https://dbdiagram.io/d/Unicorn-65e6f741cd45b569fb8f8285]
 
 ### Rights
 

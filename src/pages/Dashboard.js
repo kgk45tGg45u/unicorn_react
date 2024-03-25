@@ -8,6 +8,7 @@ import unit from '../assets/SVG/industry-solid.svg'
 import council from '../assets/SVG/arrows-to-dot-solid.svg'
 import union from '../assets/SVG/building-flag-solid.svg'
 import savings from '../assets/SVG/piggy-bank-solid.svg'
+import { DashboardCard } from '../components/DashboardCard'
 
 export const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -46,41 +47,13 @@ export const Dashboard = () => {
             </div>
           </div>
 
-          <div className="my-1 p-2 divbg rounded-3 shadow-lg">
-            <div className="row p-3">
-              <div className="col-3 m-0 col-md-3 text-center">
-                <div className="dashboard_icon">
-
-                    <img className="icon_base" src={moneyBill} alt="Tokens" />
-                    {/* <span className='indicator'>22</span> */}
-
-                  <p>Wallet</p>
-                </div>
-              </div>
-              <div className="col-3 m-0 col-md-3 text-center">
-                <div className="dashboard_icon">
-                  <img src={unit} alt="Working Unit" />
-                  <p><Link to="/unit">Working Unit</Link></p>
-                </div>
-              </div>
-              <div className="col-3 col-md-3 text-center">
-                <div className="dashboard_icon">
-                  <img src={council} alt="Workers Council" />
-                  <p>Council</p>
-                </div>
-              </div>
-              <div className="col-3 col-md-3 text-center">
-                <div className="dashboard_icon">
-                  <img src={union} alt="Workers Union" />
-                  <p>Union</p>
-                </div>
-              </div>
-              <div className="col-3 col-md-3 text-center">
-                <div className="dashboard_icon">
-                  <img src={savings} alt="Saving and Debt" />
-                  <p>Saving / Debt</p>
-                </div>
-              </div>
+          <div className="p-2 divbg rounded-3 shadow-lg">
+            <div className="d-flex flex-wrap justify-content-around p-2">
+              <DashboardCard icon={moneyBill} text="Wallet" link="/wallet" />
+              <DashboardCard icon={unit} text="Working Unit" link="/unit" />
+              <DashboardCard icon={council} text="Council" link="/council" />
+              <DashboardCard icon={union} text="Union" link="/union" />
+              <DashboardCard icon={savings} text="Saving / Debt" link="/savings" />
             </div>
           </div>
         </div>
