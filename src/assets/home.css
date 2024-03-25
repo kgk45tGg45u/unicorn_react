@@ -4,7 +4,7 @@
   padding: 150px 50px;
 }
 
-h1 {
+banner .h1 {
   margin: 0;
   color: rgb(255, 255, 255);
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
@@ -12,9 +12,20 @@ h1 {
   font-weight: bold;
 }
 
-p {
+banner .p {
   font-size: 20px;
   color: white;
   opacity: .9;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.homeCard {
+  padding: 25px;
+  margin: 10px;
+}
+
+.homeCard .h3{
+  margin-top: 7px;
+  margin-bottom: 7px;
+  font-size: 13;
 }
