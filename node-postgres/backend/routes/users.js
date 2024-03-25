@@ -49,6 +49,18 @@ router.post('/users/login', async (req, res) => {
   }
 });
 
+// Get the number of all users
+router.get('/users', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM users')
+    const length = result.rowCount;
+    res.status(200).json({ length });
+  } catch (error) {
+    console.error("Error occurred during login:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 // Register user route
 router.post('/users', async (req, res) => {
   const { name, email, password } = req.body;

@@ -1,8 +1,31 @@
 import '../assets/home.css'
 import { Link } from "react-router-dom";
+import { useFetch } from '../hooks/useFetch'
+import { useEffect } from 'react'
 
 export const Home = () => {
+  const id = null
 
+  const { result: noOfUsers, loading, error } = useFetch(id, "", "users", "GET");
+  // const log = useEffect() => {()[]}
+  useEffect(() => {
+    console.log("Data in in Home.js:", noOfUsers);
+  }, [noOfUsers]);
+
+
+  if(loading) {
+    return (
+      <div>Loading...</div>
+    )
+  }
+
+  if(error) {
+    return (
+      <div>error</div>
+    )
+  }
+
+  if(noOfUsers) {
   return (
     <section>
       <div className="p-4 container">
@@ -19,7 +42,7 @@ export const Home = () => {
         <div className="col-md-4 divbg col-sm-12 homeCard p-3 border m-4 shadow">
           <h3 className="h3">Unicorn 0.1</h3>
           <ul>
-            <li>currently serving 1549 users</li>
+            <li>currently serving {noOfUsers.length} users</li>
             <li>integrating work and politics in an online App</li>
             <li>Access to all the data for everyone with the help of block-chain.</li>
           </ul>
@@ -37,7 +60,7 @@ export const Home = () => {
         <div className="col-md-4 divbg col-sm-12 homeCard p-3 border m-4 shadow">
           <h3 className="h3">Unicorn 0.1</h3>
           <ul>
-            <li>currently serving 1549 users</li>
+            <li>currently serving 1444 users</li>
             <li>integrating work and politics in an online App</li>
             <li>Access to all the data for everyone with the help of block-chain.</li>
           </ul>
@@ -45,7 +68,7 @@ export const Home = () => {
         </div>
       </div>
 
-
     </section>
   )
+}
 }
