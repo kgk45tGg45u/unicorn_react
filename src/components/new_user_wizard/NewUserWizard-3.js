@@ -231,8 +231,8 @@ export const UserWizard3 = () => {
             {(currentConfiguration.input_group === "custom") &&
             <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
               <label htmlFor={currentConfiguration.input_id} className="text-white my-3">{currentConfiguration.grand_label}</label>
-              <div className="d-flex">
-                <div className="">
+              <div className="form-row align-items-center">
+                <div className="col-4 my-1">
                   <input
                     type={currentConfiguration.input_type}
                     name={currentConfiguration.input_id}
@@ -242,10 +242,10 @@ export const UserWizard3 = () => {
                     aria-describedby={currentConfiguration.input_id}
                   />
                 </div>
-                <div className="align-content-end">
-                  <select id={currentConfiguration.unit_id} name={currentConfiguration.unit_id}>
-                    {currentConfiguration.unitLabels.map((unitlabel) => (
-                      <option value={unitlabel} ref={unitData}>{unitlabel}</option>
+                <div className="col-auto mr-sm-2">
+                  <select className="custom-select mr-sm-2" id={currentConfiguration.unit_id} name={currentConfiguration.unit_id}>
+                    {currentConfiguration.unitLabels.map((unitlabel, index) => (
+                      <option key={index} value={unitlabel} ref={unitData}>{unitlabel}</option>
                     ))}
                   </select>
                 </div>
@@ -290,13 +290,14 @@ export const UserWizard3 = () => {
   )}
 
   if (userData[1].hasService === "Yes") {
+    // const currentConfigurationIndex = 5
 
     return (
       <div className="py-4 d-flex align-items-center justify-content-center">
         <div className="wcontainer2 rounded-3 shadow-lg">
-          {(currentConfigurationIndex === 10) &&
+          {/* {(currentConfigurationIndex === 10) &&
             <div>Thank you!</div>
-          }
+          } */}
 
           <div className="mt-4 mb-3 mx-4 text-white">
             <h2>Service Information</h2>

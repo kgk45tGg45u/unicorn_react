@@ -36,6 +36,7 @@ Using the ticketing system renders Unicorn a democratic structure. Founding a bu
 - Refactoring
 - Conceptualizing the blockchain
 - Moving data to blockchain
+- Moving from Bootstrap to CSS
 
 #### Database Structure
 

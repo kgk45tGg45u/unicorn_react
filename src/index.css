@@ -37,6 +37,7 @@ code {
 }
 
 .dashboard_icon {
+  position: relative;
   img {width: 55px;}
   p {
     margin: 5px;
@@ -44,3 +45,14 @@ code {
     font-weight: 600;
   }
 }
+/* 
+.indicator {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  left: 60%;
+  bottom: 60%;
+  display: flex;
+  justify-content: center;
+
+} */

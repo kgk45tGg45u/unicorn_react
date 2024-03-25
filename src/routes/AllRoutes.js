@@ -11,6 +11,7 @@ import { UserProfile } from '../pages/UserProfile.js'
 import { EditUserProfile } from '../pages/EditUserProfile.js'
 import { Update } from '../pages/Update.js'
 import { UnitProfile } from '../pages/UnitProfile.js'
+import { Home } from '../pages/Home'
 
 
 export const AllRoutes = () => {
@@ -21,6 +22,7 @@ export const AllRoutes = () => {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="404" element={<Errorpage />} />
+        <Route path="home" element={<Home />} />
 
         <Route path="dashboard" element={<ProtectedRoutes><Dashboard /></ProtectedRoutes>} />
         <Route path="user" element={<ProtectedRoutes><UserProfile /></ProtectedRoutes>} />

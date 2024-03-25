@@ -50,8 +50,11 @@ export const Dashboard = () => {
             <div className="row p-3">
               <div className="col-3 m-0 col-md-3 text-center">
                 <div className="dashboard_icon">
-                  <img src={moneyBill} alt="Tokens" />
-                  <p>Tokens</p>
+
+                    <img className="icon_base" src={moneyBill} alt="Tokens" />
+                    {/* <span className='indicator'>22</span> */}
+
+                  <p>Wallet</p>
                 </div>
               </div>
               <div className="col-3 m-0 col-md-3 text-center">

@@ -1,6 +1,6 @@
-import { useContext, createContext, useState, useEffect, useReducer } from "react";
+import { useContext, createContext, useEffect, useReducer } from "react";
 import { userReducer } from "./userWizardReducer";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const initialState = {
   userData: []
@@ -9,10 +9,8 @@ const initialState = {
 const UserWizardContext = createContext(initialState);
 
 export const UserWizardProvider = ({ children }) => {
-  // const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
-  // const [token, setToken] = useState(localStorage.getItem("site") || "");
+
   const [state, dispatch] = useReducer(userReducer, initialState);
-  const navigate = useNavigate();
 
   const record = (data) => {
     const updatedUserData = state.userData.concat(data);
@@ -23,12 +21,8 @@ export const UserWizardProvider = ({ children }) => {
             userData: updatedUserData
         }
     })
-
 }
 
-
-
-  // };
   useEffect(() => {
     console.log("Data in UserWizardProvider:", state.userData);
   }, [state]);
