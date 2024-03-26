@@ -18,6 +18,11 @@ code {
   padding: 20px;
 }
 
+.tokensDiv {
+  display: flex
+}
+
+
 .line {
   position: fixed;
   background-color: #124076;
