@@ -13,6 +13,7 @@ import { Update } from '../pages/Update.js'
 import { UnitProfile } from '../pages/UnitProfile.js'
 import { UnionProfile } from '../pages/UnionProfile.js'
 import { Home } from '../pages/Home'
+import { TicketingApp } from '../pages/tickets/TicketingApp.js'
 // import BasicModal from '../components/Popover.js'
 
 
@@ -35,6 +36,7 @@ export const AllRoutes = () => {
         <Route path="new-user-wizard-1" element={<ProtectedRoutes><UserWizard1 /></ProtectedRoutes>} />
         <Route path="new-user-wizard-2" element={<ProtectedRoutes><UserWizard2 /></ProtectedRoutes>} />
         <Route path="new-user-wizard-3" element={<ProtectedRoutes><UserWizard3 /></ProtectedRoutes>} />
+        <Route path="ticketing" element={<ProtectedRoutes><TicketingApp /></ProtectedRoutes>} />
       </Routes>
     </>
   )
