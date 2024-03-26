@@ -41,22 +41,26 @@ export const Dashboard = () => {
     return (
       <section>
         <div className="container">
-          <div className="row my-4 p-2 divbg rounded-3 shadow-lg">
-            <div className="col">
-              <p>Welcome {name}</p>
-              <p>Current Unit: {currentUnit.unit.title}</p>
-                <div className="tokensDiv">
-                  <p>Tokens: 14 Unics</p>
+          <div className="row my-4 mx-2 divbg rounded-3 shadow-lg">
+            <div className="col my-4 infostand">
+              <div className="infostand_data">
+                <h3>{name}</h3>
+                <h4>Current Unit: {currentUnit.unit.title}</h4>
+
+                <h5>Tokens: 14 Unics</h5>
+
+
                 </div>
 
               <button onClick={logOut}>Logout</button>
             </div>
-            <div className="col-auto">
+            <div className="col-auto my-4">
               <img src={profilePlaceholder} alt="Profile" className="profile_img" />
             </div>
           </div>
-
-          <div className="p-2 divbg rounded-3 shadow-lg">
+        </div>
+        <div className="container">
+          <div className="p-2 mx-2 divbg rounded-3 shadow-lg">
             <div className="d-flex flex-wrap justify-content-around p-2">
               <DashboardCard icon={moneyBill} text="Wallet" link="/wallet" />
               <DashboardCard icon={unit} text="Working Unit" link="/unit" />

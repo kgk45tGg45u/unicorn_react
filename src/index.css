@@ -18,11 +18,6 @@ code {
   padding: 20px;
 }
 
-.tokensDiv {
-  display: flex
-}
-
-
 .line {
   position: fixed;
   background-color: #124076;
@@ -55,7 +50,8 @@ code {
   border: 1px solid;
   border-color: #bbbbbb;
   border-radius: 7%;
-  box-shadow: 3px 5px 20px #888888;
+  box-shadow: 3px 5px 20px #eeeeee;
+  transition: background-color 0.3s ease; /* Smooth transition */
 
   img {width: 55px;
   height: 55px;}
@@ -65,6 +61,40 @@ code {
     font-size: 12px;
     font-weight: 600;
   }
+}
+
+.infostand {
+  width: 100px;
+  h3{
+    padding: 7px 17px;
+    background-color: #124076;
+    border-radius: 5px;
+    color: white;
+  }
+  h4{
+    padding: 7px 17px;
+    text-shadow: 0px 0px 2px black;
+    background-color: #ebd126;
+    border-radius: 5px;
+    color: white;
+  }
+  h5{
+    padding: 7px 17px;
+    text-shadow: 0px 0px 4px black;
+    background-color: #FFC374;
+    border-radius: 5px;
+    color: white;
+  }
+}
+
+.infostand_data {
+  width: fit-content;
+}
+
+
+.dashboard_icon:hover {
+  background-color: #297fb956 !important; /* Change background color on hover */
+  cursor: pointer; /* Change cursor to pointer on hover */
 }
 
 /* a:hover {
