@@ -1,5 +1,6 @@
 import { useFetchUnitByUser } from '../hooks/useFetchUnitByUser';
 import Placeholder from '../assets/profile-image-placeholder.jpeg';
+import { Loading } from '../components/Loading';
 import '../assets/UserProfile.css';
 
 export const UnitProfile = () => {
@@ -8,7 +9,7 @@ export const UnitProfile = () => {
   const { result: unit, loading, error } = useFetchUnitByUser(id, "", "units", "GET");
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (<Loading />)
   }
 
   if (error) {

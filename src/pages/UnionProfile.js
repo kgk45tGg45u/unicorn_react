@@ -1,6 +1,7 @@
 import { useFetchUnitByUser } from '../hooks/useFetchUnitByUser'
 import { useAuth } from '../hooks/AuthProvider'
 import { useNavigate } from 'react-router-dom'
+import { Loading } from '../components/Loading'
 import { ToastContainer, toast } from 'react-toastify';
 // import { useEffect } from 'react'
 
@@ -52,11 +53,7 @@ export const UnionProfile = () => {
     )}
 
   if(loading) {
-    return (
-      <div>
-        {toast("Loading!")}
-      </div>
-    )}
+    return (<Loading />)}
 
   if(currentUnit && currentUnion) {
     console.log(currentUnit)
