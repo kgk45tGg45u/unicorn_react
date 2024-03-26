@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react'
+import { useFetchTickets } from '../hooks/useFetchTickets';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -7,48 +8,38 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import { Loading } from './Loading';
 
 export const LatestTickets = () => {
   const [tickets, setTickets] = useState([]);
-  // const [ticketData, setTicketData] = useState({});
+  const currentUser = JSON.parse(localStorage.getItem("user"))
+  const id = currentUser.id
+
+  const { result, loading, error } = useFetchTickets(id, "", "tickets", "GET");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/tickets');
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        setTickets(data.rows);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []); // Empty dependency array ensures the effect runs only once on mount
-
-  const newData = {};
-  useEffect(() => {
-    // Initialize an empty object to store ticket data
-
-    // Loop through each ticket and add it to the ticket data object
-
-      // newData[ticketId] = { subject, content };
-      setTickets((prev) => ({
-      // Update the ticketData state with the new data
-        ...prev,
-        [subject]: content,
-      }))
-      console.log(subject, content)
-      console.log(tickets)
-    }, [tickets]); // Run this effect whenever tickets change
-  ;
+    if (result) {
+      const allData = result.rows.map((ticket) => ({
+        subject: ticket.subject,
+        content: ticket.content
+      }));
+      setTickets(allData);
+    }
+  }, [result]);
 
 
+  if (loading) {
+    return (<Loading />)
+  }
 
-  if (tickets) {
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (!result) {
+    return <div>Error!</div>;
+  }
+
   return (
     <List sx={{ width: '100%', maxWidth: '1024', bgcolor: 'background.paper' }}>
       <ListItem alignItems="flex-start">
@@ -56,7 +47,7 @@ export const LatestTickets = () => {
           <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
         </ListItemAvatar>
         <ListItemText
-          primary='hellloooooo'
+          primary={tickets[0].subject}
           secondary={
             <React.Fragment>
               <Typography
@@ -65,9 +56,9 @@ export const LatestTickets = () => {
                 variant="body2"
                 color="text.primary"
               >
-                Ali Connors
+                {currentUser.name}
               </Typography>
-          aDFHADF:HKANDFH
+              {tickets[0].content}
             </React.Fragment>
           }
         />
@@ -118,5 +109,4 @@ export const LatestTickets = () => {
       </ListItem>
     </List>
   );
-}
 }

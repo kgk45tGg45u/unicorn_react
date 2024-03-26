@@ -11,21 +11,18 @@ const pool = new Pool({
   port: 5432,
 });
 
-// Fetch unit data for the user
-router.get('/tickets', async (req, res) => {
+// Fetch ticket data for the user
+router.get('/tickets/:id', async (req, res) => {
   const { id } = req.params; // Use req.params to get the ID from the URL
 
   try {
-    const result = await pool.query('SELECT * FROM tickets')
-    // const rows = []
-    // rows.push(result.rows)
-    // const jsonData = JSON.stringify(result.rows[0]);
+    const result = await pool.query('SELECT * FROM tickets WHERE sender_id = $1', [id])
 
     if (result) {
       res.send(result);
       console.log(result)
     } else {
-      res.status(404).json({ message: "Unit not found" });
+      res.status(404).json({ message: "No tickets not found" });
     }
   } catch (error) {
     console.error("Error occurred during operation:", error);
