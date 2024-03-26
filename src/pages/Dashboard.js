@@ -2,6 +2,7 @@ import { useFetchUnitByUser } from '../hooks/useFetchUnitByUser'
 import { useAuth } from '../hooks/AuthProvider'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { Loading } from '../components/Loading'
 import Typography from '@mui/material/Typography';
 import ReusablePopover from '../components/ReusablePopover';
 import profilePlaceholder from '../assets/profile-image-placeholder.jpeg'
@@ -23,12 +24,13 @@ export const Dashboard = () => {
   const navigate = useNavigate()
   const { result: currentUnit, loading, error } = useFetchUnitByUser(id, "", "units", "GET");
   const { result: currentUnion } = useFetchUnitByUser(id, "", "unions", "GET");
-  const name = user ? user.name : "";
+  const name = user ? user.name : ""
 
   const navigateEditData = () => {
     navigate('/user/edit')
   }
-  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false)
+
   const handlePopoverClick = (event) => {
     setAnchorEl(event.currentTarget);
     setPopoverOpen(true);
@@ -50,13 +52,12 @@ export const Dashboard = () => {
 
   if(error) {
     return (
-    <div>{error}</div>
+      <div>{error}</div>
   )}
 
   if(loading) {
     return (
-    <div>loading</div>
-
+      <Loading />
     )}
 
   if(currentUnit && currentUnion) {

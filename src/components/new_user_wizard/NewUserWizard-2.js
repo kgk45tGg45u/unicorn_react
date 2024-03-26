@@ -105,7 +105,7 @@ export const UserWizard2 = () => {
       console.log("The end")
       // The end logic
       record(data)
-      navigate('/new-user-wizard-3')
+      // navigate('/new-user-wizard-3')
     }
 
     if(currentConfigurationIndex === 1 && data.workingYesNo === "Yes"){
@@ -137,7 +137,7 @@ export const UserWizard2 = () => {
     if(currentConfigurationIndex === 4 && data.producingYesNo === "No" && data.hasService === "No"){
       console.log("the end")
       record(data)
-      navigate('/new-user-wizard-3')
+      // navigate('/new-user-wizard-3')
     }
 
     if(currentConfigurationIndex === 4 && data.producingYesNo === "Yes" && data.hasService === "No"){
@@ -192,7 +192,7 @@ export const UserWizard2 = () => {
       }));
       console.log("the end")
       record(data)
-      navigate('/new-user-wizard-3')
+      // navigate('/new-user-wizard-3')
     }
 
     if(currentConfigurationIndex === 10){
@@ -202,7 +202,7 @@ export const UserWizard2 = () => {
       }));
       console.log("the end")
       record(data)
-      navigate('/new-user-wizard-3')
+      // navigate('/new-user-wizard-3')
     }
   }
 
