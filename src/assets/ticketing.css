@@ -1,0 +1,10 @@
+.ticketing-header {
+  margin: 25px 5px;
+  text-align: center;
+  border: 1px solid;
+  border-radius: 2px;
+}
+
+.pointer {
+  cursor: pointer;
+}

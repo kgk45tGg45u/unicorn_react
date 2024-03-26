@@ -62,10 +62,10 @@ export const Header = () => {
                 <Link className="nav-link" to="#">Council</Link>
               </li>
               <li className="nav-item dropdown">
-                <Link className="nav-link dropdown-toggle" data-bs-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</Link>
+                <Link className="nav-link dropdown-toggle" data-bs-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">Tickets</Link>
                 <div className="dropdown-menu">
-                  <NavLink className="dropdown-item" to="#">Action</NavLink>
-                  <NavLink className="dropdown-item" to="#">Another action</NavLink>
+                  <NavLink className="dropdown-item" to="/tickets">My tickets</NavLink>
+                  <NavLink className="dropdown-item" to="#">Send a new ticket</NavLink>
                   <NavLink className="dropdown-item" to="#">Something else here</NavLink>
                   <div className="dropdown-divider"></div>
                   <Link className="dropdown-item" to="#">Separated link</Link>

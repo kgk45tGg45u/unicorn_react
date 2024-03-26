@@ -36,7 +36,7 @@ export const AllRoutes = () => {
         <Route path="new-user-wizard-1" element={<ProtectedRoutes><UserWizard1 /></ProtectedRoutes>} />
         <Route path="new-user-wizard-2" element={<ProtectedRoutes><UserWizard2 /></ProtectedRoutes>} />
         <Route path="new-user-wizard-3" element={<ProtectedRoutes><UserWizard3 /></ProtectedRoutes>} />
-        <Route path="ticketing" element={<ProtectedRoutes><TicketingApp /></ProtectedRoutes>} />
+        <Route path="tickets" element={<ProtectedRoutes><TicketingApp /></ProtectedRoutes>} />
       </Routes>
     </>
   )

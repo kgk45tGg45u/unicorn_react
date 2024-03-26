@@ -1,7 +1,8 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
+// import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
@@ -10,6 +11,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { LatestTickets } from '../../components/LatestTickets';
+import '../../assets/ticketing.css'
 
 export const TicketingApp = () => {
   const [open, setOpen] = React.useState(false);
@@ -34,7 +37,7 @@ export const TicketingApp = () => {
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {['All tickets', 'Answered', 'Create New'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -52,20 +55,14 @@ export const TicketingApp = () => {
     <section>
 
       <div className="ticketing-header">
-        Welcome to the ticketing system
-        <Button onClick={toggleDrawer(true)}>Open drawer</Button>
-      <Drawer open={open} onClose={toggleDrawer(false)}>
+        <div className="latest-tickets"><LatestTickets /></div>
+          <div className="bg-white pb-3 pointer" onClick={toggleDrawer(true)}>Open drawer</div>
+          <Link to="/new-ticket"><div className="bg-white pb-3 pointer">Create a new ticket</div></Link>
+          <Drawer open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
       </div>
-      <div className="row">
-        <div className="col">
-avvali
-        </div>
-        <div className="col">
-dovvomi
-        </div>
-      </div>
+
     </section>
   )
 }
