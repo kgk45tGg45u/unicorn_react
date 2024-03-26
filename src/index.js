@@ -20,7 +20,7 @@ root.render(
       <UserWizardProvider>
       <ToastContainer
         position="bottom-right"
-        autoClose={1400}
+        autoClose={1800}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
