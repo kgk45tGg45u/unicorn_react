@@ -9,6 +9,7 @@ const app = express();
 const port = 3001;
 const userRoutes = require('./routes/users')
 const unitRoutes = require('./routes/units')
+const unionRoutes = require('./routes/unions')
 
 // PostgreSQL configuration
 const Pool = require("pg").Pool;
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 
 app.use(userRoutes)
 app.use(unitRoutes)
+app.use(unionRoutes)
 
 // Root route
 app.get('/', (req, res) => {

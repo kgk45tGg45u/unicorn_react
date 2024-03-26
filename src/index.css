@@ -65,26 +65,7 @@ code {
 
 .infostand {
   width: 100px;
-  h3{
-    padding: 7px 17px;
-    background-color: #124076;
-    border-radius: 5px;
-    color: white;
-  }
-  h4{
-    padding: 7px 17px;
-    text-shadow: 0px 0px 2px black;
-    background-color: #ebd126;
-    border-radius: 5px;
-    color: white;
-  }
-  h5{
-    padding: 7px 17px;
-    text-shadow: 0px 0px 4px black;
-    background-color: #FFC374;
-    border-radius: 5px;
-    color: white;
-  }
+
 }
 
 .infostand_data {
