@@ -1,6 +1,8 @@
 import { useFetchUnitByUser } from '../hooks/useFetchUnitByUser'
 import { useAuth } from '../hooks/AuthProvider'
 import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+// import { useEffect } from 'react'
 
 import profilePlaceholder from '../assets/profile-image-placeholder.jpeg'
 import moneyBill from '../assets/SVG/money-bill-solid.svg'
@@ -13,19 +15,31 @@ import { DashboardCard } from '../components/DashboardCard'
 // import unicornSymbol from '../assets/unicorn-symbol-2.png';
 
 
-export const Dashboard = () => {
+export const UnionProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const id = user.id
   const navigate = useNavigate()
   const { result: currentUnit, loading, error } = useFetchUnitByUser(id, "", "units", "GET");
   const { result: currentUnion, loadingUnion, errorUnion } = useFetchUnitByUser(id, "", "unions", "GET");
   const name = user ? user.name : "";
+  // useEffect(() => {
+
+  //     console.log(currentUnit)
+  //     // console.log(currentUnion.user.id)
+  //     // console.log(currentUnion.responsible_id)
+
+  // }, [currentUnion, currentUnit, id])
+  // useEffect(() => {
+
+  //   const responsible = currentUnion
+  //   console.log(responsible.responsible_id)
+  // }, [currentUnion])
   // const unicornSymbolStyle = {
   //   width: 13,
   //   opacity: 0.9
   // }
   const navigateEditData = () => {
-    navigate('/user/edit')
+    navigate('/union/edit')
   }
 
   const { logOut } = useAuth()
@@ -40,11 +54,14 @@ export const Dashboard = () => {
   if(loading) {
     return (
       <div>
-        Loding...
+        {toast("Loading!")}
       </div>
     )}
 
   if(currentUnit && currentUnion) {
+    console.log(currentUnit)
+    toast("Current Unit: loaded.")
+    toast("Current Union loaded.")
     return (
       <section>
         <div className="container">
@@ -54,11 +71,11 @@ export const Dashboard = () => {
               <table className="table table-hover">
                 <tbody>
                   <tr>
-                    <td><h4><strong>{name}</strong></h4></td>
+                    <td><h4><strong>{currentUnion.union.title}</strong></h4></td>
                   </tr>
                   <tr>
-                    <td>Current Unit:</td>
-                    <td><strong>{currentUnit.unit.title}</strong></td>
+                    <td>Responsible:</td>
+                    <td>{name}</td>
                     <td>go</td>
                   </tr>
                   <tr>
@@ -67,13 +84,13 @@ export const Dashboard = () => {
                     <td>go</td>
                   </tr>
                   <tr>
-                    <td>Tokens:</td>
+                    <td>description</td>
                     <td>14 Unics</td>
                     <td>go</td>
                   </tr>
                 </tbody>
               </table>
-                <button className="btn btn-info" onClick={navigateEditData}>Edit user data</button>
+                <button className="btn btn-info" onClick={navigateEditData}>Edit union data</button>
                 <button className="btn btn-warning mx-3" onClick={logOut}>Logout</button>
 
               </div>

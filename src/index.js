@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { UserWizardProvider } from './hooks/UserWizardProvider'
 import './index.css';
 import App from './App';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { BrowserRouter } from 'react-router-dom'
 // Bootstrap CSS
@@ -14,6 +16,18 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
       <UserWizardProvider>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={1400}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        />
         <App />
       </UserWizardProvider>
     </BrowserRouter>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from 'react-toastify';
 
 const baseUrl = 'http://localhost:3001/';
 
@@ -27,12 +28,12 @@ export const useFetchUnitByUser = (id, data, endpoint, method) => {
 
         setResult(jsonData);
         if (response.ok) {
-          // Request was successful
+          // toast("Successful")
         } else {
           throw new Error("Request failed");
         }
       } catch (err) {
-        console.error("Request error:", err);
+        toast.error("Request error:", err);
         // Provide feedback to the user about the request failure
       } finally {
         setLoading(false); // Update loading state after fetch request is completed

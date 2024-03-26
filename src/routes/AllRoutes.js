@@ -11,6 +11,7 @@ import { UserProfile } from '../pages/UserProfile.js'
 import { EditUserProfile } from '../pages/EditUserProfile.js'
 import { Update } from '../pages/Update.js'
 import { UnitProfile } from '../pages/UnitProfile.js'
+import { UnionProfile } from '../pages/UnionProfile.js'
 import { Home } from '../pages/Home'
 
 
@@ -29,6 +30,7 @@ export const AllRoutes = () => {
         <Route path="user/edit" element={<ProtectedRoutes><EditUserProfile /></ProtectedRoutes>} />
         <Route path="update" element={<ProtectedRoutes><Update /></ProtectedRoutes>} />
         <Route path="unit" element={<ProtectedRoutes><UnitProfile /></ProtectedRoutes>} />
+        <Route path="union" element={<ProtectedRoutes><UnionProfile /></ProtectedRoutes>} />
         <Route path="new-user-wizard-1" element={<ProtectedRoutes><UserWizard1 /></ProtectedRoutes>} />
         <Route path="new-user-wizard-2" element={<ProtectedRoutes><UserWizard2 /></ProtectedRoutes>} />
         <Route path="new-user-wizard-3" element={<ProtectedRoutes><UserWizard3 /></ProtectedRoutes>} />

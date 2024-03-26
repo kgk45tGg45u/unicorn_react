@@ -1,5 +1,6 @@
 import { useContext, createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
 
@@ -56,12 +57,26 @@ export const AuthProvider = ({ children }) => {
 
         setUser(res.user)
         localStorage.setItem("user", JSON.stringify(res.user))
+
+        // toast.success('🦄 Wow so easy!', {
+        //   position: "bottom-right",
+        //   autoClose: 1400,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        //   theme: "light",
+        //   transition: Bounce,
+        //   });
+
+        toast('Login Successful!')
         navigate("/dashboard");
       } else {
-        throw new Error(res.message || "Login failed");
+        toast('Login Failed!')
       }
     } catch (err) {
-      console.error("Login error:", err);
+      toast(err)
       // Provide feedback to the user about the login failure
     }
   };
@@ -80,10 +95,10 @@ export const AuthProvider = ({ children }) => {
         // Provide feedback to the user about the registration
         navigate("/login"); // Redirect to login page after successful registration
       } else {
-        throw new Error("Registration failed");
+        toast('Registration failed.');
       }
     } catch (err) {
-      console.error("Registration error:", err);
+      toast.error("Registration error:", err)
       // Provide feedback to the user about the registration failure
     }
   };
@@ -104,12 +119,13 @@ export const AuthProvider = ({ children }) => {
         throw new Error("Registration failed");
       }
     } catch (err) {
-      console.error("Registration error:", err);
+      toast.error("Registration error:", err);
       // Provide feedback to the user about the registration failure
     }
   };
 
   const logOut = () => {
+    toast('Logout Successful!')
     setUser(null);
     setToken("");
     localStorage.removeItem("site");
