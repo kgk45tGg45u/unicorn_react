@@ -17,10 +17,10 @@ router.get('/tickets/:id', async (req, res) => {
 
   try {
     const result = await pool.query('SELECT * FROM tickets WHERE sender_id = $1', [id])
-
+    const tickets = result.rows
     if (result) {
-      res.send(result);
-      console.log(result)
+      res.send(tickets);
+      console.log(tickets)
     } else {
       res.status(404).json({ message: "No tickets not found" });
     }

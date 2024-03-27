@@ -23,11 +23,12 @@ export const useFetchTickets = (id, data, endpoint, method) => {
 
         const response = await fetch(url, options);
         const jsonData = await response.json();
-        console.log("Response data:", jsonData.rows);
 
         setResult(jsonData);
+        console.log("Response data:", jsonData);
         if (response.ok) {
           // Request was successful
+          console.log(result)
         } else {
           throw new Error("Request failed");
         }
@@ -36,6 +37,7 @@ export const useFetchTickets = (id, data, endpoint, method) => {
         // Provide feedback to the user about the request failure
       } finally {
         setLoading(false); // Update loading state after fetch request is completed
+        console.log(result)
       }
     };
 
