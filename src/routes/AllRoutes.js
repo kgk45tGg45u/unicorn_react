@@ -14,15 +14,13 @@ import { UnitProfile } from '../pages/UnitProfile.js'
 import { UnionProfile } from '../pages/UnionProfile.js'
 import { Home } from '../pages/Home'
 import { TicketingApp } from '../pages/tickets/TicketingApp.js'
-// import EnhancedTable from '../components/LatestTickets-new.js'
-// import BasicModal from '../components/Popover.js'
-
+import { CreateTicket } from '../components/CreateTicket.js'
 
 export const AllRoutes = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="404" element={<Errorpage />} />
@@ -38,7 +36,7 @@ export const AllRoutes = () => {
         <Route path="new-user-wizard-2" element={<ProtectedRoutes><UserWizard2 /></ProtectedRoutes>} />
         <Route path="new-user-wizard-3" element={<ProtectedRoutes><UserWizard3 /></ProtectedRoutes>} />
         <Route path="tickets" element={<ProtectedRoutes><TicketingApp /></ProtectedRoutes>} />
-        {/* <Route path="enhancedtable" element={<ProtectedRoutes><EnhancedTable /></ProtectedRoutes>} /> */}
+        <Route path="tickets/new" element={<ProtectedRoutes><CreateTicket /></ProtectedRoutes>} />
       </Routes>
     </>
   )

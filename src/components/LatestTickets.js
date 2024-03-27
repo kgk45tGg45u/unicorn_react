@@ -1,34 +1,17 @@
 import * as React from 'react';
-import { useState } from 'react'
 import { useFetchTickets } from '../hooks/useFetchTickets';
-// import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
-// import Divider from '@mui/material/Divider';
-// import ListItemText from '@mui/material/ListItemText';
-// import ListItemAvatar from '@mui/material/ListItemAvatar';
-// import Avatar from '@mui/material/Avatar';
-// import Typography from '@mui/material/Typography';
 import { Loading } from './Loading';
 
 export const LatestTickets = () => {
-  const [currentTickets, setCurrentTickets] = useState({
-    subject: null,
-    content: null
-  });
   const currentUser = JSON.parse(localStorage.getItem("user"))
   const id = currentUser.id
 
   const { result: tickets, loading } = useFetchTickets(id, "", "tickets", "GET");
-console.log(tickets)
-// const allTickets = tickets.map((ticket) => (
-//   setCurrentTickets(ticket)
-// ))
-// console.log(allTickets)
-      // setCurrentTickets(tickets)
+  console.log(tickets)
 
-      // console.log("Tickets in UseEffect:", currentTickets)
-
-
+  const openTicket = () => {
+    console.log("clicked")
+  }
 
   if (loading) {
     return (<Loading />)
@@ -40,11 +23,9 @@ console.log(tickets)
 
   return (
     <>
-      <table className="table table-success table-striped">
-
+      <table className="table table-success table-hover table-striped max-width-100 tickets_table">
         <thead>
           <tr>
-            <th scope="col">Select</th>
             <th scope="col">From</th>
             <th scope="col">Subject</th>
             <th scope="col">Content</th>
@@ -54,18 +35,15 @@ console.log(tickets)
         <tbody>
           {tickets && tickets.map((ticket, index) => (
             <tr id={index}>
-              <th scope="row">1</th>
-              <td>SENDER</td>
-              <td>{ticket.subject}</td>
-              <td>{ticket.content}</td>
-              <td>DATE HERE</td>
+
+              <td onClick={openTicket} role="button">SENDER</td>
+              <td onClick={openTicket} role="button">{ticket.subject}</td>
+              <td onClick={openTicket} role="button">{ticket.content}</td>
+              <td onClick={openTicket} role="button">DATE HERE</td>
             </tr>
           ))}
         </tbody>
       </table>
-
     </>
-
-
-    );
+  );
 }
