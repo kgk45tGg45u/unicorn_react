@@ -18,7 +18,7 @@ export const LatestTickets = () => {
   const currentUser = JSON.parse(localStorage.getItem("user"))
   const id = currentUser.id
 
-  const { result: tickets, loading } = useFetchTickets(1, "", "tickets", "GET");
+  const { result: tickets, loading } = useFetchTickets(id, "", "tickets", "GET");
 console.log(tickets)
 // const allTickets = tickets.map((ticket) => (
 //   setCurrentTickets(ticket)
@@ -39,7 +39,33 @@ console.log(tickets)
   }
 
   return (
-    tickets.map((ticket, index) => (
-    <div id={index}>{ticket.subject}</div>
-    )));
+    <>
+      <table className="table table-success table-striped">
+
+        <thead>
+          <tr>
+            <th scope="col">Select</th>
+            <th scope="col">From</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Content</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tickets && tickets.map((ticket, index) => (
+            <tr id={index}>
+              <th scope="row">1</th>
+              <td>SENDER</td>
+              <td>{ticket.subject}</td>
+              <td>{ticket.content}</td>
+              <td>DATE HERE</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+    </>
+
+
+    );
 }
