@@ -12,6 +12,20 @@ code {
     monospace;
 }
 
+.edit_user {
+  margin: 0 auto;
+  margin-top: 15px;
+  max-width: 500px;
+  background-color: #4f4f4f98;
+  padding: 30px;
+  border: 1px solid;
+  border-radius: 5px;
+}
+
+.edit_user label {
+  color: white;
+}
+
 .content {
   position: relative;
   z-index: 1;
@@ -65,33 +79,22 @@ code {
 
 .infostand {
   width: 100px;
-
 }
 
 .infostand_data {
   width: fit-content;
 }
 
-
 .dashboard_icon:hover {
   background-color: #297fb956 !important; /* Change background color on hover */
   cursor: pointer; /* Change cursor to pointer on hover */
 }
 
-/* a:hover {
-   border-color: red;
-
-  } */
-
-
-/*
-.indicator {
-  position: absolute;
-  top: 0%;
-  right: 0%;
-  left: 60%;
-  bottom: 60%;
-  display: flex;
-  justify-content: center;
-
-} */
+.error {
+  color: red;
+  font-size: 11px;
+}
+.success {
+  font-size: 20px;
+  color: rgb(75, 181, 67);
+}

@@ -123,7 +123,6 @@ router.put('/users/add-from-wizard', async (req, res) => {
   const { first_name, last_name, address, city, country, zip, phone } = req.body;
   const fullName = first_name + last_name
 
-
   try {
     const newData = await pool.query('UPDATE users SET name = $1, address = $2, phone = $3, city= $4, country = $5, zip = $6 WHERE id = $7 RETURNING *', [fullName, address, phone, city, country, zip, 1])
     res.status(201).json({ message: "User profile edited successfully" });
