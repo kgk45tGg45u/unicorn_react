@@ -98,3 +98,9 @@ code {
   font-size: 20px;
   color: rgb(75, 181, 67);
 }
+
+/* .sidebar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+} */

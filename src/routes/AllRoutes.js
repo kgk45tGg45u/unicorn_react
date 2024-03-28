@@ -15,6 +15,7 @@ import { UnionProfile } from '../pages/UnionProfile.js'
 import { Home } from '../pages/Home'
 import { TicketingApp } from '../pages/tickets/TicketingApp.js'
 import { CreateTicket } from '../components/CreateTicket.js'
+import { CouncilProfile } from '../pages/CouncilProfile.js'
 
 export const AllRoutes = () => {
   return (
@@ -37,6 +38,7 @@ export const AllRoutes = () => {
         <Route path="new-user-wizard-3" element={<ProtectedRoutes><UserWizard3 /></ProtectedRoutes>} />
         <Route path="tickets" element={<ProtectedRoutes><TicketingApp /></ProtectedRoutes>} />
         <Route path="tickets/new" element={<ProtectedRoutes><CreateTicket /></ProtectedRoutes>} />
+        <Route path="council" element={<ProtectedRoutes><CouncilProfile /></ProtectedRoutes>} />
       </Routes>
     </>
   )
