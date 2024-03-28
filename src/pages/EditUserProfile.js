@@ -152,14 +152,14 @@ const [inputFields, setInputFields] = useState({
           </label>
           <input
             type="text"
-            name="Birthday"
-            id="Birthday"
+            name="birthday"
+            id="birthday"
             className="form-control"
             onChange={handleChange}
-            style={{ border: errors.Birthday ? "1px solid red" : null }}
+            style={{ border: errors.birthday ? "1px solid red" : null }}
           />
         </div>
-        {errors.Birthday ? (
+        {errors.birthday ? (
           <p className="error">The format for your birthday is wrong.</p>
         ) : null}
 
@@ -261,7 +261,7 @@ const [inputFields, setInputFields] = useState({
           />
           <datalist id="countryOptions">
             {countries.map((country) => (
-              <option value={`${country.name}`} />
+              <option key={`${country.code}`} value={`${country.name}`} />
             ))}
           </datalist>
         </div>

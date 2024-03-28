@@ -36,38 +36,37 @@ export const Home = () => {
           <p className="p-4">Modelling the future of labor, market and planning with the help of smart designs.</p>
           <Link to="/login" className="mx-4 btn btn-danger">Join now</Link>
         </div>
-      </div>
 
-      <div className="d-flex m-4 align-content-start justify-content-evenly flex-wrap">
-        <div className="col-md-4 divbg col-sm-12 homeCard p-3 border m-4 shadow">
-          <h3 className="h3">Unicorn 0.1</h3>
-          <ul>
-            <li>currently serving {noOfUsers.length} users</li>
-            <li>integrating work and politics in an online App</li>
-            <li>Access to all the data for everyone with the help of block-chain.</li>
-          </ul>
-          {/* <button className="btn btn-danger">Logout</button> */}
-        </div>
-        <div className="col-md-4 divbg col-sm-12 homeCard p-3 border m-4 shadow">
-          <h3 className="h3">Unicorn 0.1</h3>
-          <ul>
-            <li>currently serving 1549 users</li>
-            <li>integrating work and politics in an online App</li>
-            <li>Access to all the data for everyone with the help of block-chain.</li>
-          </ul>
-          {/* <button className="btn btn-danger">Logout</button> */}
-        </div>
-        <div className="col-md-4 divbg col-sm-12 homeCard p-3 border m-4 shadow">
-          <h3 className="h3">Unicorn 0.1</h3>
-          <ul>
-            <li>currently serving 1444 users</li>
-            <li>integrating work and politics in an online App</li>
-            <li>Access to all the data for everyone with the help of block-chain.</li>
-          </ul>
-          {/* <button className="btn btn-danger">Logout</button> */}
+        <div className="d-flex m-4 align-content-start justify-content-evenly flex-wrap">
+          <div className="col-md-4 divbg col-sm-12 homeCard p-3 border m-4 shadow">
+            <h3 className="h3">Unicorn 0.1</h3>
+            <ul>
+              <li>currently serving {noOfUsers.length} users</li>
+              <li>integrating work and politics in an online App</li>
+              <li>Access to all the data for everyone with the help of block-chain.</li>
+            </ul>
+            {/* <button className="btn btn-danger">Logout</button> */}
+          </div>
+          <div className="col-md-4 divbg col-sm-12 homeCard p-3 border m-4 shadow">
+            <h3 className="h3">Unicorn 0.1</h3>
+            <ul>
+              <li>currently serving 1549 users</li>
+              <li>integrating work and politics in an online App</li>
+              <li>Access to all the data for everyone with the help of block-chain.</li>
+            </ul>
+            {/* <button className="btn btn-danger">Logout</button> */}
+          </div>
+          <div className="col-md-4 divbg col-sm-12 homeCard p-3 border m-4 shadow">
+            <h3 className="h3">Unicorn 0.1</h3>
+            <ul>
+              <li>currently serving 1444 users</li>
+              <li>integrating work and politics in an online App</li>
+              <li>Access to all the data for everyone with the help of block-chain.</li>
+            </ul>
+            {/* <button className="btn btn-danger">Logout</button> */}
+          </div>
         </div>
       </div>
-
     </section>
   )
 }
