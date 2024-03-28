@@ -104,3 +104,8 @@ code {
   position: sticky;
   top: 0;
 } */
+
+.latest_requests_card {
+  width: 200px;
+  background-color: red;
+}

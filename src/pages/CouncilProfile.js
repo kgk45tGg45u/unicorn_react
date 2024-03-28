@@ -23,6 +23,7 @@ import union from '../assets/SVG/building-flag-solid.svg'
 import savings from '../assets/SVG/piggy-bank-solid.svg'
 import { DashboardCard } from '../components/DashboardCard'
 import menu from '../assets/SVG/bars-solid.svg'
+import { LatestRequestsCard } from '../components/LatestRequestsCard';
 
 export const CouncilProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -53,16 +54,7 @@ export const CouncilProfile = () => {
     const DrawerList = (
       <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <LatestRequestsCard />
         </List>
         <Divider />
         <List>
