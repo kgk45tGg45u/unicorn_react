@@ -24,6 +24,7 @@ import savings from '../assets/SVG/piggy-bank-solid.svg'
 import { DashboardCard } from '../components/DashboardCard'
 import menu from '../assets/SVG/bars-solid.svg'
 import { LatestRequestsCard } from '../components/LatestRequestsCard';
+import { XputCard } from '../components/XputCard';
 
 export const CouncilProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -112,15 +113,19 @@ export const CouncilProfile = () => {
         <div className="container">
           <div className="row p-2 mb-4 mx-2 divbg rounded-3 shadow-lg">
             <div className="col-md-6 col-sm-12">
-              INPUT
+              <XputCard title="Input / Last Month" />
             </div>
             <div className="col-md-6 col-sm-12">
-              OUTPUT
+              <XputCard title="Output / Last Month" />
             </div>
           </div>
         </div>
 
-
+        <div className="container">
+          <div className="p-2 mx-2 mb-4 divbg rounded-3 shadow-lg">
+            News Stand
+          </div>
+        </div>
 
         <div className="container">
           <div className="p-2 mx-2 divbg rounded-3 shadow-lg">

@@ -83,6 +83,10 @@ code {
 
 .infostand_data {
   width: fit-content;
+  tr {
+    font-weight: 200;
+    font-size: small;
+  }
 }
 
 .dashboard_icon:hover {
@@ -138,4 +142,13 @@ code {
 }
 .request_card_button button:hover {
   opacity: 1;
+}
+
+.xput_card_wrapper {
+  padding: 10px 0px 10px 0px;
+}
+
+.xput_list .table tr {
+  font-weight: 200;
+  font-size: small;
 }
