@@ -31,21 +31,22 @@ export const CouncilProfile = () => {
   const navigate = useNavigate()
   const { result: currentUnit, loading, error } = useFetch(id, "", "units", "GET");
   const { result: currentUnion, loading: loadingUnion, error: errorUnion } = useFetch(id, "", "unions", "GET");
+  const { result: currentCouncil, loading: loadingCouncil, error: errorCouncil } = useFetch(id, "", "councils", "GET");
   const name = user ? user.name : "";
   const [open, setOpen] = useState(false);
 
 
-  if(error || errorUnion) {
+  if(error || errorUnion || errorCouncil) {
     return (
       <div>
         An error occured. Please login.
       </div>
     )}
 
-  if(loading || loadingUnion) {
+  if(loading || loadingUnion || loadingCouncil) {
     return (<Loading />)}
 
-  if(currentUnit && currentUnion) {
+  if(currentUnit && currentUnion && currentCouncil) {
 
     const toggleDrawer = (newOpen) => () => {
       setOpen(newOpen);
@@ -54,26 +55,21 @@ export const CouncilProfile = () => {
     const DrawerList = (
       <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
         <List>
-          <LatestRequestsCard />
+          <LatestRequestsCard title="Latest Requests" button1="New" button2="Tickets" />
         </List>
         <Divider />
         <List>
-          {['All tickets', 'Answered', 'Create New'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          <LatestRequestsCard title="Union Requests" button1="New" button2="Tickets" />
+        </List>
+        <Divider />
+        <List>
+          <LatestRequestsCard title="Members" button1="New" button2="Remove" />
         </List>
       </Box>
     );
     console.log(currentUnit)
     // toast("Current Unit: loaded.")
-    toast("Current Union loaded.")
+    // toast("Current Union loaded.")
     return (
       <section>
         <div className="ticketing_icons">
@@ -88,24 +84,23 @@ export const CouncilProfile = () => {
           <div className="row my-4 mx-2 divbg rounded-3 shadow-lg">
             <div className="col my-4 infostand">
               <div className="infostand_data">
-              <table className="table table-hover">
-                <tbody>
-                  <tr>
-                    <td><h4><strong>{currentUnion.union.title}</strong></h4></td>
-                  </tr>
-                  <tr>
-                    <td>Responsible:</td>
-                    <td>{name}</td>
-                    <td>Profile</td>
-                  </tr>
-                  <tr>
-                    <td>Union:</td>
-                    <td><strong>{currentUnion.union.title}</strong></td>
-                    <td>Union profile</td>
-                  </tr>
-                </tbody>
-              </table>
-
+                <table className="table table-hover">
+                  <tbody>
+                    <tr>
+                      <td><h4><strong>{currentCouncil.council.name}</strong></h4></td>
+                    </tr>
+                    <tr>
+                      <td>Responsible:</td>
+                      <td>{name}</td>
+                      <td>Profile</td>
+                    </tr>
+                    <tr>
+                      <td>Working Unit:</td>
+                      <td><strong>{currentUnit.unit.title}</strong></td>
+                      <td>Unit profile</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div className="col-auto my-4">
@@ -114,6 +109,19 @@ export const CouncilProfile = () => {
             </div>
           </div>
         </div>
+        <div className="container">
+          <div className="row p-2 mb-4 mx-2 divbg rounded-3 shadow-lg">
+            <div className="col-md-6 col-sm-12">
+              INPUT
+            </div>
+            <div className="col-md-6 col-sm-12">
+              OUTPUT
+            </div>
+          </div>
+        </div>
+
+
+
         <div className="container">
           <div className="p-2 mx-2 divbg rounded-3 shadow-lg">
             <div className="d-flex flex-wrap justify-content-around p-2">

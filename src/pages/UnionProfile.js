@@ -57,8 +57,7 @@ export const UnionProfile = () => {
 
   if(currentUnit && currentUnion) {
     console.log(currentUnit)
-    // toast("Current Unit: loaded.")
-    toast("Current Union loaded.")
+    // toast("Current Union loaded.")
     return (
       <section>
         <div className="container">

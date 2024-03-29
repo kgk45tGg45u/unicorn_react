@@ -11,6 +11,7 @@ const userRoutes = require('./routes/users')
 const unitRoutes = require('./routes/units')
 const ticketRoutes = require('./routes/tickets')
 const unionRoutes = require('./routes/unions')
+const councilRoutes = require('./routes/councils')
 
 // PostgreSQL configuration
 const Pool = require("pg").Pool;
@@ -30,6 +31,7 @@ app.use(userRoutes)
 app.use(unitRoutes)
 app.use(ticketRoutes)
 app.use(unionRoutes)
+app.use(councilRoutes)
 
 // Root route
 app.get('/', (req, res) => {

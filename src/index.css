@@ -107,5 +107,35 @@ code {
 
 .latest_requests_card {
   width: 200px;
-  background-color: red;
+  background-color: rgb(215, 215, 215);
+  margin: 0 auto;
+  padding: 8px;
+  font-size: small;
+  border-radius: 5px;
+}
+
+.latest_requests_card_wrapper {
+  margin-top: 20px;
+}
+
+.requests_card_buttons {
+  display: flex;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  justify-content: space-around;
+}
+
+.request_card_button {
+  margin: 0 5px 0 5px;
+  button {
+    padding: 4px 12px;
+    border-radius: 3px;
+    background: #ff4646;
+    border: 1px solid #4A4A4A;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+}
+.request_card_button button:hover {
+  opacity: 1;
 }
