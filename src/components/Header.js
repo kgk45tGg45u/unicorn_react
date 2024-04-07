@@ -59,7 +59,7 @@ export const Header = () => {
                 <Link className="nav-link" to="#">Wallet</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="#">Council</Link>
+                <Link className="nav-link" to="/council">Council</Link>
               </li>
               <li className="nav-item dropdown">
                 <Link className="nav-link dropdown-toggle" data-bs-toggle="dropdown" to="#" role="button" aria-haspopup="true" aria-expanded="false">Tickets</Link>
