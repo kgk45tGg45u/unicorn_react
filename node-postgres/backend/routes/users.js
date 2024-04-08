@@ -119,12 +119,12 @@ router.put('/users', async (req, res) => {
   }
 });
 
-router.put('/users/add-from-wizard', async (req, res) => {
-  const { first_name, last_name, address, city, country, zip, phone } = req.body;
-  const fullName = first_name + last_name
+router.put('/users/add-personal-details', async (req, res) => {
+  const { id, first_name, last_name, address, city, country, zip, phone, working } = req.body;
+  let workingBoolean = (working === "Yes")
 
   try {
-    const newData = await pool.query('UPDATE users SET name = $1, address = $2, phone = $3, city= $4, country = $5, zip = $6 WHERE id = $7 RETURNING *', [fullName, address, phone, city, country, zip, 1])
+    const newData = await pool.query('UPDATE users SET first_name = $1, last_name = $2, address = $3, phone = $4, city= $5, country = $6, zip = $7, working = $8 WHERE id = $9 RETURNING *', [first_name, last_name, address, phone, city, country, zip, workingBoolean, id])
     res.status(201).json({ message: "User profile edited successfully" });
   } catch (error) {
     console.error("Error occurred during operation:", error);

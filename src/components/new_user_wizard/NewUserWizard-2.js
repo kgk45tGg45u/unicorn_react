@@ -104,8 +104,8 @@ export const UserWizard2 = () => {
     if(currentConfigurationIndex === 1 && data.workingYesNo === "No"){
       console.log("The end")
       // The end logic
-      record(data)
-      // navigate('/new-user-wizard-3')
+      record({working: false})
+      navigate('/dashboard')
     }
 
     if(currentConfigurationIndex === 1 && data.workingYesNo === "Yes"){
@@ -136,8 +136,8 @@ export const UserWizard2 = () => {
     // Offering service?
     if(currentConfigurationIndex === 4 && data.producingYesNo === "No" && data.hasService === "No"){
       console.log("the end")
-      record(data)
-      // navigate('/new-user-wizard-3')
+      record({working: false})
+      navigate('/dashboard')
     }
 
     if(currentConfigurationIndex === 4 && data.producingYesNo === "Yes" && data.hasService === "No"){

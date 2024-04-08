@@ -29,4 +29,51 @@ router.get('/units/:id', async (req, res) => {
   }
 });
 
+router.post('/units/add', async (req, res) => {
+  const { id, newProductionUnitName } = req.body;
+
+  try {
+    // Check if unit
+    const existingUnit = await pool.query('SELECT * FROM units WHERE title = $1', [newProductionUnitName]);
+    if (existingUnit.rows.length > 0) {
+      return res.status(400).json({ message: "A Unit with this name already exists. Failed to create a new working unit." });
+    }
+
+    // Create the unit
+    const newUnit = await pool.query('INSERT INTO units (title, user_id) VALUES ($1, $2) RETURNING *', [newProductionUnitName, id]);
+    res.status(201).json({ message: "Unit created successfully" });
+  } catch (error) {
+    console.error("Error occurred during user registration:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Edit unit data
+router.put('/units', async (req, res) => {
+  const { id, currentProductionUnit } = req.body;
+
+  try {
+    const newData = await pool.query('UPDATE units SET users = array_append(users, $1) WHERE title = $2 RETURNING *', [id, currentProductionUnit])
+    res.status(201).json({ message: "Unit data edited successfully!" });
+  } catch (error) {
+    console.error("Error occurred during operation:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Add producing and service booleans to unit
+router.put('/units-service-product', async (req, res) => {
+  const { id, producingYesNo, hasService } = req.body;
+  let producingBoolean = (producingYesNo === "Yes")
+  let serviceBoolean = (hasService === "Yes")
+
+  try {
+    const newData = await pool.query('UPDATE units SET has_product = $1, has_service = $2 WHERE array_position(users, $3) IS NOT NULL RETURNING *', [producingBoolean, serviceBoolean, id])
+    res.status(201).json({ message: "Unit data edited successfully!" });
+  } catch (error) {
+    console.error("Error occurred during operation:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router
