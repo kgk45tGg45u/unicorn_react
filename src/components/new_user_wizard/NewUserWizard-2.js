@@ -104,7 +104,7 @@ export const UserWizard2 = () => {
     if(currentConfigurationIndex === 1 && data.workingYesNo === "No"){
       console.log("The end")
       // The end logic
-      record({working: false})
+      record(data)
       navigate('/dashboard')
     }
 

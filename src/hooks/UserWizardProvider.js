@@ -1,5 +1,4 @@
-import { useContext, createContext, useEffect, useReducer } from "react";
-import { userReducer } from "./userWizardReducer";
+import { useContext, createContext, useEffect } from "react";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -7,13 +6,10 @@ const initialState = {
 }
 
 const UserWizardContext = createContext(initialState);
-
 const currentUser = JSON.parse(localStorage.getItem("user"))
 
 export const UserWizardProvider = ({ children }) => {
   const id = currentUser.id
-
-  const [state, dispatch] = useReducer(userReducer, initialState);
 
   const record = async (data) => {
     const { workingYesNo, producingYesNo, product1title, hasService, serviceName, hasUnit, currentProductionUnit, newProductionUnitName, councilName } = data
@@ -21,33 +17,27 @@ export const UserWizardProvider = ({ children }) => {
     data.id = id
 
     // Add working boolean to the the user
-    try {
-      const response = await fetch("http://localhost:3001/users/add-personal-details", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(workingYesNo),
-      });
-      if (response.ok) {
-        // If the request is successful, update the local state with the new data
-        const updatedUserData = state.userData.concat(data);
-        toast.info('User Data updated!')
-        dispatch({
-          type: "RECORD_USER_DATA",
-          payload: {
-            userData: updatedUserData
-          }
+    if (workingYesNo) {
+      try {
+        const response = await fetch("http://localhost:3001/users/add-personal-details", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(workingYesNo),
         });
-        // Provide feedback to the user about the successful record
-      } else {
-        throw new Error("Failed to save data to the backend");
+        if (response.ok) {
+          // If the request is successful, update the local state with the new data
+          toast.info('User Data updated!')
+          // Provide feedback to the user about the successful record
+        } else {
+          throw new Error("Failed to save data to the backend");
+        }
+      } catch (error) {
+        console.error("Error saving data to the backend:", error);
+        // Provide feedback to the user about the error in saving data
       }
-    } catch (error) {
-      console.error("Error saving data to the backend:", error);
-      // Provide feedback to the user about the error in saving data
-    }
-
+  }
     // Create Unit if necessary
     if (hasUnit && hasUnit === "Yes") {
       try {
@@ -110,12 +100,14 @@ export const UserWizardProvider = ({ children }) => {
     }
   }
 
-  useEffect(() => {
-    console.log("Data in UserWizardProvider:", state.userData);
-  }, [state]);
+  
+
+  // useEffect(() => {
+  //   console.log("Data in UserWizardProvider:", state.userData);
+  // }, [state]);
 
   return (
-    <UserWizardContext.Provider value={{ record, userData: state.userData }}>
+    <UserWizardContext.Provider value={{ record }}>
       {children}
     </UserWizardContext.Provider>
   );

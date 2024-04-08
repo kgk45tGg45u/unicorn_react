@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { UserWizardProvider } from './hooks/UserWizardProvider'
 import './index.css';
 import App from './App';
 import { ToastContainer } from 'react-toastify';
@@ -15,9 +14,8 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <BrowserRouter>
-        <StyledEngineProvider injectFirst>
-      <UserWizardProvider>
+  <BrowserRouter>
+    <StyledEngineProvider injectFirst>
       <ToastContainer
         position="bottom-right"
         autoClose={1800}
@@ -29,9 +27,8 @@ root.render(
         draggable
         pauseOnHover
         theme="dark"
-        />
-        <App />
-      </UserWizardProvider>
-      </StyledEngineProvider>
-    </BrowserRouter>
+      />
+      <App />
+    </StyledEngineProvider>
+  </BrowserRouter>
 );

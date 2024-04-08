@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useUserWizard } from '../../hooks/UserWizardProvider'
+import { toast } from "react-toastify";
 import '../../assets/wizard.css';
 
 export const UserWizard1 = () => {
@@ -14,7 +15,7 @@ export const UserWizard1 = () => {
   const country = useRef()
   const zip = useRef()
 
-  const action = (e) => {
+  const action = async (e) => {
     e.preventDefault();
 
     const personalData = {
@@ -26,8 +27,31 @@ export const UserWizard1 = () => {
       zip: zip.current.value
     }
 
-    record(personalData)
-    navigate('/new-user-wizard-2')
+    try {
+      const response = await fetch("http://localhost:3001/users/add-personal-details", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(personalData),
+      });
+      if (response.ok) {
+        // If the request is successful, update the local state with the new data
+        toast.info('User Data updated!')
+        // Provide feedback to the user about the successful record
+      } else {
+        throw new Error("Failed to save data to the backend");
+      }
+    } catch (error) {
+      console.error("Error saving data to the backend:", error);
+      // Provide feedback to the user about the error in saving data
+    } finally {
+      navigate('/new-user-wizard-2')
+    }
+
+
+
+    // record(personalData)
 
   }
 
