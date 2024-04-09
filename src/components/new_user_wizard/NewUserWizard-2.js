@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserWizard } from '../../hooks/UserWizardProvider'
+import { toast } from 'react-toastify'
 import '../../assets/wizard.css';
 
 export const UserWizard2 = () => {
@@ -97,14 +98,50 @@ export const UserWizard2 = () => {
   const inputData = useRef()
   const inputRadioRefs = useRef({});
   const [data, setData] = useState({});
+  const currentUser = JSON.parse(localStorage.getItem("user"))
+  console.log(data.workingYesNo)
+  let tryExecuted = false
+
+  const submit = async (data) => {
+    // Updating Working boolean for user.
+    if (!tryExecuted) {
+      const requestBody = {
+        ...data, // Existing key-value pairs in the data object
+        id: currentUser.id // Add user ID to the request
+      };
+
+      try {
+        console.log("Running the first function.")
+        const response = await fetch("http://localhost:3001/users/add-work", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+        if (response.ok) {
+          toast.info('User Data updated!')
+          tryExecuted = true
+        } else {
+          toast.error("Failed to update user data!");
+        }
+      } catch (error) {
+        toast.error("Error saving data to the backend.");
+      }
+    }
+
+    if (tryExecuted) {
+      // Logic to record all other information
+    }
+  }
 
   const action = (e) => {
     e.preventDefault();
+
     setMoves(true)
     if(currentConfigurationIndex === 1 && data.workingYesNo === "No"){
       console.log("The end")
-      // The end logic
-      record(data)
+      submit(data)
       navigate('/dashboard')
     }
 
@@ -136,7 +173,7 @@ export const UserWizard2 = () => {
     // Offering service?
     if(currentConfigurationIndex === 4 && data.producingYesNo === "No" && data.hasService === "No"){
       console.log("the end")
-      record({working: false})
+      submit({working: false})
       navigate('/dashboard')
     }
 
