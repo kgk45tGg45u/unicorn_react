@@ -99,7 +99,6 @@ export const UserWizard2 = () => {
   const inputRadioRefs = useRef({});
   const [data, setData] = useState({});
   const currentUser = JSON.parse(localStorage.getItem("user"))
-  console.log(data.workingYesNo)
   let tryExecuted = false
 
   const submit = async (data) => {
@@ -132,6 +131,83 @@ export const UserWizard2 = () => {
 
     if (tryExecuted) {
       // Logic to record all other information
+      if (data.newProductionUnitName){
+        const requestBody = {
+          ...data, // Existing key-value pairs in the data object
+          id: currentUser.id // Add user ID to the request
+        };
+
+        try {
+          console.log("Running the second function.")
+          const response = await fetch("http://localhost:3001/units/add", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+          });
+          if (response.ok) {
+            toast.info('Production unit successfully created!')
+            tryExecuted = true
+          } else {
+            toast.error("Failed to create production unit!");
+          }
+        } catch (error) {
+          toast.error("Error saving data to the backend.");
+        }
+      } else if (data.currentProductionUnit) {
+        const requestBody = {
+          ...data, // Existing key-value pairs in the data object
+          id: currentUser.id // Add user ID to the request
+        };
+
+        try {
+          console.log("Running the third function.")
+          const response = await fetch("http://localhost:3001/units", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+          });
+          if (response.ok) {
+            toast.info('Production unit changed successfully!')
+            tryExecuted = true
+          } else {
+            toast.error("Failed to edit production unit data!");
+          }
+        } catch (error) {
+          toast.error("Error saving data to the backend.");
+        }
+      }
+    }
+
+    if (tryExecuted){
+      if (data.producingYesNo || data.hasService) {
+        const requestBody = {
+          ...data, // Existing key-value pairs in the data object
+          id: currentUser.id // Add user ID to the request
+        };
+
+        try {
+          console.log("Running the fourth function.")
+          const response = await fetch("http://localhost:3001/units-service-product", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+          });
+          if (response.ok) {
+            toast.info('Production unit changed successfully!')
+            tryExecuted = true
+          } else {
+            toast.error("Failed to edit production unit data!");
+          }
+        } catch (error) {
+          toast.error("Error saving data to the backend.");
+        }
+      }
     }
   }
 
@@ -228,7 +304,7 @@ export const UserWizard2 = () => {
         [formConfigurations[currentConfigurationIndex].input_id]: inputData.current.value
       }));
       console.log("the end")
-      record(data)
+      submit(data)
       // navigate('/new-user-wizard-3')
     }
 
@@ -238,7 +314,7 @@ export const UserWizard2 = () => {
         [formConfigurations[currentConfigurationIndex].input_id]: inputData.current.value
       }));
       console.log("the end")
-      record(data)
+      submit(data)
       // navigate('/new-user-wizard-3')
     }
   }
