@@ -29,4 +29,36 @@ router.get('/councils/:id', async (req, res) => {
   }
 });
 
+// Add a new unit
+router.post('/councils/add', async (req, res) => {
+  const { id, councilName } = req.body;
+
+  try {
+    // Check if unit
+    const existingCouncil = await pool.query('SELECT * FROM units WHERE title = $1', [councilName]);
+    if (existingCouncil.rows.length > 0) {
+      return res.status(400).json({ message: "A council with this name already exists. Failed to create a new working council." });
+    }
+
+    // Create the council
+    const newCouncil = await pool.query('INSERT INTO unit_councils (name) VALUES ($1) RETURNING *', [councilName]);
+    if (newCouncil.rowCount > 0) {
+      try {
+        const newData = await pool.query('UPDATE unit_councils SET responsible_id = $1 WHERE name = $2 RETURNING *', [id, councilName])
+        if (newData.rowCount > 0) {
+          res.status(201).json({ message: "Council profile created and user is its responsible." });
+        } else {
+          res.status(404).json({ message: "Error adding user to council" });
+        }
+      } catch (error) {
+        console.error("Error occured while adding user to the working council in creating the council.")
+        res.status(500).json({ message: "Internal server error" });
+      }
+    }
+  } catch (error) {
+  console.error("Error occured while creating the council or adding user to it.")
+  res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router

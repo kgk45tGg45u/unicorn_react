@@ -29,6 +29,7 @@ router.get('/units/:id', async (req, res) => {
   }
 });
 
+// Add a new unit
 router.post('/units/add', async (req, res) => {
   const { id, newProductionUnitName } = req.body;
 

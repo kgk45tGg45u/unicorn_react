@@ -1,12 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserWizard } from '../../hooks/UserWizardProvider'
 import { toast } from 'react-toastify'
 import '../../assets/wizard.css';
 
 export const UserWizard2 = () => {
   const [moves, setMoves] = useState(false);
-  const { record } = useUserWizard()
   const navigate = useNavigate()
 
   const formConfigurations = [
@@ -207,6 +205,32 @@ export const UserWizard2 = () => {
         } catch (error) {
           toast.error("Error saving data to the backend.");
         }
+      }
+    }
+
+    if (tryExecuted && data.councilName) {
+      const requestBody = {
+        ...data, // Existing key-value pairs in the data object
+        id: currentUser.id // Add user ID to the request
+      };
+
+      try {
+        console.log("Running the fifth function.")
+        const response = await fetch("http://localhost:3001/councils/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+        if (response.ok) {
+          toast.info('Working Council created successfully!')
+          tryExecuted = true
+        } else {
+          toast.error("Failed to create working council or adding the user to it!");
+        }
+      } catch (error) {
+        toast.error("Error saving data to the backend.");
       }
     }
   }
