@@ -24,7 +24,7 @@ export const Dashboard = () => {
   const navigate = useNavigate()
   const { result: currentUnit, loading, error } = useFetchUnitByUser(id, "", "units", "GET");
   const { result: currentUnion } = useFetchUnitByUser(id, "", "unions", "GET");
-  const name = user ? user.name : ""
+  const name = user ? user.first_name : ""
 
   const navigateEditData = () => {
     navigate('/user/edit')
@@ -70,7 +70,7 @@ export const Dashboard = () => {
               <table className="table table-hover">
                 <tbody>
                   <tr>
-                    <td><h4><strong>{name}</strong></h4></td>
+                    <td><h4><strong>Welcome, {name}!</strong></h4></td>
                   </tr>
                   <tr>
                     <td>Current Unit:</td>

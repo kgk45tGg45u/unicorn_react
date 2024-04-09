@@ -77,7 +77,12 @@ router.post('/users', async (req, res) => {
 
     // Create the user
     const newUser = await pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *', [name, email, hashedPassword]);
-    res.status(201).json({ message: "User created successfully" });
+    // Check if any rows were affected by the update
+    if (newUser.rowCount > 0) {
+      res.status(201).json({ message: "User profile edited successfully" });
+    } else {
+      res.status(404).json({ message: "User not found or no changes made" }); // or another appropriate status code
+    }
   } catch (error) {
     console.error("Error occurred during user registration:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -112,7 +117,12 @@ router.put('/users', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     // console.log(hashedPassword)
     const newData = await pool.query('UPDATE users SET name = $1, email = $2, address = $3, phone= $4, password = $5 WHERE id = $6 RETURNING *', [name, email, address, phone, hashedPassword, id])
-    res.status(201).json({ message: "User profile edited successfully" });
+    // Check if any rows were affected by the update
+    if (newData.rowCount > 0) {
+      res.status(201).json({ message: "User profile edited successfully" });
+    } else {
+      res.status(404).json({ message: "User not found or no changes made" }); // or another appropriate status code
+    }
   } catch (error) {
     console.error("Error occurred during operation:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -121,12 +131,33 @@ router.put('/users', async (req, res) => {
 
 router.put('/users/add-personal-details', async (req, res) => {
   const { id, first_name, last_name, address, city, country, zip, phone } = req.body;
-  // const workingBoolean = (workingYesNo === "Yes")
-  // const idNumber = Number(id)
 
   try {
     const newData = await pool.query('UPDATE users SET first_name = $1, last_name = $2, address = $3, phone = $4, city= $5, country = $6, zip = $7 WHERE id = $8 RETURNING *', [first_name, last_name, address, phone, city, country, zip, id])
-    res.status(201).json({ message: "User profile edited successfully" });
+    if (newData.rowCount > 0) {
+      res.status(201).json({ message: "User profile edited successfully" });
+    } else {
+      res.status(404).json({ message: "User not found or no changes made" }); // or another appropriate status code
+    }
+  } catch (error) {
+    console.error("Error occurred during operation:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.put('/users/add-work', async (req, res) => {
+  const { workingYesNo, id } = req.body;
+  const workingBoolean = (workingYesNo === "Yes")
+  // const idNumber = Number(id)
+
+  try {
+    const newData = await pool.query('UPDATE users SET working = $1 WHERE id = $2', [workingBoolean, id])
+    // Check if any rows were affected by the update
+    if (newData.rowCount > 0) {
+      res.status(201).json({ message: "User profile edited successfully" });
+    } else {
+      res.status(404).json({ message: "User not found or no changes made" }); // or another appropriate status code
+    }
   } catch (error) {
     console.error("Error occurred during operation:", error);
     res.status(500).json({ message: "Internal server error" });

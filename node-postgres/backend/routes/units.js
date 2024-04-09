@@ -41,15 +41,23 @@ router.post('/units/add', async (req, res) => {
 
     // Create the unit
     const newUnit = await pool.query('INSERT INTO units (title) VALUES ($1) RETURNING *', [newProductionUnitName]);
-    res.status(201).json({ message: "Unit created successfully" });
+    if (newUnit.rowCount > 0) {
+      res.status(201).json({ message: "Unit profile created successfully" });
+    } else {
+      res.status(404).json({ message: "Error creating unit" }); // or another appropriate status code
+    }
   } catch (error) {
     console.error("Error occurred during user registration:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 
   try {
-    await pool.query('UPDATE units SET users = array_append(users, $1) WHERE title = $2 RETURNING *', [id, newProductionUnitName])
-    res.status(201).json({ message: "User added to unit successfully" });
+    const newData = await pool.query('UPDATE units SET users = array_append(users, $1) WHERE title = $2 RETURNING *', [id, newProductionUnitName])
+    if (newData.rowCount > 0) {
+      res.status(201).json({ message: "Unit profile edited successfully" });
+    } else {
+      res.status(404).json({ message: "Unit not found or no changes made" }); // or another appropriate status code
+    }
   } catch (error) {
     console.error("Error occured while adding user to the production unit in creating the production unit.")
     res.status(500).json({ message: "Internal server error" });
@@ -62,7 +70,11 @@ router.put('/units', async (req, res) => {
 
   try {
     const newData = await pool.query('UPDATE units SET users = array_append(users, $1) WHERE title = $2 RETURNING *', [id, currentProductionUnit])
-    res.status(201).json({ message: "Unit data edited successfully!" });
+    if (newData.rowCount > 0) {
+      res.status(201).json({ message: "Unit profile edited successfully" });
+    } else {
+      res.status(404).json({ message: "Unit not found or no changes made" }); // or another appropriate status code
+    }
   } catch (error) {
     console.error("Error occurred during operation:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -78,7 +90,11 @@ router.put('/units-service-product', async (req, res) => {
 
   try {
     const newData = await pool.query('UPDATE units SET has_product = $1, has_service = $2 WHERE array_position(users, $3) IS NOT NULL RETURNING *', [producingBoolean, serviceBoolean, id])
-    res.status(201).json({ message: "Unit data edited successfully!" });
+    if (newData.rowCount > 0) {
+      res.status(201).json({ message: "Unit data edited successfully!" });
+    } else {
+      res.status(404).json({ message: "Unit not found or no changes made" }); // or another appropriate status code
+    }
   } catch (error) {
     console.error("Error occurred during operation:", error);
     res.status(500).json({ message: "Internal server error" });

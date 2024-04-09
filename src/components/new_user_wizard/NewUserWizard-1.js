@@ -1,24 +1,24 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { useUserWizard } from '../../hooks/UserWizardProvider'
 import { toast } from "react-toastify";
 import '../../assets/wizard.css';
 
 export const UserWizard1 = () => {
   // const [moves, setMoves] = useState(false);
   const navigate = useNavigate()
-  const { record } = useUserWizard()
   const firstName = useRef()
   const lastName = useRef()
   const address = useRef()
   const city = useRef()
   const country = useRef()
   const zip = useRef()
+  const currentUser = JSON.parse(localStorage.getItem("user"))
 
   const action = async (e) => {
     e.preventDefault();
 
     const personalData = {
+      id: currentUser.id,
       first_name: firstName.current.value,
       last_name: lastName.current.value,
       address: address.current.value,
@@ -40,7 +40,7 @@ export const UserWizard1 = () => {
         toast.info('User Data updated!')
         // Provide feedback to the user about the successful record
       } else {
-        throw new Error("Failed to save data to the backend");
+        toast.error("Failed to save data to the backend");
       }
     } catch (error) {
       console.error("Error saving data to the backend:", error);
@@ -84,12 +84,12 @@ export const UserWizard1 = () => {
             </div>
             <div className="form-group col-md-4">
               <label className="text-white my-3" htmlFor="country">Country</label>
-              <select id="country" className="form-control" ref={country}>
-                <option>Choose...</option>
-                <option>Iran</option>
-                <option>United States</option>
-                <option>Germany</option>
-              </select>
+              <input id="country" className="form-control" ref={country} placeholder="Click to choose" list="countryOptions" />
+                <datalist id="countryOptions">
+                  <option>Iran</option>
+                  <option>United States</option>
+                  <option>Germany</option>
+                </datalist>
             </div>
             <div className="form-group col-md-2">
               <label className="text-white my-3" htmlFor="zipCode">Zip/Postal code</label>

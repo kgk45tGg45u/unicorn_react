@@ -81,7 +81,7 @@ export const UserWizard2 = () => {
       input_id: "councilName",
       input_type: "text",
       input_help: "A working council is responsible for the economy of the production unit. You can change this name later.",
-      action_button_label: "Go to Services/Products",
+      action_button_label: "Save and got to dashboard",
     },
     {
       grand_label: "THANK YOU!",
