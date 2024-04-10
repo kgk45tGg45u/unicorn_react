@@ -2,10 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'
 import '../../assets/wizard.css';
+import { useFetch } from '../../hooks/useFetch';
+import { Loading } from '../Loading';
 
 export const UserWizard2 = () => {
   const [moves, setMoves] = useState(false);
   const navigate = useNavigate()
+  const { result: allUnits, loading, error } = useFetch("", "", "all-units", "GET")
 
   const formConfigurations = [
     {
@@ -64,7 +67,7 @@ export const UserWizard2 = () => {
     {
       grand_label: "Enter the name of your production unit",
       input_id: "currentProductionUnit",
-      input_type: "text",
+      input_type: "list",
       input_help: "",
       action_button_label: "Next",
     },
@@ -82,19 +85,13 @@ export const UserWizard2 = () => {
       input_help: "A working council is responsible for the economy of the production unit. You can change this name later.",
       action_button_label: "Save and got to dashboard",
     },
-    {
-      grand_label: "THANK YOU!",
-      input_id: "THANK YOU",
-      input_type: "text",
-      input_help: "",
-      action_button_label: "Go to Services/Products",
-    },
     // Add more form configurations as needed
   ];
 
   const [currentConfigurationIndex, setCurrentConfigurationIndex] = useState(1);
   const inputData = useRef()
   const inputRadioRefs = useRef({});
+  const inputListRefs = useRef({})
   const [data, setData] = useState({});
   const currentUser = JSON.parse(localStorage.getItem("user"))
   let tryExecuted = false
@@ -308,11 +305,8 @@ export const UserWizard2 = () => {
 
     // Unit name if has (this part has to change to a dropdown menu)
     if(currentConfigurationIndex === 7){
-      setData(prevData => ({
-        ...prevData,
-        [formConfigurations[currentConfigurationIndex].input_id]: inputData.current.value
-      }));
-      setCurrentConfigurationIndex(9);
+      submit(data)
+      navigate('/dashboard')
     }
 
     if(currentConfigurationIndex === 8){
@@ -331,7 +325,7 @@ export const UserWizard2 = () => {
       }));
       console.log("the end")
       submit(data)
-      // navigate('/new-user-wizard-3')
+      navigate('/dashboard')
     }
 
     if(currentConfigurationIndex === 10){
@@ -351,66 +345,93 @@ export const UserWizard2 = () => {
 
   const currentConfiguration = formConfigurations[currentConfigurationIndex];
 
-  return (
-    <div className="py-4 d-flex align-items-center justify-content-center">
-      <div className="wcontainer2 rounded-3 shadow-lg">
-        {(currentConfigurationIndex === 10) &&
-          <div>Thank you!</div>
-        }
+  if(loading) {
+    return(<Loading />)
+  }
 
-        <div className="mt-4 mb-3 mx-4 text-white">
-          <h2>Work Data</h2>
-        </div>
+  if(error) {
+    toast.error("Error getting units names.")
+  }
 
-        <form className="form-inline my-3 mx-4">
-          <div className="form-group mx-sm-3 mb-2 font-weight-bold">
-            {(currentConfiguration.input_type === "text") &&
-            <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
-              <label htmlFor={currentConfiguration.input_id} className="text-white my-3">{currentConfiguration.grand_label}</label>
-              <input
-                type={currentConfiguration.input_type}
-                name={currentConfiguration.input_id}
-                className="form-control"
-                id={currentConfiguration.input_id}
-                ref={inputData}
-                aria-describedby={currentConfiguration.input_id}
-              />
-              <div className="form-text text-white"><small id={currentConfiguration.input_id}>{currentConfiguration.input_help}</small></div>
-            </div>
-            }
-
-            {(currentConfiguration.input_type === "radio") &&
-              <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
-                <label className="text-white my-3">{currentConfiguration.grand_label}</label>
-                {currentConfiguration.radioLabels.map((radiolabel, index) => (
-                  <div key={index}>
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name={currentConfiguration.input_id}
-                      id={`${currentConfiguration.input_id}_${index}`}
-                      value={radiolabel}
-                      checked={data[currentConfiguration.input_id] === radiolabel}
-                      ref={(el) => {
-                        // Store refs for each radio button group
-                        if (!inputRadioRefs.current[currentConfiguration.input_id]) {
-                          inputRadioRefs.current[currentConfiguration.input_id] = [];
-                        }
-                        inputRadioRefs.current[currentConfiguration.input_id][index] = el;
-                      }}
-                      onChange={() => {
-                        setData({ ...data, [currentConfiguration.input_id]: radiolabel });
-                      }}
-                    />
-                    <label className="mx-3 form-check-label text-white" htmlFor={`${currentConfiguration.input_id}_${index}`}>{radiolabel}</label>
-                  </div>
-                ))}
-              </div>
-            }
+  if(allUnits) {
+    return (
+      <div className="py-4 d-flex align-items-center justify-content-center">
+        <div className="wcontainer2 rounded-3 shadow-lg">
+          <div className="mt-4 mb-3 mx-4 text-white">
+            <h2>Work Data</h2>
           </div>
-          <button onClick={action} type="submit" className="btn btn-primary mt-5 mb-3 mx-3">{currentConfiguration.action_button_label}</button>
-        </form>
+          <form className="form-inline my-3 mx-4">
+            <div className="form-group mx-sm-3 mb-2 font-weight-bold">
+              {(currentConfiguration.input_type === "text") &&
+              <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
+                <label htmlFor={currentConfiguration.input_id} className="text-white my-3">{currentConfiguration.grand_label}</label>
+                <input
+                  type={currentConfiguration.input_type}
+                  name={currentConfiguration.input_id}
+                  className="form-control"
+                  id={currentConfiguration.input_id}
+                  ref={inputData}
+                  aria-describedby={currentConfiguration.input_id}
+                />
+                <div className="form-text text-white"><small id={currentConfiguration.input_id}>{currentConfiguration.input_help}</small></div>
+              </div>
+              }
+
+              {(currentConfiguration.input_type === "radio") &&
+                <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
+                  <label className="text-white my-3">{currentConfiguration.grand_label}</label>
+                  {currentConfiguration.radioLabels.map((radiolabel, index) => (
+                    <div key={index}>
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name={currentConfiguration.input_id}
+                        id={`${currentConfiguration.input_id}_${index}`}
+                        value={radiolabel}
+                        checked={data[currentConfiguration.input_id] === radiolabel}
+                        ref={(el) => {
+                          // Store refs for each radio button group
+                          if (!inputRadioRefs.current[currentConfiguration.input_id]) {
+                            inputRadioRefs.current[currentConfiguration.input_id] = [];
+                          }
+                          inputRadioRefs.current[currentConfiguration.input_id][index] = el;
+                        }}
+                        onChange={() => {
+                          setData({ ...data, [currentConfiguration.input_id]: radiolabel });
+                        }}
+                      />
+                      <label className="mx-3 form-check-label text-white" htmlFor={`${currentConfiguration.input_id}_${index}`}>{radiolabel}</label>
+                    </div>
+                  ))}
+
+                </div>
+              }
+
+              {(currentConfiguration.input_type === "list") &&
+                <div className={`form-inline my-3 mx-4 ${moves ? 'form-animation' : ''}`}>
+                  <label className="text-white my-3">{currentConfiguration.grand_label}</label>
+                  <input
+                    className="form-control"
+                    list={`${currentConfiguration.input_id}_options`}
+                    name={currentConfiguration.input_id}
+                    id={currentConfiguration.input_id}
+                    placeholder="Type to search"
+                    onChange={(e) => {
+                      setData({ ...data, [currentConfiguration.input_id]: e.target.value });
+                    }}
+                  />
+                  <datalist id={`${currentConfiguration.input_id}_options`}>
+                    {allUnits.map((currentUnitName) => (
+                      <option value={currentUnitName.title} />
+                    ))}
+                  </datalist>
+                </div>
+              }
+              </div>
+            <button onClick={action} type="submit" className="btn btn-primary mt-5 mb-3 mx-3">{currentConfiguration.action_button_label}</button>
+          </form>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
+}

@@ -22,7 +22,7 @@ router.post('/products/add', async (req, res) => {
       return res.status(400).json({ message: "A product/service with this name already exists. Failed to create a new item." });
     }
 
-    // Create the product/service
+    // Create the product/service and add it to the corresponding unit (according to its title)
     if (product1title) {
       const newProduct = await pool.query('INSERT INTO products_and_services (name) VALUES ($1) RETURNING *', [product1title]);
       if (newProduct.rowCount > 0) {
@@ -57,7 +57,7 @@ router.post('/products/add', async (req, res) => {
       }
     }
   } catch (error) {
-  console.error("Error occured while adding product/service or while editing the corresponding unit.")
-  res.status(500).json({ message: "Internal server error" });
+    console.error("Error occured while adding product/service or while editing the corresponding unit.")
+    res.status(500).json({ message: "Internal server error" });
   }
 });

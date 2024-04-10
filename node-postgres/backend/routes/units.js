@@ -97,4 +97,15 @@ router.put('/units-service-product', async (req, res) => {
   }
 });
 
+// Get all units names
+router.get('/all-units', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM units')
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error getting units names");
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router
