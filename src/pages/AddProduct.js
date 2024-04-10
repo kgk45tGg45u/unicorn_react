@@ -288,19 +288,19 @@ export const AddProduct = (props) => {
 
         <div className="form-outline mb-4">
           <label
-          className="form-label"
-          htmlFor="productIntermediateUnit"
+            className="form-label"
+            htmlFor="productIntermediateUnit"
           >
             Unit
           </label>
           <input
-          className="form-control"
-          list="productIntermediateUnitOptions"
-          id="productIntermediateUnit"
-          name="productIntermediateUnit"
-          onChange={handleChange}
-          placeholder="Type to search..."
-          style={{ border: errors.productIntermediateUnit ? "1px solid red" : null }}
+            className="form-control"
+            list="productIntermediateUnitOptions"
+            id="productIntermediateUnit"
+            name="productIntermediateUnit"
+            onChange={handleChange}
+            placeholder="Type to search..."
+            style={{ border: errors.productIntermediateUnit ? "1px solid red" : null }}
           />
           <datalist id="productIntermediateUnitOptions">
             <option value="number" />

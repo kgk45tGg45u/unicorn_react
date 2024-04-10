@@ -98,15 +98,14 @@ export const UserWizard2 = () => {
   const [data, setData] = useState({});
   const currentUser = JSON.parse(localStorage.getItem("user"))
   let tryExecuted = false
+  const requestBody = {
+    ...data, // Existing key-value pairs in the data object
+    id: currentUser.id // Add user ID to the request
+  };
 
   const submit = async (data) => {
     // Updating Working boolean for user.
     if (!tryExecuted) {
-      const requestBody = {
-        ...data, // Existing key-value pairs in the data object
-        id: currentUser.id // Add user ID to the request
-      };
-
       try {
         console.log("Running the first function.")
         const response = await fetch("http://localhost:3001/users/add-work", {
@@ -130,11 +129,6 @@ export const UserWizard2 = () => {
     if (tryExecuted) {
       // Logic to record all other information
       if (data.newProductionUnitName){
-        const requestBody = {
-          ...data, // Existing key-value pairs in the data object
-          id: currentUser.id // Add user ID to the request
-        };
-
         try {
           console.log("Running the second function.")
           const response = await fetch("http://localhost:3001/units/add", {
@@ -154,11 +148,6 @@ export const UserWizard2 = () => {
           toast.error("Error saving data to the backend.");
         }
       } else if (data.currentProductionUnit) {
-        const requestBody = {
-          ...data, // Existing key-value pairs in the data object
-          id: currentUser.id // Add user ID to the request
-        };
-
         try {
           console.log("Running the third function.")
           const response = await fetch("http://localhost:3001/units", {
@@ -182,11 +171,6 @@ export const UserWizard2 = () => {
 
     if (tryExecuted){
       if (data.producingYesNo || data.hasService) {
-        const requestBody = {
-          ...data, // Existing key-value pairs in the data object
-          id: currentUser.id // Add user ID to the request
-        };
-
         try {
           console.log("Running the fourth function.")
           const response = await fetch("http://localhost:3001/units-service-product", {
@@ -209,11 +193,6 @@ export const UserWizard2 = () => {
     }
 
     if (tryExecuted && data.councilName) {
-      const requestBody = {
-        ...data, // Existing key-value pairs in the data object
-        id: currentUser.id // Add user ID to the request
-      };
-
       try {
         console.log("Running the fifth function.")
         const response = await fetch("http://localhost:3001/councils/add", {
@@ -231,6 +210,29 @@ export const UserWizard2 = () => {
         }
       } catch (error) {
         toast.error("Error saving data to the backend.");
+      }
+    }
+
+    if (tryExecuted) {
+      if (data.product1title || data.hasService) {
+        try {
+          console.log("Running the sixth function.")
+          const response = await fetch("http://localhost:3001/councils/add", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+          });
+          if (response.ok) {
+            toast.info('Working Council created successfully!')
+            tryExecuted = true
+          } else {
+            toast.error("Failed to create working council or adding the user to it!");
+          }
+        } catch (error) {
+          toast.error("Error saving data to the backend.");
+        }
       }
     }
   }
