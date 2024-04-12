@@ -74,12 +74,12 @@ export const Dashboard = () => {
                   </tr>
                   <tr>
                     <td>Current Unit:</td>
-                    <td><strong>{currentUnit.unit.title}</strong></td>
+                    <td><strong>{currentUnit.unit.title ? currentUnit.unit.title : "Untitled Unit"}</strong></td>
                     <td>go</td>
                   </tr>
                   <tr>
                     <td>Union:</td>
-                    <td><strong>{currentUnion.union.title}</strong></td>
+                    <td><strong>{currentUnion.union.title? currentUnion.union.title : "Untitled Union"}</strong></td>
                     <td>go</td>
                   </tr>
                   <tr>

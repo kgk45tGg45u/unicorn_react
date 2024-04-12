@@ -1,34 +1,21 @@
 import { useState } from "react";
 import { toast } from 'react-toastify'
 import { UserWizard1 } from '../components/new_user_wizard/NewUserWizard-1'
+import { useAuth } from "../hooks/AuthProvider";
 
 export const Register = () => {
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
-  const [ok, setOk] = useState(false)
+  const { registerAction, registerOk } = useAuth();
 
   const handleSubmitEvent = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:3001/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(input),
-      });
-      if (response.ok) {
-        toast.info("User created successfully");
-        setOk(true)
-      } else {
-        const data = await response.json();
-        throw new Error(data.message || "Registration failed");
-      }
-    } catch (err) {
-      toast.error("Couldn't register the new user!");
-      // Handle the error, e.g., display an error message to the user
+    if (input.email !== "" && input.password !== "") {
+      registerAction(input);
+    } else {
+    toast.error("Please provide a valid input");
     }
   };
 
@@ -42,7 +29,7 @@ export const Register = () => {
 
   return (
     <div>
-      {ok? <UserWizard1 /> : ""}
+      {registerOk? <UserWizard1 /> : ""}
       <div className="py-4 h-100 d-flex align-items-center justify-content-center">
         <div className="bg-warning p-4 rounded-1">
           <form onSubmit={handleSubmitEvent}>

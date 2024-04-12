@@ -1,13 +1,9 @@
 import { useAuth } from '../hooks/AuthProvider'
-import { Link, NavLink } from "react-router-dom";
-// import Placeholder from '../assets/profile-image-placeholder.jpeg';
-// import { DropdownLoggedOut, DropdownLoggedIn } from "../index";
-// import { useCart } from "../../context";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 export const Header = () => {
-  // const [dropdown, setDropdown] = useState(false);
-  // const token = JSON.parse(sessionStorage.getItem("token"));
-  const { user, logOut, loginAction } = useAuth()
+  const { user, logOut } = useAuth()
+  const navigate = useNavigate()
 
   return (
     <header>
@@ -74,7 +70,7 @@ export const Header = () => {
             </ul>
               }
             <form className="d-flex">
-              { user ? <button onClick={logOut} className="btn btn-secondary my-2 my-sm-1" type="submit">Logout</button> : <button onClick={loginAction} className="btn btn-secondary my-2 my-sm-1" type="submit">Login</button>}
+              { user ? <button onClick={logOut} className="btn btn-secondary my-2 my-sm-1" type="submit">Logout</button> : <button onClick={() => navigate("/login")} className="btn btn-secondary my-2 my-sm-1" type="submit">Login</button>}
               {/* <input className="form-control me-sm-2" type="search" placeholder="Search" />
               <button className="btn btn-secondary my-2 my-sm-0" type="submit">Search</button> */}
             </form>

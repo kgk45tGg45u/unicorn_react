@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
   const [token, setToken] = useState(localStorage.getItem("site") || "");
+  const [registerOk, setRegisterOk] = useState(false)
   const navigate = useNavigate();
 
   const loginAction = async (data) => {
@@ -23,53 +24,8 @@ export const AuthProvider = ({ children }) => {
         setToken(res.token);
         console.log(token)
         localStorage.setItem("site", res.token);
-
-        // function setWithExpiry(key, value, ttl) {
-        //   const now = new Date()
-
-        //   // `item` is an object which contains the original value
-        //   // as well as the time when it's supposed to expire
-        //   const item = {
-        //     value: value,
-        //     expiry: now.getTime() + ttl,
-        //   }
-        //   localStorage.setItem(key, JSON.stringify(item))
-        // }
-
-        // function getWithExpiry(key) {
-        //   const itemStr = localStorage.getItem(key)
-        //   // if the item doesn't exist, return null
-        //   if (!itemStr) {
-        //     return null
-        //   }
-        //   const item = JSON.parse(itemStr)
-        //   const now = new Date()
-        //   // compare the expiry time of the item with the current time
-        //   if (now.getTime() > item.expiry) {
-        //     // If the item is expired, delete the item from storage
-        //     // and return null
-        //     localStorage.removeItem(key)
-        //     return null
-        //   }
-        //   return item.value
-        // }
-
-
         setUser(res.user)
         localStorage.setItem("user", JSON.stringify(res.user))
-
-        // toast.success('🦄 Wow so easy!', {
-        //   position: "bottom-right",
-        //   autoClose: 1400,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: true,
-        //   draggable: true,
-        //   progress: undefined,
-        //   theme: "light",
-        //   transition: Bounce,
-        //   });
-
         toast('Login Successful!')
         navigate("/dashboard");
       } else {
@@ -91,11 +47,15 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify(data),
       });
       const res = await response.json();
-      if (res.message) {
-        // Provide feedback to the user about the registration
-        navigate("/login"); // Redirect to login page after successful registration
+      if (res.token) {
+        setToken(res.token);
+        localStorage.setItem("site", res.token);
+        setUser(res.user)
+        localStorage.setItem("user", JSON.stringify(res.user))
+        setRegisterOk(true)
+        toast('Registeration Successful!')
       } else {
-        toast('Registration failed.');
+        toast('Login Failed!')
       }
     } catch (err) {
       toast.error("Registration error:", err)
@@ -134,7 +94,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, registerAction, editUser, logOut }}>
+    <AuthContext.Provider value={{ token, user, registerOk, loginAction, registerAction, editUser, logOut }}>
       {children}
     </AuthContext.Provider>
   );

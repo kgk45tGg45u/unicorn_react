@@ -256,7 +256,6 @@ export const UserWizard2 = () => {
       }));
       console.log("the end")
       submit(data)
-      // navigate('/new-user-wizard-3')
     }
   }
 
@@ -292,6 +291,9 @@ export const UserWizard2 = () => {
                   className="form-control"
                   id={currentConfiguration.input_id}
                   ref={inputData}
+                  onChange={(e) => {
+                    setData({ ...data, [currentConfiguration.input_id]: e.target.value });
+                  }}
                   aria-describedby={currentConfiguration.input_id}
                 />
                 <div className="form-text text-white"><small id={currentConfiguration.input_id}>{currentConfiguration.input_help}</small></div>
@@ -324,7 +326,6 @@ export const UserWizard2 = () => {
                       <label className="mx-3 form-check-label text-white" htmlFor={`${currentConfiguration.input_id}_${index}`}>{radiolabel}</label>
                     </div>
                   ))}
-
                 </div>
               }
 

@@ -70,9 +70,11 @@ router.post('/users', async (req, res) => {
     const newUser = await pool.query('INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *', [email, hashedPassword]);
     // Check if any rows were affected by the update
     if (newUser.rowCount > 0) {
-      res.status(201).json({ message: "User profile edited successfully" });
+      const user = newUser.rows[0]
+      const token = jwt.sign({ email: user.email }, `${process.env.JWT_SECRET}`);
+      res.status(200).json({ token, user });
     } else {
-      res.status(404).json({ message: "User not found or no changes made" }); // or another appropriate status code
+      res.status(404).json({ message: "Failed creating user." }); // or another appropriate status code
     }
   } catch (error) {
     console.error("Error occurred during user registration:", error);
