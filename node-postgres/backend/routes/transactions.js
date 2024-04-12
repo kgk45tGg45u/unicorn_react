@@ -1,15 +1,6 @@
 const express = require('express')
 const router = express.Router()
-
-// PostgreSQL configuration
-const Pool = require("pg").Pool;
-const pool = new Pool({
-  user: "my_user",
-  host: "localhost",
-  database: "unicorn3",
-  // password: process.env.REACT_APP_DATABASE_PASSWORD,
-  port: 5432,
-});
+const pool = require('../db')
 
 // Fetch transaction data for the user
 router.post('/transactions', async (req, res) => {

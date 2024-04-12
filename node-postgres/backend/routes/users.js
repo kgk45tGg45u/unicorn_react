@@ -2,16 +2,7 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
-
-// PostgreSQL configuration
-const Pool = require("pg").Pool;
-const pool = new Pool({
-  user: "my_user",
-  host: "localhost",
-  database: "unicorn3",
-  // password: process.env.REACT_APP_DATABASE_PASSWORD,
-  port: 5432,
-});
+const pool = require('../db')
 
 // Authentication middleware
 const authenticateJWT = (req, res, next) => {
@@ -63,7 +54,7 @@ router.get('/users', async (req, res) => {
 
 // Register user route
 router.post('/users', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     // Check if user already exists
@@ -76,7 +67,7 @@ router.post('/users', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create the user
-    const newUser = await pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *', [name, email, hashedPassword]);
+    const newUser = await pool.query('INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *', [email, hashedPassword]);
     // Check if any rows were affected by the update
     if (newUser.rowCount > 0) {
       res.status(201).json({ message: "User profile edited successfully" });

@@ -13,16 +13,6 @@ const ticketRoutes = require('./routes/tickets')
 const unionRoutes = require('./routes/unions')
 const councilRoutes = require('./routes/councils')
 
-// PostgreSQL configuration
-const Pool = require("pg").Pool;
-const pool = new Pool({
-  user: "my_user",
-  host: "localhost",
-  database: "unicorn3",
-  // password: process.env.REACT_APP_DATABASE_PASSWORD,
-  port: 5432,
-});
-
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());

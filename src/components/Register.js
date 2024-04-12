@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { toast } from 'react-toastify'
 import { UserWizard1 } from '../components/new_user_wizard/NewUserWizard-1'
 
 export const Register = () => {
   const [input, setInput] = useState({
-    name: "",
     email: "",
     password: "",
   });
+  const [ok, setOk] = useState(false)
 
   const handleSubmitEvent = async (e) => {
     e.preventDefault();
@@ -19,14 +20,14 @@ export const Register = () => {
         body: JSON.stringify(input),
       });
       if (response.ok) {
-        alert("User created successfully");
-        // Optionally, you can redirect the user to another page after successful registration
+        toast.info("User created successfully");
+        setOk(true)
       } else {
         const data = await response.json();
         throw new Error(data.message || "Registration failed");
       }
     } catch (err) {
-      console.error("Registration error:", err);
+      toast.error("Couldn't register the new user!");
       // Handle the error, e.g., display an error message to the user
     }
   };
@@ -41,26 +42,22 @@ export const Register = () => {
 
   return (
     <div>
-      <UserWizard1 />
-    <div className="py-4 h-100 d-flex align-items-center justify-content-center">
-      <div className="bg-warning p-4 rounded-1">
-        <form onSubmit={handleSubmitEvent}>
-          <div className="form-outline mb-4">
-            <label className="form-label" htmlFor="name">Name</label>
-            <input type="text" name="name" id="name" className="form-control" onChange={handleInput} />
-          </div>
-          <div className="form-outline mb-4">
-            <label className="form-label" htmlFor="email">Email address</label>
-            <input type="email" name="email" id="email" className="form-control" onChange={handleInput} />
-          </div>
-          <div className="form-outline mb-4">
-            <label className="form-label" htmlFor="password">Password</label>
-            <input type="password" name="password" id="password" className="form-control" onChange={handleInput} />
-          </div>
-          <button type="submit" className="btn btn-primary btn-block mb-4">Register</button>
-        </form>
+      {ok? <UserWizard1 /> : ""}
+      <div className="py-4 h-100 d-flex align-items-center justify-content-center">
+        <div className="bg-warning p-4 rounded-1">
+          <form onSubmit={handleSubmitEvent}>
+            <div className="form-outline mb-4">
+              <label className="form-label" htmlFor="email">Email address</label>
+              <input type="email" name="email" id="email" className="form-control" onChange={handleInput} />
+            </div>
+            <div className="form-outline mb-4">
+              <label className="form-label" htmlFor="password">Password</label>
+              <input type="password" name="password" id="password" className="form-control" onChange={handleInput} />
+            </div>
+            <button type="submit" className="btn btn-primary btn-block mb-4">Register</button>
+          </form>
+        </div>
       </div>
     </div>
-      </div>
   );
 };

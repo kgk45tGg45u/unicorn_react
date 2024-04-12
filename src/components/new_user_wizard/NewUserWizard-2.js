@@ -4,94 +4,15 @@ import { toast } from 'react-toastify'
 import '../../assets/wizard.css';
 import { useFetch } from '../../hooks/useFetch';
 import { Loading } from '../Loading';
+import { formConfigurations } from './NewUserFormConfigurations';
 
 export const UserWizard2 = () => {
   const [moves, setMoves] = useState(false);
   const navigate = useNavigate()
   const { result: allUnits, loading, error } = useFetch("", "", "all-units", "GET")
-
-  const formConfigurations = [
-    {
-      grand_label: "Full Name",
-      input_id: "fullname",
-      input_type: "text",
-      input_help: "Your full name will be confirmed with your ID through a confirmation process.",
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Do you currently provide a product or offer a service to public?",
-      input_id: "workingYesNo",
-      input_type: "radio",
-      input_help: "",
-      radioLabels: ["Yes", "No"],
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Do you currently produce a product?",
-      input_id: "producingYesNo",
-      input_type: "radio",
-      input_help: "",
-      radioLabels: ["Yes", "No"],
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Complete name or title of your main product",
-      input_id: "product1title",
-      input_type: "text",
-      input_help: "Please enter the name of your main product. You can add or remove products later.",
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Do you currently provide a service to the public?",
-      input_id: "hasService",
-      input_type: "radio",
-      input_help: "",
-      radioLabels: ["Yes", "No"],
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Complete name or title of the service you offer",
-      input_id: "serviceName",
-      input_type: "text",
-      input_help: "",
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Do you work alone or with others?",
-      input_id: "hasUnit",
-      input_type: "radio",
-      input_help: "",
-      radioLabels: ["I work in a team", "I work alone"],
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Enter the name of your production unit",
-      input_id: "currentProductionUnit",
-      input_type: "list",
-      input_help: "",
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Set or decide a name for your production unit",
-      input_id: "newProductionUnitName",
-      input_type: "text",
-      input_help: "",
-      action_button_label: "Next",
-    },
-    {
-      grand_label: "Set a name for your working council",
-      input_id: "councilName",
-      input_type: "text",
-      input_help: "A working council is responsible for the economy of the production unit. You can change this name later.",
-      action_button_label: "Save and got to dashboard",
-    },
-    // Add more form configurations as needed
-  ];
-
   const [currentConfigurationIndex, setCurrentConfigurationIndex] = useState(1);
   const inputData = useRef()
   const inputRadioRefs = useRef({});
-  const inputListRefs = useRef({})
   const [data, setData] = useState({});
   const currentUser = JSON.parse(localStorage.getItem("user"))
   let tryExecuted = false
