@@ -11,7 +11,7 @@ export const UserWizard2 = () => {
   const navigate = useNavigate()
   const { result: allUnits, loading, error } = useFetch("", "", "all-units", "GET")
   const [currentConfigurationIndex, setCurrentConfigurationIndex] = useState(1);
-  const inputData = useRef()
+  let inputData = useRef(null)
   const inputRadioRefs = useRef({});
   const [data, setData] = useState({});
   const currentUser = JSON.parse(localStorage.getItem("user"))
@@ -122,6 +122,8 @@ export const UserWizard2 = () => {
         });
         if (response.ok) {
           toast.info('Working Council created successfully!')
+          const council_id = response.council_id
+          console.log("Council ID:", council_id)
           tryExecuted = true
         } else {
           toast.error("Failed to create working council or adding the user to it!");
@@ -135,8 +137,8 @@ export const UserWizard2 = () => {
       if (data.product1title || data.hasService) {
         try {
           console.log("Running the sixth function.")
-          const response = await fetch("http://localhost:3001/councils/add", {
-            method: "POST",
+          const response = await fetch("http://localhost:3001/units-service-product", {
+            method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
@@ -233,7 +235,8 @@ export const UserWizard2 = () => {
     if(currentConfigurationIndex === 8){
       setData(prevData => ({
         ...prevData,
-        [formConfigurations[currentConfigurationIndex].input_id]: inputData.current.value
+        [formConfigurations[currentConfigurationIndex].input_id]: inputData.current.value,
+        councilName: data.newProductionUnitName + " Council"
       }));
       setCurrentConfigurationIndex(9);
     }
@@ -264,6 +267,8 @@ export const UserWizard2 = () => {
   }, [data])
 
   const currentConfiguration = formConfigurations[currentConfigurationIndex];
+
+
 
   if(loading) {
     return(<Loading />)
@@ -343,8 +348,8 @@ export const UserWizard2 = () => {
                     }}
                   />
                   <datalist id={`${currentConfiguration.input_id}_options`}>
-                    {allUnits.map((currentUnitName) => (
-                      <option value={currentUnitName.title} />
+                    {allUnits.map((currentUnitName, index) => (
+                      <option key={index} value={currentUnitName.title} />
                     ))}
                   </datalist>
                 </div>
