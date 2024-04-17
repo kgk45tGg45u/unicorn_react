@@ -20,6 +20,7 @@ export const UserWizard2 = () => {
     ...data, // Existing key-value pairs in the data object
     id: currentUser.id // Add user ID to the request
   };
+  const [newUnitIdState, setNewUnitIdState] = useState(null)
 
   const submit = async (data) => {
     // Updating Working boolean for user.
@@ -56,9 +57,11 @@ export const UserWizard2 = () => {
             },
             body: JSON.stringify(requestBody),
           });
-          if (response.ok) {
+          const responseData = await response.json();
+          if (response.ok) { // Check if response is OK (status code 2xx)
             toast.info('Production unit successfully created!')
             tryExecuted = true
+            setNewUnitIdState(responseData.newUnitId) // Access the newUnitId from the parsed response
           } else {
             toast.error("Failed to create production unit!");
           }
@@ -111,6 +114,11 @@ export const UserWizard2 = () => {
     }
 
     if (tryExecuted && data.councilName) {
+        const requestBodyWithUnit = {
+          ...data, // Existing key-value pairs in the data object
+          newUnitId: newUnitIdState,
+          id: currentUser.id // Add user ID to the request
+        };
       try {
         console.log("Running the fifth function.")
         const response = await fetch("http://localhost:3001/councils/add", {
@@ -118,7 +126,7 @@ export const UserWizard2 = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify(requestBodyWithUnit),
         });
         if (response.ok) {
           toast.info('Working Council created successfully!')
@@ -267,8 +275,6 @@ export const UserWizard2 = () => {
   }, [data])
 
   const currentConfiguration = formConfigurations[currentConfigurationIndex];
-
-
 
   if(loading) {
     return(<Loading />)

@@ -21,6 +21,45 @@
   text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 
+.unicorn_banner {
+  position: relative;
+  background-color: bisque;
+  >p {
+    color: black;
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 8vw;
+  }
+}
+
+.subtext_banner {
+  padding: 4px;
+  max-width: 250px;
+  background-color: beige;
+  position: absolute;
+  padding: 15px;
+  top: calc(100% - 5px);
+  right: 0;
+  text-align: end;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 12px;
+  background: rgb(255,255,255);
+  background: radial-gradient(circle, rgba(147,147,147,1) 0%, rgba(255,255,255,1) 100%);
+  line-height: 0.3;
+  /* box-shadow: 0 0 5px 10px #555; */
+
+/* @media screen and (min-width: 500px) {
+    top: -25px;
+    left: 400px;
+    text-align: end;
+    font-weight: 700;
+    font-style: normal;
+    font-size:3vw;
+  } */
+}
+
 .homeCard {
   text-align: center;
   padding: 25px;

@@ -112,7 +112,9 @@ router.put('/users', async (req, res) => {
     const newData = await pool.query('UPDATE users SET name = $1, email = $2, address = $3, phone= $4, password = $5 WHERE id = $6 RETURNING *', [name, email, address, phone, hashedPassword, id])
     // Check if any rows were affected by the update
     if (newData.rowCount > 0) {
-      res.status(201).json({ message: "User profile edited successfully" });
+      const user = newData.rows[0]
+      const token = jwt.sign({ email: user.email }, `${process.env.JWT_SECRET}`);
+      res.status(201).json({ token, user });
     } else {
       res.status(404).json({ message: "User not found or no changes made" }); // or another appropriate status code
     }
@@ -128,7 +130,9 @@ router.put('/users/add-personal-details', async (req, res) => {
   try {
     const newData = await pool.query('UPDATE users SET first_name = $1, last_name = $2, address = $3, phone = $4, city= $5, country = $6, zip = $7 WHERE id = $8 RETURNING *', [first_name, last_name, address, phone, city, country, zip, id])
     if (newData.rowCount > 0) {
-      res.status(201).json({ message: "User profile edited successfully" });
+      const user = newData.rows[0]
+      const token = jwt.sign({ email: user.email }, `${process.env.JWT_SECRET}`);
+      res.status(201).json({ token, user });
     } else {
       res.status(404).json({ message: "User not found or no changes made" }); // or another appropriate status code
     }

@@ -1,9 +1,8 @@
-import { useFetchUnitByUser } from '../hooks/useFetchUnitByUser'
+import { useFetch } from '../hooks/useFetch'
 import { useAuth } from '../hooks/AuthProvider'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Loading } from '../components/Loading'
-import Typography from '@mui/material/Typography';
 import ReusablePopover from '../components/ReusablePopover';
 import profilePlaceholder from '../assets/profile-image-placeholder.jpeg'
 import moneyBill from '../assets/SVG/money-bill-solid.svg'
@@ -14,7 +13,6 @@ import savings from '../assets/SVG/piggy-bank-solid.svg'
 import { DashboardCard } from '../components/DashboardCard'
 // import unicornSymbol from '../assets/unicorn-symbol-2.png';
 
-
 export const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const id = user.id
@@ -22,8 +20,8 @@ export const Dashboard = () => {
 
 
   const navigate = useNavigate()
-  const { result: currentUnit, loading, error } = useFetchUnitByUser(id, "", "units", "GET");
-  const { result: currentUnion } = useFetchUnitByUser(id, "", "unions", "GET");
+  const { result: currentUnit, loading, error } = useFetch(id, "", "units", "GET");
+  const { result: currentUnion } = useFetch(id, "", "unions", "GET");
   const name = user ? user.first_name : ""
 
   const navigateEditData = () => {
@@ -36,11 +34,7 @@ export const Dashboard = () => {
     setPopoverOpen(true);
   };
   const popoverContent = (
-    <>
-      {/* Your content here */}
-      YOHOOOOOOO
-      <Typography>The content of the Popover.</Typography>
-    </>
+    <div>Your content here</div>
   )
 
   const handlePopoverClose = () => {
@@ -61,6 +55,7 @@ export const Dashboard = () => {
     )}
 
   if(currentUnit && currentUnion) {
+    // console.log({currentUnion})
     return (
       <section>
         <div className="container">
@@ -72,16 +67,20 @@ export const Dashboard = () => {
                   <tr>
                     <td><h4><strong>Welcome, {name}!</strong></h4></td>
                   </tr>
-                  <tr>
-                    <td>Current Unit:</td>
-                    <td><strong>{currentUnit.unit.title ? currentUnit.unit.title : "Untitled Unit"}</strong></td>
-                    <td>go</td>
-                  </tr>
-                  <tr>
-                    <td>Union:</td>
-                    <td><strong>{currentUnion.union.title? currentUnion.union.title : "Untitled Union"}</strong></td>
-                    <td>go</td>
-                  </tr>
+                  {currentUnit.unit?.title &&
+                    <tr>
+                      <td>Current Unit:</td>
+                      <td><strong>{currentUnit.unit?.title}</strong></td>
+                      <td>go</td>
+                    </tr>
+                  }
+                  {currentUnion.union?.title &&
+                    <tr>
+                      <td>Union:</td>
+                      <td><strong>{currentUnion.union?.title}</strong></td>
+                      <td>go</td>
+                    </tr>
+                  }
                   <tr>
                     <td>Tokens:</td>
                     <td>14 Unics</td>
@@ -117,8 +116,7 @@ export const Dashboard = () => {
                 }}
                 content={popoverContent}
               />
-
-              <DashboardCard icon={unit} text="Working Unit" link="/unit" />
+              {currentUnit.unit?.title && <DashboardCard icon={unit} text="Working Unit" link="/unit" />}
               <DashboardCard icon={council} text="Council" link="/council" />
               <DashboardCard icon={union} text="Union" link="/union" />
               <DashboardCard icon={savings} text="Saving / Debt" link="/savings" />

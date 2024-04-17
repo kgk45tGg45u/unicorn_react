@@ -22,7 +22,7 @@ router.get('/councils/:id', async (req, res) => {
 
 // Add a new council
 router.post('/councils/add', async (req, res) => {
-  const { id, councilName } = req.body;
+  const { id, councilName, newUnitId } = req.body;
 
   try {
     // Check if council exists
@@ -35,7 +35,7 @@ router.post('/councils/add', async (req, res) => {
     const newCouncil = await pool.query('INSERT INTO unit_councils (name) VALUES ($1) RETURNING *', [councilName]);
     if (newCouncil.rowCount > 0) {
       try {
-        const newData = await pool.query('UPDATE unit_councils SET responsible_id = $1 WHERE name = $2 RETURNING *', [id, councilName])
+        const newData = await pool.query('UPDATE unit_councils SET responsible_id = $1, unit_id = $2 WHERE name = $3 RETURNING *', [id, newUnitId, councilName])
         if (newData.rowCount > 0) {
           res.status(200).json({ message: "Council profile created and user is its responsible.", council_id: newData.rows[0].id });
         } else {

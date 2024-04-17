@@ -37,8 +37,12 @@ export const UserWizard1 = () => {
       });
       if (response.ok) {
         // If the request is successful, update the local state with the new data
-        toast.info('User Data updated!')
-        // Provide feedback to the user about the successful record
+        const res = await response.json();
+        if (res.token) {
+          localStorage.removeItem("user")
+          localStorage.setItem("user", JSON.stringify(res.user))
+          toast.info('User Data updated!')
+        }
       } else {
         toast.error("Failed to save data to the backend");
       }

@@ -10,6 +10,7 @@ router.get('/units/:id', async (req, res) => {
     const result = await pool.query('SELECT * FROM units WHERE array_position(users, $1) IS NOT NULL', [id])
     const unit = result.rows[0];
     if (unit) {
+      console.log(unit)
       res.status(200).json({ unit });
     } else {
       res.status(404).json({ message: "Unit not found" });
@@ -37,7 +38,8 @@ router.post('/units/add', async (req, res) => {
       try {
         const newData = await pool.query('UPDATE units SET users = array_append(users, $1) WHERE title = $2 RETURNING *', [id, newProductionUnitName])
         if (newData.rowCount > 0) {
-          res.status(201).json({ message: "Unit profile created and user added to it." });
+          const newUnitId = newData.rows[0].id
+          res.status(201).json({ message: "Unit profile created and user added to it.", newUnitId });
         } else {
           res.status(404).json({ message: "Error adding user to unit" });
         }
@@ -78,7 +80,7 @@ router.put('/units-service-product', async (req, res) => {
   try {
     const newData = await pool.query('UPDATE units SET has_product = $1, has_service = $2 WHERE array_position(users, $3) IS NOT NULL RETURNING *', [producingBoolean, serviceBoolean, id])
     if (newData.rowCount > 0) {
-      res.status(201).json({ message: "Unit data edited successfully!" });
+      res.status(201).json({ message: "Unit data edited successfully!"});
     } else {
       res.status(404).json({ message: "Unit not found or no changes made" }); // or another appropriate status code
     }
