@@ -1,10 +1,6 @@
-// import {useState } from 'react'
 import { Link } from "react-router-dom"
-// import BasicModal from "./Popover"
 
 export const DashboardCard = (props) => {
-  // const [hidden, setHidden] = useState(true);
-
   return (
     <section>
       {props.link ? (
@@ -13,7 +9,7 @@ export const DashboardCard = (props) => {
             onClick={props.onClick}
             className="dashboard_icon"
           >
-            <img src={props.icon} alt="Tokens" />
+            <img src={props.icon} alt={props.text} />
             {/* <span className='indicator'>22</span> */}
             <p>{props.text}</p>
           </div>
@@ -22,7 +18,7 @@ export const DashboardCard = (props) => {
         onClick={props.onClick}
         className="dashboard_icon"
       >
-        <img src={props.icon} alt="Tokens" />
+        <img src={props.icon} alt={props.text} />
         {/* <span className='indicator'>22</span> */}
         <p>{props.text}</p>
       </div>

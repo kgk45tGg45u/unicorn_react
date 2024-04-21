@@ -90,7 +90,7 @@ code {
 }
 
 .dashboard_icon:hover {
-  background-color: #297fb956 !important; /* Change background color on hover */
+  background-color: #a4d8fa56 !important; /* Change background color on hover */
   cursor: pointer; /* Change cursor to pointer on hover */
 }
 
@@ -102,12 +102,6 @@ code {
   font-size: 20px;
   color: rgb(75, 181, 67);
 }
-
-/* .sidebar {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-} */
 
 .latest_requests_card {
   width: 200px;
@@ -140,6 +134,7 @@ code {
     transition: opacity 0.3s ease;
   }
 }
+
 .request_card_button button:hover {
   opacity: 1;
 }

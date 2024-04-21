@@ -1,3 +1,4 @@
 .profile_img {
-  width: 150px;
+  width: 20vw;
+  max-width: 200px;
 }
