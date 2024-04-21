@@ -131,9 +131,6 @@ export const UserWizard2 = () => {
 
         if (response.ok) {
           toast.info('Working Council created successfully!');
-          const council_id = await response.json().council_id;
-          localStorage.setItem("Council_ID", council_id)
-          console.log("Council ID:", council_id);
           tryExecuted = true;
         } else {
           toast.error("Unable to create the working council!");

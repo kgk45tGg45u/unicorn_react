@@ -118,7 +118,7 @@ export const Dashboard = () => {
               />
               {currentUnit.unit?.title && <DashboardCard icon={unit} text="Working Unit" link="/unit" />}
               <DashboardCard icon={council} text="Council" link="/council" />
-              <DashboardCard icon={union} text="Union" link="/union" />
+              {currentUnion.union?.title ? <DashboardCard icon={union} text="Union" link="/union" /> : <DashboardCard icon={union} text="Create Union" link="/create-union" />}
               <DashboardCard icon={savings} text="Saving / Debt" link="/savings" />
             </div>
           </div>

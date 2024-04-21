@@ -64,7 +64,7 @@ export const Login = () => {
           {/* <!-- Register buttons --> */}
           <div className="text-center">
             <p>Not a member? <a href="/register">Register</a></p>
-            <p>or sign up with:</p>
+            {/* <p>or sign up with:</p>
             <button type="button" className="btn btn-link btn-floating mx-1">
               <i className="fab fa-facebook-f"></i>
             </button>
@@ -79,7 +79,7 @@ export const Login = () => {
 
             <button type="button" className="btn btn-link btn-floating mx-1">
               <i className="fab fa-github"></i>
-            </button>
+            </button> */}
           </div>
         </form>
       </div>

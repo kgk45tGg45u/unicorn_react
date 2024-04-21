@@ -20,4 +20,30 @@ router.get('/unions/:id', async (req, res) => {
   }
 });
 
+router.post('/unions/add', async (req, res) => {
+  const { newUnionTitle, councilId, responsible_Id } = req.body;
+
+  try {
+    // Create the unit
+    const newData = await pool.query('INSERT INTO unions (title, responsible_id, council_id) VALUES ($1, $2, $3) RETURNING *', [newUnionTitle, responsible_Id, councilId]);
+    if (newData.rowCount > 0) {
+      try {
+        const newUnion = await pool.query('UPDATE unions SET members_id = array_append(members_id, $1) WHERE title = $2 RETURNING *', [responsible_Id, newUnionTitle])
+        if (newUnion.rowCount > 0) {
+          const union = newUnion.rows[0]
+          res.status(201).json({ message: "Union created and user added to it as responsible.", union: union });
+        } else {
+          res.status(404).json({ message: "Error creating union or adding user to it." });
+        }
+      } catch (error) {
+        console.error("Error occured while adding user to the union in creating the production unit.")
+        res.status(500).json({ message: "Internal server error" });
+      }
+    }
+  } catch (error) {
+    console.error("Error occured while creating the union or adding user to it.")
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router
