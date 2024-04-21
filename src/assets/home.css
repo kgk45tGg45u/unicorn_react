@@ -24,6 +24,7 @@
 .unicorn_banner {
   position: relative;
   background-color: bisque;
+  animation: moveIn 0.5s ease forwards;
   >p {
     color: black;
     font-family: "Anton", sans-serif;
@@ -33,7 +34,16 @@
   }
 }
 
-.subtext_banner {
+@keyframes moveIn {
+  from {
+    transform: translateY(-20px); /* Start with a translateY of -20px */
+  }
+  to {
+    transform: translateY(0); /* End with a translateY of 0 */
+  }
+}
+
+/* .subtext_banner {
   padding: 4px;
   max-width: 250px;
   background-color: beige;
@@ -47,7 +57,7 @@
   font-size: 12px;
   background: rgb(255,255,255);
   background: radial-gradient(circle, rgba(147,147,147,1) 0%, rgba(255,255,255,1) 100%);
-  line-height: 0.3;
+  line-height: 0.3; */
   /* box-shadow: 0 0 5px 10px #555; */
 
 /* @media screen and (min-width: 500px) {
@@ -58,6 +68,10 @@
     font-style: normal;
     font-size:3vw;
   } */
+/* } */
+
+.subbanner_text {
+  display: flex
 }
 
 .homeCard {

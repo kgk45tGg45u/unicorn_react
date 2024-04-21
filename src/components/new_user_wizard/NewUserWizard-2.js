@@ -20,7 +20,6 @@ export const UserWizard2 = () => {
     ...data, // Existing key-value pairs in the data object
     id: currentUser.id // Add user ID to the request
   };
-  const [newUnitIdState, setNewUnitIdState] = useState(null)
 
   const submit = async (data) => {
     // Updating Working boolean for user.
@@ -58,11 +57,12 @@ export const UserWizard2 = () => {
             body: JSON.stringify(requestBody),
           });
           const responseData = await response.json();
-          if (response.ok) { // Check if response is OK (status code 2xx)
+          if (responseData.newUnitId) { // Check if response is OK (status code 2xx)
+            localStorage.setItem("newUnitId", JSON.stringify(responseData.newUnitId))
             toast.info('Production unit successfully created!')
             tryExecuted = true
-            setNewUnitIdState(responseData.newUnitId) // Access the newUnitId from the parsed response
           } else {
+            console.log(responseData.message)
             toast.error("Failed to create production unit!");
           }
         } catch (error) {
@@ -114,13 +114,13 @@ export const UserWizard2 = () => {
     }
 
     if (tryExecuted && data.councilName) {
-        const requestBodyWithUnit = {
-          ...data, // Existing key-value pairs in the data object
-          newUnitId: newUnitIdState,
-          id: currentUser.id // Add user ID to the request
-        };
       try {
-        console.log("Running the fifth function.")
+        const requestBodyWithUnit = {
+          ...data,
+          newUnitId: Number(localStorage.getItem("newUnitId")),
+          id: currentUser.id
+        };
+        console.log("Running the fifth function.");
         const response = await fetch("http://localhost:3001/councils/add", {
           method: "POST",
           headers: {
@@ -128,13 +128,15 @@ export const UserWizard2 = () => {
           },
           body: JSON.stringify(requestBodyWithUnit),
         });
+
         if (response.ok) {
-          toast.info('Working Council created successfully!')
-          const council_id = response.council_id
-          console.log("Council ID:", council_id)
-          tryExecuted = true
+          toast.info('Working Council created successfully!');
+          const council_id = await response.json().council_id;
+          localStorage.setItem("Council_ID", council_id)
+          console.log("Council ID:", council_id);
+          tryExecuted = true;
         } else {
-          toast.error("Failed to create working council or adding the user to it!");
+          toast.error("Unable to create the working council!");
         }
       } catch (error) {
         toast.error("Error saving data to the backend.");
@@ -153,10 +155,10 @@ export const UserWizard2 = () => {
             body: JSON.stringify(requestBody),
           });
           if (response.ok) {
-            toast.info('Working Council created successfully!')
+            toast.info('Unit data updated successfully!')
             tryExecuted = true
           } else {
-            toast.error("Failed to create working council or adding the user to it!");
+            toast.error("Failed to edit unit data!");
           }
         } catch (error) {
           toast.error("Error saving data to the backend.");

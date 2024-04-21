@@ -37,7 +37,8 @@ router.post('/councils/add', async (req, res) => {
       try {
         const newData = await pool.query('UPDATE unit_councils SET responsible_id = $1, unit_id = $2 WHERE name = $3 RETURNING *', [id, newUnitId, councilName])
         if (newData.rowCount > 0) {
-          res.status(200).json({ message: "Council profile created and user is its responsible.", council_id: newData.rows[0].id });
+          const council_id = newData.rows[0].id
+          res.status(200).json({ message: "Council profile created and user is its responsible.", council_id: council_id });
         } else {
           res.status(404).json({ message: "Error adding user to council" });
         }

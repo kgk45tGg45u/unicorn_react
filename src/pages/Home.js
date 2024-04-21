@@ -25,11 +25,15 @@ export const Home = () => {
         </div>
         <div className="p-0 unicorn_banner">
           <p>UNICORN - The Home of Work</p>
-
-          <div className="subtext_banner">
-          <p>From each according to their ability,</p>
-          <p>To whom according to their need...</p>
         </div>
+
+        <div className="subbanner_text">
+          <div className="left">
+            <p>From each according to their ability,</p>
+          </div>
+          <div className="right">
+            <p>To whom according to their need...</p>
+          </div>
         </div>
 
         <div className="d-flex m-4 align-content-start justify-content-evenly flex-wrap">

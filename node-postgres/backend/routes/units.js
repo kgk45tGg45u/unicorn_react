@@ -38,8 +38,8 @@ router.post('/units/add', async (req, res) => {
       try {
         const newData = await pool.query('UPDATE units SET users = array_append(users, $1) WHERE title = $2 RETURNING *', [id, newProductionUnitName])
         if (newData.rowCount > 0) {
-          const newUnitId = newData.rows[0].id
-          res.status(201).json({ message: "Unit profile created and user added to it.", newUnitId });
+          const newUnit = newData.rows[0]
+          res.status(201).json({ message: "Unit profile created and user added to it.", newUnitId: newUnit.id });
         } else {
           res.status(404).json({ message: "Error adding user to unit" });
         }
