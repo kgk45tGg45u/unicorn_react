@@ -32,6 +32,7 @@ Using the ticketing system renders Unicorn a democratic structure. Founding a bu
 #### Enhancements
 
 - Working on security
+- Moving database to GraphQL
 - Making the code reusable
 - Refactoring
 - Conceptualizing the blockchain
