@@ -1,6 +1,6 @@
 import { useFetch } from '../hooks/useFetch'
 import { useAuth } from '../hooks/AuthProvider'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import { Loading } from '../components/Loading'
 import ReusablePopover from '../components/ReusablePopover';
@@ -11,6 +11,7 @@ import council from '../assets/SVG/arrows-to-dot-solid.svg'
 import union from '../assets/SVG/building-flag-solid.svg'
 import savings from '../assets/SVG/piggy-bank-solid.svg'
 import { DashboardCard } from '../components/DashboardCard'
+import { Announcement } from '../components/Announcement'
 // import unicornSymbol from '../assets/unicorn-symbol-2.png';
 
 export const Dashboard = () => {
@@ -55,7 +56,6 @@ export const Dashboard = () => {
     )}
 
   if(currentUnit && currentUnion) {
-    // console.log({currentUnion})
     return (
       <section>
         <div className="container">
@@ -84,7 +84,21 @@ export const Dashboard = () => {
                   <tr>
                     <td>Tokens:</td>
                     <td>14 Unics</td>
-                    <td>go</td>
+                    <td className="fw-bold" onClick={handlePopoverClick}><Link>Overview</Link></td>
+                    <ReusablePopover
+                      open={popoverOpen}
+                      anchorEl={anchorEl}
+                      onClose={handlePopoverClose}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'top',
+                      }}
+                      content={popoverContent}
+                    />
                   </tr>
                 </tbody>
               </table>
@@ -98,24 +112,22 @@ export const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        <div className="container">
+          <div className="row my-4 mx-2 divbg rounded-3 shadow-lg">
+            <h4 className="p-4">Announcements</h4>
+            <div>
+              {/* Announcements flags: danger, success, warning */}
+              <Announcement flag="danger" text="Your Union is ready to be created." link="/create-union" />
+            </div>
+          </div>
+        </div>
+
         <div className="container">
           <div className="p-2 mx-2 divbg rounded-3 shadow-lg">
             <div className="d-flex flex-wrap justify-content-around p-2">
-              <DashboardCard icon={moneyBill} text="Wallet" onClick={handlePopoverClick}/>
-              <ReusablePopover
-                open={popoverOpen}
-                anchorEl={anchorEl}
-                onClose={handlePopoverClose}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'top',
-                }}
-                content={popoverContent}
-              />
+              <DashboardCard icon={moneyBill} text="Wallet" link="/wallet" />
+
               {currentUnit.unit?.title && <DashboardCard icon={unit} text="Working Unit" link="/unit" />}
               <DashboardCard icon={council} text="Council" link="/council" />
               {currentUnion.union?.title ? <DashboardCard icon={union} text="Union" link="/union" /> : <DashboardCard icon={union} text="Create Union" link="/create-union" />}

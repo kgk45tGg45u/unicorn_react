@@ -36,7 +36,7 @@ export const UserWizard1 = () => {
         body: JSON.stringify(personalData),
       });
       if (response.ok) {
-        // If the request is successful, update the local state with the new data
+        // If the request is successful, update the local storage with the new data
         const res = await response.json();
         if (res.token) {
           localStorage.removeItem("user")
@@ -52,11 +52,6 @@ export const UserWizard1 = () => {
     } finally {
       navigate('/new-user-wizard-2')
     }
-
-
-
-    // record(personalData)
-
   }
 
   return (

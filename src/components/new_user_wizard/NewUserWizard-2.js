@@ -132,6 +132,7 @@ export const UserWizard2 = () => {
         if (response.ok) {
           toast.info('Working Council created successfully!');
           tryExecuted = true;
+          localStorage.removeItem("newUnitId");
         } else {
           toast.error("Unable to create the working council!");
         }
