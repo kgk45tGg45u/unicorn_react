@@ -1,12 +1,11 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom'
 import ReactDOM from 'react-dom/client';
+import { ToastContainer } from 'react-toastify';
+import { StyledEngineProvider } from '@mui/styled-engine';
 import './index.css';
 import App from './App';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { StyledEngineProvider } from '@mui/styled-engine';
-
-import { BrowserRouter } from 'react-router-dom'
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS
@@ -20,7 +19,7 @@ root.render(
         position="bottom-right"
         autoClose={1800}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop={true}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss

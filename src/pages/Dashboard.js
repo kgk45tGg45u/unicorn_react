@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import { Loading } from '../components/Loading'
 import ReusablePopover from '../components/ReusablePopover';
-import profilePlaceholder from '../assets/profile-image-placeholder.jpeg'
+import profilePlaceholder from '../assets/SVG/Unicorn_openmoji.svg'
 import moneyBill from '../assets/SVG/money-bill-solid.svg'
 import unit from '../assets/SVG/industry-solid.svg'
 import council from '../assets/SVG/arrows-to-dot-solid.svg'
@@ -119,7 +119,7 @@ export const Dashboard = () => {
             <h4 className="p-4">Announcements</h4>
             <div>
               {/* Announcements flags: danger, success, warning */}
-              <Announcement flag="danger" text="Your Union is ready to be created." link="/create-union" />
+              <Announcement flag="warning" text="Your Union is ready to be created." link="/create-union" />
             </div>
           </div>
         </div>
