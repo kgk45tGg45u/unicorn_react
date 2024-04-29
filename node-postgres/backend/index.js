@@ -1,31 +1,78 @@
-require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
+import express from 'express';
+import { createHandler } from 'graphql-http/lib/use/express';
+import userSchema from './database/schema/UserSchema.js'; // Import user schema
+import unitSchema from './database/schema/UnitSchema.js'; // Import unit schema
+import councilSchema from './database/schema/CouncilSchema.js'; // Import unit schema
+import cors from 'cors';
+import { ruruHTML } from 'ruru/server';
+import jwt from 'jsonwebtoken';
 
-// Do more research on CORS, see how to implement it and see whether CSURF makes more sense.
-const cors = require('cors');
+// const JWT_SECRET = 'your-secret-key';
+
+// // Middleware to verify JWT token
+// const authenticateJWT = (req, res, next) => {
+//   const token = req.headers.authorization;
+
+//   if (token) {
+//     jwt.verify(token, JWT_SECRET, (err, decoded) => {
+//       if (err) {
+//         return res.status(401).json({ message: 'Unauthorized' });
+//       }
+//       req.userId = decoded.userId;
+//       next();
+//     });
+//   } else {
+//     res.status(401).json({ message: 'Unauthorized' });
+//   }
+// };
 
 const app = express();
 const port = 3001;
-const userRoutes = require('./routes/users')
-const unitRoutes = require('./routes/units')
-const ticketRoutes = require('./routes/tickets')
-const unionRoutes = require('./routes/unions')
-const councilRoutes = require('./routes/councils')
+var root = {
+  hello() {
+    return 'Hello world!';
+  },
+};
 
-// Middleware
+// Apply CORS middleware to all routes
 app.use(cors());
-app.use(bodyParser.json());
 
-app.use(userRoutes)
-app.use(unitRoutes)
-app.use(ticketRoutes)
-app.use(unionRoutes)
-app.use(councilRoutes)
 
-// Root route
+
+// GraphQL endpoint for user schema
+app.use(
+  '/user/graphql',
+  cors({ origin: ['http://localhost:3000', 'https://studio.apollographql.com'] }),
+  createHandler({
+    schema: userSchema,
+    rootValue: root,
+  })
+);
+
+// GraphQL endpoint for unit schema
+app.use(
+  '/unit/graphql',
+  cors({ origin: ['http://localhost:3000', 'https://studio.apollographql.com'] }),
+  createHandler({
+    schema: unitSchema,
+    rootValue: root,
+  })
+);
+
+// GraphQL endpoint for council schema
+app.use(
+  '/council/graphql',
+  cors({ origin: ['http://localhost:3000', 'https://studio.apollographql.com'] }),
+  createHandler({
+    schema: councilSchema,
+    rootValue: root,
+  })
+);
+
+// Serve the GraphiQL IDE.
 app.get('/', (req, res) => {
-  res.send("Hello from Express!");
+  res.type('html');
+  res.end(ruruHTML({ endpoint: '/council/graphql' }));
 });
 
 app.listen(port, () => {
