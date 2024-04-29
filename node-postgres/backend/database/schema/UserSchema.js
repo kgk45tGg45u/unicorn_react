@@ -53,12 +53,46 @@ const User = new GraphQLObjectType({
         resolve(user) {
           return user.password
         }
+      },
+      birthday: {
+        type: GraphQLString,
+        resolve(user) {
+          return user.birthday
+        }
+      },
+      address: {
+        type: GraphQLString,
+        resolve(user) {
+          return user.address
+        }
+      },
+      zip: {
+        type: GraphQLString,
+        resolve(user) {
+          return user.zip
+        }
+      },
+      city: {
+        type: GraphQLString,
+        resolve(user) {
+          return user.city
+        }
+      },
+      country: {
+        type: GraphQLString,
+        resolve(user) {
+          return user.country
+        }
+      },
+      disability: {
+        type: new GraphQLList(GraphQLString),
+        resolve(user) {
+          return user.disability
+        }
       }
     }
   }
 })
-
-
 
 const Query = new GraphQLObjectType({
   name: 'Query',
@@ -69,7 +103,7 @@ const Query = new GraphQLObjectType({
         type: new GraphQLList(User),
         args: {
           id: {
-            type: GraphQLInt
+            type: GraphQLID
           },
           firstName: {
             type: GraphQLString
@@ -86,31 +120,17 @@ const Query = new GraphQLObjectType({
         },
         //validations can go here
         resolve(root, args) {
-          return db.models.user.findAll({ where: args })
+          return db.User.findAll({ where: args })
         }
       }
     }
   }
 })
 
-
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   description: 'Functions to create and authenticate users',
   fields: () => ({
-    // addUser: {
-    //   type: User,
-    //   args: {
-    //     firstName: {
-    //       type: new GraphQLNonNull(GraphQLString)
-    //     }
-    //   },
-    //   resolve: (_, args) => {
-    //     return db.models.user.create({
-    //       firstName: args.firstName
-    //     })
-    //   }
-    // },
     register: {
       type: AuthPayload,
       args: {
@@ -145,17 +165,80 @@ const Mutation = new GraphQLObjectType({
         return {token, user: existingUser}
         }
       }
-    }
+    },
+    updateUserProfile: {
+      type: User,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        firstName: { type: GraphQLString },
+        lastName: { type: GraphQLString },
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+        birthday: { type: GraphQLString },
+        phone: { type: GraphQLString },
+        address: { type: GraphQLString },
+        disability: { type: new GraphQLList(GraphQLString) },
+        zip: { type: GraphQLInt },
+        city: { type: GraphQLString },
+        country: { type: GraphQLString }
+      },
+      resolve: async (_, { id, firstName, lastName, email, password, birthday, phone, address, disability, zip, city, country }) => {
+        try {
+          // Find the user by ID
+          const user = await db.User.findOne({ where: { id } });
+          if (!user) {
+            throw new Error('User not found');
+          }
+          // Update user profile with new first name and last name if provided
+          if (firstName) {
+            user.firstName = firstName;
+          }
+          if (lastName) {
+            user.lastName = lastName;
+          }
+          if (email) {
+            user.email = email;
+          }
+          if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            user.password = hashedPassword;
+          }
+          if (birthday) {
+            user.birthday = birthday;
+          }
+          if (phone) {
+            user.phone = phone;
+          }
+          if (address) {
+            user.address = address;
+          }
+          if (disability) {
+            user.disability = disability;
+          }
+          if (zip) {
+            user.zip = zip;
+          }
+          if (city) {
+            user.city = city;
+          }
+          if (country) {
+            user.country = country;
+          }
+
+          // Save changes to the database
+          await user.save();
+          return user; // Return the updated user object
+        } catch (error) {
+          console.error('Error updating user profile:', error);
+          throw error; // Propagate error to the client
+        }
+      },
+    },
   })
 });
-
-
-
 
 const Schema = new GraphQLSchema({
   query: Query,
   mutation: Mutation
 })
-
-
 export default Schema

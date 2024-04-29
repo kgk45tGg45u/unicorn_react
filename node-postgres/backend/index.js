@@ -72,7 +72,7 @@ app.use(
 // Serve the GraphiQL IDE.
 app.get('/', (req, res) => {
   res.type('html');
-  res.end(ruruHTML({ endpoint: '/council/graphql' }));
+  res.end(ruruHTML({ endpoint: '/user/graphql' }));
 });
 
 app.listen(port, () => {

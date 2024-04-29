@@ -40,8 +40,8 @@ const User = sequelize.define('user', {
     type: Sequelize.STRING,
     // allowNull: false
   },
-  borthday: {
-    type: Sequelize.DATE,
+  birthday: {
+    type: Sequelize.STRING,
     // allowNull: false
   },
   password: {
