@@ -57,7 +57,7 @@ const Council = new GraphQLObjectType({
       },
 
       members: {
-        type: GraphQLList(GraphQLID),
+        type: new GraphQLList(GraphQLID),
         resolve(council) {
           return council.members
         }
@@ -89,7 +89,7 @@ const Query = new GraphQLObjectType({
         type: new GraphQLList(Council),
         args: {
           members: {
-            type: GraphQLList(GraphQLID), defaultValue: null ,
+            type: new GraphQLList(GraphQLID), defaultValue: null ,
           }
         },
         resolve(root, args) {
@@ -124,7 +124,7 @@ const Mutation = new GraphQLObjectType({
       type: Council,
       args: {
         name: { type: GraphQLString, defaultValue: null },
-        members: { type: GraphQLList(GraphQLID), defaultValue: null },
+        members: { type: new GraphQLList(GraphQLID), defaultValue: null },
         responsible_id: { type: GraphQLID, defaultValue: null },
         phone: { type: GraphQLString, defaultValue: null },
       },

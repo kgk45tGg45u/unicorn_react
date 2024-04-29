@@ -1,6 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "App to connect Unicorn to Postgresql",
   "main": "index.js",
   "scripts": {

@@ -56,13 +56,13 @@ const Unit = new GraphQLObjectType({
         }
       },
       users: {
-        type: GraphQLList(GraphQLID),
+        type: new GraphQLList(GraphQLID),
         resolve(unit) {
           return unit.users
         }
       },
       products: {
-        type: GraphQLList(GraphQLID),
+        type: new GraphQLList(GraphQLID),
         resolve(unit) {
           return unit.products
         }
@@ -82,7 +82,7 @@ const Query = new GraphQLObjectType({
         type: new GraphQLList(Unit),
         args: {
           name: {
-            type: GraphQLNonNull(GraphQLString),
+            type: new GraphQLNonNull(GraphQLString),
           }
         },
         resolve(root, args) {
