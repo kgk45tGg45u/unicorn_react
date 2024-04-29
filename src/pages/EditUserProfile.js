@@ -3,6 +3,7 @@ import { useMutation, gql, useQuery } from '@apollo/client'
 import '../assets/UserProfile.css'
 import { Loading } from '../components/Loading'
 import  countries  from '../data/countries'
+import { toast } from 'react-toastify'
 
 const GET_USER = gql`
 query users($id: ID) {
@@ -42,7 +43,6 @@ mutation updateUserProfile($id: ID!, $firstName: String, $lastName: String, $cit
 `;
 
 export const EditUserProfile = () => {
-  const [inputValues, setInputValues] = useState({});
   const user = JSON.parse(localStorage.getItem("user"));
   const firstName = useRef()
   const lastName = useRef()
@@ -55,10 +55,8 @@ export const EditUserProfile = () => {
   const birthday = useRef()
   const phone = useRef()
   const disability = useRef()
-
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
-  // const editDataMutation = useMutation
 
   const { loading, error, data } = useQuery(GET_USER, {
     variables: {id: user.id},
@@ -102,22 +100,8 @@ export const EditUserProfile = () => {
 
   const [updateUser, { newData, newLoading, newError }] = useMutation(UPDATE_USER)
 
-    // Effect to update inputValues when data changes
-    useEffect(() => {
-      if (data && data.users && data.users.length > 0) {
-        const userData = data.users[0];
-        setInputValues(userData); // Update inputValues with all fields from userData
-      }
-    }, [data]);
-
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // setInputFields({ ...inputFields, [event.target.name]: event.target.value })
-    console.log(firstName.current.value);
-    // setErrors(validateValues(inputValues));
-    setSubmitting(true);
-    console.log(inputValues);
     const inputValues2 = {
       id: user.id,
       firstName: firstName.current.value,
@@ -132,44 +116,19 @@ export const EditUserProfile = () => {
       phone: phone.current.value,
       disability: [disability.current.value]
     }
-    console.log(inputValues2)
     try {
-      const result = updateUser({
+      const result = await updateUser({
         variables: inputValues2,
         errorPolicy: "all"
       });
-      console.log(result.data); // Log the data returned from the mutation
+      result.data.updateUserProfile ? toast("Successfully changed profile data.") : toast("Error saving information.") // Log the data returned from the mutation
     } catch (error) {
       console.error('Error adding council:', error.message);
     }
   };
-
-  const finishSubmit = () => {
-    console.log(inputValues);
-    try {
-      const result = updateUser({
-        variables: { inputValues },
-        errorPolicy: "all"
-      });
-      console.log(result.data); // Log the data returned from the mutation
-    } catch (error) {
-      console.error('Error adding council:', error.message);
-    }
-  };
-
   // useEffect(() => {
-  //   console.log(data.user)
-  // },[data.user])
-
-  // useEffect(() => {
-  //   console.log(data.error)
-  // },[data.error])
-
-  useEffect(() => {
-    if (Object.keys(errors).length === 0 && submitting) {
-      finishSubmit();
-    }
-  }, [errors]);
+  //   toast("Success!")
+  // },[result, result.updateUserProfile])
 
   if (loading || newLoading) {return <Loading />}
   if (data && data.users && data.users.length) {
@@ -262,7 +221,7 @@ export const EditUserProfile = () => {
             id="password"
             ref={password}
             className="form-control"
-            defaultValue={data.users[0].password}
+            // defaultValue={data.users[0].password}
             // onChange={handleChange}
             style={{ border: errors.password ? "1px solid red" : null }}
           />
