@@ -1,104 +1,113 @@
 import { useContext, createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { useMutation, gql } from '@apollo/client'; // Import useMutation hook from Apollo Client
 
 const AuthContext = createContext();
+
+const LOGIN_MUTATION = gql`
+mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    token
+    user {
+      id
+      firstName
+      lastName
+      email
+    }
+  }
+}
+`;
+
+const REGISTER_MUTATION = gql`
+  mutation Register($email: String!, $password: String!) {
+    register(email: $email, password: $password) {
+      token
+      user {
+        id
+        firstName
+        lastName
+        email
+      }
+    }
+  }
+`;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
   const [token, setToken] = useState(localStorage.getItem("site") || "");
-  const [registerOk, setRegisterOk] = useState(false)
   const navigate = useNavigate();
+
+  // Use useMutation hook to execute GraphQL mutations
+  const [loginMutation] = useMutation(LOGIN_MUTATION);
+  const [registerMutation] = useMutation(REGISTER_MUTATION);
 
   const loginAction = async (data) => {
     try {
-      const response = await fetch("http://localhost:3001/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const res = await response.json();
-      if (res.token) {
-        setToken(res.token);
-        console.log(token)
-        localStorage.setItem("site", res.token);
-        setUser(res.user)
-        localStorage.setItem("user", JSON.stringify(res.user))
-        toast('Login Successful!')
+      const { data: { login } } = await loginMutation({ variables: { email: data.email, password: data.password } });
+      // Check if the register mutation response contains token and user
+      if (login.token && login.user) {
+        // Extract token and user from the response
+        const { token, user } = login;
+        // Update user state and save token to local storage
+        setUser(user);
+        setToken(token);
+        localStorage.setItem("site", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        // Display success toast and navigate to login page
+        toast('Login Successful!');
         navigate("/dashboard");
       } else {
-        toast('Login Failed!')
+        // Handle case where token or user is missing in the response
+        toast('Login failed.');
       }
     } catch (err) {
-      toast(err)
-      // Provide feedback to the user about the login failure
+      // Handle registration error
+      toast.error("Error", err);
+      console.error('Error during login:', err);
     }
   };
 
   const registerAction = async (data) => {
     try {
-      const response = await fetch("http://localhost:3001/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const res = await response.json();
-      if (res.token) {
-        setToken(res.token);
-        localStorage.setItem("site", res.token);
-        setUser(res.user)
-        localStorage.setItem("user", JSON.stringify(res.user))
-        setRegisterOk(true)
-        toast('Registeration Successful!')
+      const { data: { register } } = await registerMutation({ variables: { email: data.email, password: data.password } });
+      // Check if the register mutation response contains token and user
+      if (register.token && register.user) {
+        // Extract token and user from the response
+        const { token, user } = register;
+        // Update user state and save token to local storage
+        setUser(user);
+        setToken(token);
+        localStorage.setItem("site", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        // Display success toast and navigate to login page
+        toast('Registration Successful!');
+        navigate("/user/wizard/1");
       } else {
-        toast('Login Failed!')
+        // Handle case where token or user is missing in the response
+        toast('Registration failed.');
       }
     } catch (err) {
-      toast.error("Registration error:", err)
-      // Provide feedback to the user about the registration failure
-    }
-  };
-
-  const editUser = async (data, method) => {
-    try {
-      const response = await fetch("http://localhost:3001/users", {
-        method: `${method}`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const res = await response.json();
-      if (res.message) {
-        // Provide feedback to the user about the registration
-      } else {
-        throw new Error("Registration failed");
-      }
-    } catch (err) {
+      // Handle registration error
       toast.error("Registration error:", err);
-      // Provide feedback to the user about the registration failure
+      console.error('Error during registration:', err);
     }
   };
 
   const logOut = () => {
-    toast('Logout Successful!')
+    toast('Logout Successful!');
     setUser(null);
     setToken("");
     localStorage.removeItem("site");
-    localStorage.removeItem("user"); // Remove user data from local storage
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, registerOk, loginAction, registerAction, editUser, logOut }}>
+    <AuthContext.Provider value={{ token, user, loginAction, registerAction, logOut }}>
       {children}
     </AuthContext.Provider>
   );
-
 };
 
 export const useAuth = () => {

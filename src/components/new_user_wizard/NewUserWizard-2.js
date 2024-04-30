@@ -1,15 +1,47 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { gql, useQuery, useMutation } from '@apollo/client'
 import { toast } from 'react-toastify'
 import '../../assets/wizard.css';
-import { useFetch } from '../../hooks/useFetch';
 import { Loading } from '../Loading';
 import { formConfigurations } from './NewUserFormConfigurations';
+const unitClient = new ApolloClient({
+  uri: 'http://localhost:3001/unit/graphql', // Endpoint for unit schema
+  cache: new InMemoryCache(),
+});
+const councilClient = new ApolloClient({
+  uri: 'http://localhost:3001/council/graphql', // Endpoint for unit schema
+  cache: new InMemoryCache(),
+});
+
+const GET_ALL_UNITS = gql`
+  query GetAllUnits {
+    GetAllUnits {
+      name
+      id
+    }
+  }
+`;
+
+const UPDATE_USER_WORKING = gql`
+mutation updateUserProfile($id: ID!, $working: Boolean!) {
+  updateUserProfile(id: $id, working: $working) {
+    id
+    working
+  }
+}
+`;
 
 export const UserWizard2 = () => {
   const [moves, setMoves] = useState(false);
   const navigate = useNavigate()
-  const { result: allUnits, loading, error } = useFetch("", "", "all-units", "GET")
+  const { loading: allUnitsLoading, error: allUnitsError, data: allUnits } = useQuery(GET_ALL_UNITS, {
+    client: unitClient, // Use the unitClient
+    errorPolicy: "all",
+  });
+  const [updateUser, { newData, newLoading, newError }] = useMutation(UPDATE_USER_WORKING)
+  // const { result: allUnits, loading, error } = useFetch("", "", "all-units", "GET")
   const [currentConfigurationIndex, setCurrentConfigurationIndex] = useState(1);
   let inputData = useRef(null)
   const inputRadioRefs = useRef({});
@@ -26,21 +58,13 @@ export const UserWizard2 = () => {
     if (!tryExecuted) {
       try {
         console.log("Running the first function.")
-        const response = await fetch("http://localhost:3001/users/add-work", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
+        const result = await updateUser({
+          variables: {id: requestBody.id, working: requestBody.workingYesNo === "No" ? false : true},
+          errorPolicy: "all"
         });
-        if (response.ok) {
-          toast.info('User Data updated!')
-          tryExecuted = true
-        } else {
-          toast.error("Failed to update user data!");
-        }
+        result.data.updateUserProfile ? toast.success("Successfully changed profile data.") : toast.error("Error saving information.") // Log the data returned from the mutation
       } catch (error) {
-        toast.error("Error saving data to the backend.");
+        console.error('Error working details', error.message);
       }
     }
 
@@ -276,15 +300,15 @@ export const UserWizard2 = () => {
 
   const currentConfiguration = formConfigurations[currentConfigurationIndex];
 
-  if(loading) {
+  if(allUnitsLoading) {
     return(<Loading />)
   }
 
-  if(error) {
+  if(allUnitsError) {
     toast.error("Error getting units names.")
   }
 
-  if(allUnits) {
+  if(allUnits.GetAllUnits) {
     return (
       <div className="py-4 d-flex align-items-center justify-content-center">
         <div className="wcontainer2 rounded-3 shadow-lg">
@@ -354,8 +378,8 @@ export const UserWizard2 = () => {
                     }}
                   />
                   <datalist id={`${currentConfiguration.input_id}_options`}>
-                    {allUnits.map((currentUnitName, index) => (
-                      <option key={index} value={currentUnitName.title} />
+                    {allUnits.GetAllUnits.map((unit) => (
+                      <option key={unit.id} value={unit.name} />
                     ))}
                   </datalist>
                 </div>

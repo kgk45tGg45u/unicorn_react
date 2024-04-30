@@ -1,7 +1,7 @@
-import { useFetch } from '../hooks/useFetch'
 import { useAuth } from '../hooks/AuthProvider'
 import { useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { Loading } from '../components/Loading'
 import ReusablePopover from '../components/ReusablePopover';
 import profilePlaceholder from '../assets/SVG/Unicorn_openmoji.svg'
@@ -14,15 +14,53 @@ import { DashboardCard } from '../components/DashboardCard'
 import { Announcement } from '../components/Announcement'
 // import unicornSymbol from '../assets/unicorn-symbol-2.png';
 
+import { gql, useQuery } from '@apollo/client';
+// Apollo Client for Unit Schema
+const unitClient = new ApolloClient({
+  uri: 'http://localhost:3001/unit/graphql', // Endpoint for unit schema
+  cache: new InMemoryCache(),
+});
+const councilClient = new ApolloClient({
+  uri: 'http://localhost:3001/council/graphql', // Endpoint for unit schema
+  cache: new InMemoryCache(),
+});
+
+const GET_UNIT = gql`
+  query GetUnit($name: String!) {
+    GetUnit(name: $name) {
+      name
+      id
+    }
+  }
+`;
+
+const GET_COUNCIL = gql`
+  query GetCouncil($members: [ID]) {
+    GetCouncil(members: $members) {
+      name
+      id
+    }
+  }
+`;
+
 export const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const id = user.id
   const [anchorEl, setAnchorEl] = useState(null);
-
-
   const navigate = useNavigate()
-  const { result: currentUnit, loading, error } = useFetch(id, "", "units", "GET");
-  const { result: currentUnion } = useFetch(id, "", "unions", "GET");
+
+  const { loading, error, data } = useQuery(GET_UNIT, {
+    variables: { name: "New Unit" },
+    client: unitClient, // Use the unitClient
+    errorPolicy: "all",
+  });
+
+  const { loading: councilLoading, error: councilError, data: councilData } = useQuery(GET_COUNCIL, {
+    variables: { members: [id] },
+    client: councilClient, // Use the unitClient
+    errorPolicy: "all",
+  });
+
   const name = user ? user.first_name : ""
 
   const navigateEditData = () => {
@@ -45,17 +83,18 @@ export const Dashboard = () => {
 
   const { logOut } = useAuth()
 
-  if(error) {
+  if(error || councilError) {
     return (
-      <div>{error}</div>
+      error && <div>{error.message}</div>,
+      councilError && <div>{councilError.message}</div>
   )}
 
-  if(loading) {
+  if(loading || councilLoading) {
     return (
       <Loading />
     )}
 
-  if(currentUnit && currentUnion) {
+  if(data && councilData) {
     return (
       <section>
         <div className="container">
@@ -66,17 +105,17 @@ export const Dashboard = () => {
                   <h4 className="mx-2 mb-3"><strong>Welcome, {name}!</strong></h4>
                   <table className="table table-hover">
                     <tbody>
-                      {currentUnit.unit?.title &&
+                      {data.GetUnit[0]?.name &&
                         <tr>
                           <td>Current Unit:</td>
-                          <td><strong>{currentUnit.unit?.title}</strong></td>
+                          <td><strong>{data.GetUnit[0].name}</strong></td>
                           <td className="fw-bold"><Link to="/unit">Unit Profile</Link></td>
                         </tr>
                       }
-                      {currentUnion.union?.title &&
+                      {councilData.GetCouncil[0]?.name &&
                         <tr>
                           <td>Union:</td>
-                          <td><strong>{currentUnion.union?.title}</strong></td>
+                          <td><strong>{councilData.GetCouncil[0].name}</strong></td>
                           <td>go</td>
                         </tr>
                       }
@@ -128,10 +167,15 @@ export const Dashboard = () => {
           <div className="p-2 mx-2 divbg rounded-3 shadow-lg">
             <div className="d-flex flex-wrap justify-content-around p-2">
               <DashboardCard icon={moneyBill} text="Wallet" link="/wallet" />
-
-              {currentUnit.unit?.title && <DashboardCard icon={unit} text="Working Unit" link="/unit" />}
+              {/* {data?.GetCouncil[0].name && */}
+                <DashboardCard icon={unit} text="Working Unit" link="/unit" />
+              {/* // } */}
               <DashboardCard icon={council} text="Council" link="/council" />
-              {currentUnion.union?.title ? <DashboardCard icon={union} text="Union" link="/union" /> : <DashboardCard icon={union} text="Create Union" link="/create-union" />}
+              {/* {councilData?.GetCouncil[0].name ? */}
+              <DashboardCard icon={union} text="Union" link="/union" />
+               {/* :
+              <DashboardCard icon={union} text="Create Union" link="/create-union" />
+              } */}
               <DashboardCard icon={savings} text="Saving / Debt" link="/savings" />
             </div>
           </div>
