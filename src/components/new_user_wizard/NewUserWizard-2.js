@@ -33,6 +33,24 @@ mutation updateUserProfile($id: ID!, $working: Boolean!) {
 }
 `;
 
+const ADD_UNIT = gql`
+mutation addUnit($user_id: ID!, $name: String!) {
+  addUnit(user_id: $id, name: $name) {
+    id
+    name
+  }
+}
+`;
+
+const EDIT_UNIT = gql`
+mutation editUnit($user_id: ID!, $name: String!) {
+  editUnit(user_id: $id, name: $name) {
+    id
+    name
+  }
+}
+`;
+
 export const UserWizard2 = () => {
   const [moves, setMoves] = useState(false);
   const navigate = useNavigate()
@@ -41,6 +59,8 @@ export const UserWizard2 = () => {
     errorPolicy: "all",
   });
   const [updateUser, { newData, newLoading, newError }] = useMutation(UPDATE_USER_WORKING)
+  const [addUnit, { unitData, unitLoading, unitError }] = useMutation(ADD_UNIT)
+  const [editUnit, { editUnitData, editUnitLoading, editUnitError }] = useMutation(EDIT_UNIT)
   // const { result: allUnits, loading, error } = useFetch("", "", "all-units", "GET")
   const [currentConfigurationIndex, setCurrentConfigurationIndex] = useState(1);
   let inputData = useRef(null)
@@ -70,46 +90,40 @@ export const UserWizard2 = () => {
 
     if (tryExecuted) {
       // Logic to record all other information
-      if (data.newProductionUnitName){
+      if (data.newProductionUnitName) {
         try {
           console.log("Running the second function.")
-          const response = await fetch("http://localhost:3001/units/add", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
+          const result = await addUnit({
+            variables: {id: requestBody.id, name: requestBody.newProductionUnitName},
+            client: unitClient,
+            errorPolicy: "all"
           });
-          const responseData = await response.json();
-          if (responseData.newUnitId) { // Check if response is OK (status code 2xx)
-            localStorage.setItem("newUnitId", JSON.stringify(responseData.newUnitId))
-            toast.info('Production unit successfully created!')
+          if (result.data.addUnit.name) {
+            toast.success("Successfully created new working unit.")
+            localStorage.setItem("newUnitId", JSON.stringify(result.data.addUnit.id))
             tryExecuted = true
           } else {
-            console.log(responseData.message)
-            toast.error("Failed to create production unit!");
+            toast.error("Error creating new unit.") // Log the data returned from the mutation
           }
         } catch (error) {
-          toast.error("Error saving data to the backend.");
+          console.error('Error adding a new unit.', error.message);
         }
       } else if (data.currentProductionUnit) {
         try {
           console.log("Running the third function.")
-          const response = await fetch("http://localhost:3001/units", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
+          const result = await editUnit({
+            variables: {id: requestBody.id, name: requestBody.currentProductionUnit},
+            client: unitClient,
+            errorPolicy: "all"
           });
-          if (response.ok) {
-            toast.info('Production unit changed successfully!')
+          if (result.data.editUnit.name) {
+            toast.success("Successfully edited the production unit.")
             tryExecuted = true
           } else {
-            toast.error("Failed to edit production unit data!");
+            toast.error("Error changing production unit.") // Log the data returned from the mutation
           }
         } catch (error) {
-          toast.error("Error saving data to the backend.");
+          console.error('Error editing unit.', error.message);
         }
       }
     }

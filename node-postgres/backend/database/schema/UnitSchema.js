@@ -136,12 +136,43 @@ const Mutation = new GraphQLObjectType({
       args: {
         name: {
           type: new GraphQLNonNull(GraphQLString)
+        },
+        user_id: {
+          type: new GraphQLNonNull(GraphQLID)
         }
       },
       resolve: (_, args) => {
         return db.Unit.create({
-          name: args.name
+          name: args.name,
+          users: [args.user_id]
         })
+      }
+    },
+    editUnit: {
+      type: Unit,
+      args: {
+        name: {
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        user_id: {
+          type: new GraphQLNonNull(GraphQLID)
+        }
+      },
+      resolve: async (_, args) => {
+        try {
+        const unit = await db.Unit.findOne({ where: args.name })
+        const userExistsInUnit = unit.users.includes(args.user_id)
+        if (userExistsInUnit) {
+          // If user already exists in the unit, throw an error
+          throw new Error('User is already in this unit');
+        }
+        // If user doesn't exist in the unit, add the user to the unit's users array
+        unit.users.push(args.user_id);
+        await unit.save(); // Save the updated unit
+        return unit;
+        } catch (error) {
+        throw new Error('Could not find the unit.');
+        }
       }
     },
   })

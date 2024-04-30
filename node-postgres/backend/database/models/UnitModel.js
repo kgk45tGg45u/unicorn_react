@@ -11,7 +11,8 @@ const Unit = sequelize.define('unit', {
   },
   name: {
     type: Sequelize.STRING,
-    // allowNull: false
+    unique: true, // Enforce uniqueness constraint
+    allowNull: false // Ensure name is always required
   },
   address: {
     type: Sequelize.STRING,
