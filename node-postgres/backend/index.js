@@ -70,9 +70,10 @@ app.use(
 );
 
 // Serve the GraphiQL IDE.
-app.get('/', (req, res) => {
+app.get('/graphiql/:schemaName', (req, res) => {
+  const { schemaName } = req.params;
   res.type('html');
-  res.end(ruruHTML({ endpoint: '/user/graphql' }));
+  res.end(ruruHTML({ endpoint: `/${schemaName}/graphql` }));
 });
 
 app.listen(port, () => {

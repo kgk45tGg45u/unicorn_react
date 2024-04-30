@@ -101,12 +101,31 @@ const Query = new GraphQLObjectType({
               throw error; // Propagate error to the client
             });
         }
+      },
+      GetAllUnits: {
+        type: new GraphQLList(Unit),
+        args: {
+        },
+        resolve(root, args) {
+          console.log('Querying all units');
+          // Retrieve units from the database based on provided arguments
+          return db.Unit.findAll()
+            .then(units => units.map(unit => ({
+              id: unit.id,
+              name: unit.name,
+              status: unit.status,
+              users: unit.users, // Ensure this matches the expected type
+              // Add other fields if necessary
+            })))
+            .catch(error => {
+              console.error('Error retrieving units:', error);
+              throw error; // Propagate error to the client
+            });
+        }
       }
     }
   }
 });
-
-
 
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
@@ -125,8 +144,6 @@ const Mutation = new GraphQLObjectType({
         })
       }
     },
-
-
   })
 });
 

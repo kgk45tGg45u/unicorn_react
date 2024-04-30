@@ -1,7 +1,26 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom'
+import { useMutation, gql } from '@apollo/client'
 import { toast } from "react-toastify";
 import '../../assets/wizard.css';
+
+const UPDATE_USER = gql`
+mutation updateUserProfile($id: ID!, $firstName: String, $lastName: String, $city: String, $phone: String, $email: String, $birthday: String, $password: String, $address: String, $disability: [String], $zip: Int, $country: String) {
+  updateUserProfile(id: $id, firstName: $firstName, lastName: $lastName, city: $city, phone: $phone, email: $email, birthday: $birthday, password: $password, address: $address, disability: $disability, zip: $zip, country: $country) {
+    firstName
+    lastName
+    phone
+    email
+    birthday
+    password
+    address
+    disability
+    zip
+    city
+    country
+  }
+}
+`;
 
 export const UserWizard1 = () => {
   // const [moves, setMoves] = useState(false);
@@ -13,44 +32,29 @@ export const UserWizard1 = () => {
   const country = useRef()
   const zip = useRef()
   const currentUser = JSON.parse(localStorage.getItem("user"))
+  const [updateUser, { newData, newLoading, newError }] = useMutation(UPDATE_USER)
 
   const action = async (e) => {
     e.preventDefault();
-
     const personalData = {
       id: currentUser.id,
-      first_name: firstName.current.value,
-      last_name: lastName.current.value,
+      firstName: firstName.current.value,
+      lastName: lastName.current.value,
       address: address.current.value,
       city: city.current.value,
       country: country.current.value,
-      zip: zip.current.value
+      zip: Number(zip.current.value)
     }
-
     try {
-      const response = await fetch("http://localhost:3001/users/add-personal-details", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(personalData),
+      const result = await updateUser({
+        variables: personalData,
+        errorPolicy: "all"
       });
-      if (response.ok) {
-        // If the request is successful, update the local storage with the new data
-        const res = await response.json();
-        if (res.token) {
-          localStorage.removeItem("user")
-          localStorage.setItem("user", JSON.stringify(res.user))
-          toast.info('User Data updated!')
-        }
-      } else {
-        toast.error("Failed to save data to the backend");
-      }
+      result.data.updateUserProfile ? toast.success("Successfully changed profile data.") : toast.error("Error saving information.") // Log the data returned from the mutation
     } catch (error) {
-      console.error("Error saving data to the backend:", error);
-      // Provide feedback to the user about the error in saving data
+      console.error('Error adding personal details', error.message);
     } finally {
-      navigate('/new-user-wizard-2')
+      navigate('/user/wizard/2')
     }
   }
 

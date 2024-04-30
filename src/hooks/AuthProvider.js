@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("user", JSON.stringify(user));
         // Display success toast and navigate to login page
         toast('Registration Successful!');
-        navigate("/login");
+        navigate("/user/wizard/1");
       } else {
         // Handle case where token or user is missing in the response
         toast('Registration failed.');

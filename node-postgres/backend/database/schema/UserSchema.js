@@ -2,7 +2,7 @@ import db from '../models/UserModel.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-import {GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList, GraphQLNonNull, GraphQLID } from 'graphql'
+import {GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList, GraphQLNonNull, GraphQLID, GraphQLBoolean } from 'graphql'
 
 const AuthPayload = new GraphQLObjectType({
   name: 'AuthPayload',
@@ -89,7 +89,13 @@ const User = new GraphQLObjectType({
         resolve(user) {
           return user.disability
         }
-      }
+      },
+      working: {
+        type: GraphQLBoolean,
+        resolve(user) {
+          return user.working
+        }
+      },
     }
   }
 })
@@ -180,9 +186,10 @@ const Mutation = new GraphQLObjectType({
         disability: { type: new GraphQLList(GraphQLString) },
         zip: { type: GraphQLInt },
         city: { type: GraphQLString },
-        country: { type: GraphQLString }
+        country: { type: GraphQLString },
+        working: { type: GraphQLBoolean }
       },
-      resolve: async (_, { id, firstName, lastName, email, password, birthday, phone, address, disability, zip, city, country }) => {
+      resolve: async (_, { id, firstName, lastName, email, password, birthday, phone, address, disability, zip, city, country, working }) => {
         try {
           // Find the user by ID
           const user = await db.User.findOne({ where: { id } });
@@ -223,6 +230,12 @@ const Mutation = new GraphQLObjectType({
           }
           if (country) {
             user.country = country;
+          }
+          if (working) {
+            user.working = working
+          }
+          if (working === false){
+            user.working = false
           }
 
           // Save changes to the database
