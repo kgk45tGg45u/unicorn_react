@@ -35,7 +35,7 @@ mutation updateUserProfile($id: ID!, $working: Boolean!) {
 
 const ADD_UNIT = gql`
 mutation addUnit($user_id: ID!, $name: String!) {
-  addUnit(user_id: $id, name: $name) {
+  addUnit(user_id: $user_id, name: $name) {
     id
     name
   }
@@ -44,7 +44,16 @@ mutation addUnit($user_id: ID!, $name: String!) {
 
 const EDIT_UNIT = gql`
 mutation editUnit($user_id: ID!, $name: String!) {
-  editUnit(user_id: $id, name: $name) {
+  editUnit(user_id: $user_id, name: $name) {
+    id
+    name
+  }
+}
+`;
+
+const ADD_SERVICE_PRODUCT = gql`
+mutation addServiceProduct($user_id: ID!, $hasProduct: Boolean, $hasService: Boolean) {
+  addServiceProduct(user_id: $user_id, hasProduct: $hasProduct, hasService: $hasService) {
     id
     name
   }
@@ -61,6 +70,7 @@ export const UserWizard2 = () => {
   const [updateUser, { newData, newLoading, newError }] = useMutation(UPDATE_USER_WORKING)
   const [addUnit, { unitData, unitLoading, unitError }] = useMutation(ADD_UNIT)
   const [editUnit, { editUnitData, editUnitLoading, editUnitError }] = useMutation(EDIT_UNIT)
+  const [addServiceProductToUnit, { addServiceProductToUnitData, addServiceProductToUnitLoading, addServiceProductToUnitError }] = useMutation(ADD_SERVICE_PRODUCT)
   // const { result: allUnits, loading, error } = useFetch("", "", "all-units", "GET")
   const [currentConfigurationIndex, setCurrentConfigurationIndex] = useState(1);
   let inputData = useRef(null)
@@ -83,6 +93,7 @@ export const UserWizard2 = () => {
           errorPolicy: "all"
         });
         result.data.updateUserProfile ? toast.success("Successfully changed profile data.") : toast.error("Error saving information.") // Log the data returned from the mutation
+        tryExecuted = true
       } catch (error) {
         console.error('Error working details', error.message);
       }
@@ -94,7 +105,7 @@ export const UserWizard2 = () => {
         try {
           console.log("Running the second function.")
           const result = await addUnit({
-            variables: {id: requestBody.id, name: requestBody.newProductionUnitName},
+            variables: {user_id: requestBody.id, name: requestBody.newProductionUnitName},
             client: unitClient,
             errorPolicy: "all"
           });
@@ -112,7 +123,7 @@ export const UserWizard2 = () => {
         try {
           console.log("Running the third function.")
           const result = await editUnit({
-            variables: {id: requestBody.id, name: requestBody.currentProductionUnit},
+            variables: {user_id: requestBody.id, name: requestBody.currentProductionUnit},
             client: unitClient,
             errorPolicy: "all"
           });
@@ -132,21 +143,25 @@ export const UserWizard2 = () => {
       if (data.producingYesNo || data.hasService) {
         try {
           console.log("Running the fourth function.")
-          const response = await fetch("http://localhost:3001/units-service-product", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
+          let hasProductBoolean
+          let hasServiceBoolean
+          if (data.producingYesNo && data.producingYesNo === "Yes") {let hasProductBoolean = true}
+          if (data.producingYesNo && data.producingYesNo === "No") {let hasProductBoolean = false}
+          if (data.hasService && data.hasService === "Yes") {let hasServiceBoolean = true}
+          if (data.hasService && data.hasService === "No") {let hasServiceBoolean = false}
+          const result = await addServiceProductToUnit({
+            variables: {user_id: requestBody.id, hasService: hasServiceBoolean, hasProduct: hasProductBoolean},
+            client: unitClient,
+            errorPolicy: "all"
           });
-          if (response.ok) {
-            toast.info('Production unit changed successfully!')
+          if (result.data.addServiceProduct.name) {
+            toast.success("Successfully edited the production unit.")
             tryExecuted = true
           } else {
-            toast.error("Failed to edit production unit data!");
+            toast.error("Error changing production unit.") // Log the data returned from the mutation
           }
         } catch (error) {
-          toast.error("Error saving data to the backend.");
+          console.error('Error editing unit.', error.message);
         }
       }
     }

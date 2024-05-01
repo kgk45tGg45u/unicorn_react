@@ -1,5 +1,6 @@
 import db from '../models/UnitModel.js'
 import {GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLList, GraphQLNonNull, GraphQLID, GraphQLBoolean } from 'graphql'
+import { Op } from 'sequelize'
 
 const Unit = new GraphQLObjectType({
   name: 'Unit',
@@ -175,14 +176,41 @@ const Mutation = new GraphQLObjectType({
         }
       }
     },
+    addServiceProduct: {
+      type: Unit,
+      args: {
+        hasService: {
+          type: GraphQLBoolean
+        },
+        hasProduct: {
+          type: GraphQLBoolean
+        },
+        user_id: {
+          type: new GraphQLNonNull(GraphQLID)
+        }
+      },
+      resolve: async (_, args) => {
+        try {
+          const unit = await db.Unit.findOne({ where: { users: { [Op.contains]: [args.user_id] } } })
+          if (args.hasProduct) {
+            unit.has_product = args.hasProduct
+          }
+          if (args.hasService) {
+            unit.has_service = args.hasService
+          }
+          await unit.save();
+          return unit; // Return the updated user object
+        } catch (error) {
+          throw new Error('Could not find the unit.');
+        }
+      }
+    },
   })
 });
-
 
 const Schema = new GraphQLSchema({
   query: Query,
   mutation: Mutation
 })
-
 
 export default Schema
