@@ -1,8 +1,9 @@
 import express from 'express';
 import { createHandler } from 'graphql-http/lib/use/express';
-import userSchema from './database/schema/UserSchema.js'; // Import user schema
-import unitSchema from './database/schema/UnitSchema.js'; // Import unit schema
-import councilSchema from './database/schema/CouncilSchema.js'; // Import unit schema
+import userSchema from './database/schema/UserSchema.js';
+import unitSchema from './database/schema/UnitSchema.js';
+import councilSchema from './database/schema/CouncilSchema.js';
+import productAndServiceSchema from './database/schema/ProductsAndServicesSchema.js';
 import cors from 'cors';
 import { ruruHTML } from 'ruru/server';
 import jwt from 'jsonwebtoken';
@@ -55,6 +56,16 @@ app.use(
   cors({ origin: ['http://localhost:3000', 'https://studio.apollographql.com'] }),
   createHandler({
     schema: unitSchema,
+    rootValue: root,
+  })
+);
+
+// GraphQL endpoint for product and service schema
+app.use(
+  '/productAndService/graphql',
+  cors({ origin: ['http://localhost:3000', 'https://studio.apollographql.com'] }),
+  createHandler({
+    schema: productAndServiceSchema,
     rootValue: root,
   })
 );

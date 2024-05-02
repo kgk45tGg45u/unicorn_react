@@ -14,6 +14,10 @@ const councilClient = new ApolloClient({
   uri: 'http://localhost:3001/council/graphql', // Endpoint for unit schema
   cache: new InMemoryCache(),
 });
+const productAndServiceClient = new ApolloClient({
+  uri: 'http://localhost:3001/productAndService/graphql', // Endpoint for unit schema
+  cache: new InMemoryCache(),
+});
 
 const GET_ALL_UNITS = gql`
   query GetAllUnits {
@@ -60,6 +64,24 @@ mutation addServiceProduct($user_id: ID!, $hasProduct: Boolean, $hasService: Boo
 }
 `;
 
+const ADD_COUNCIL = gql`
+mutation addCouncil($user_id: ID!, $name: String!, $unit_id: Int!) {
+  addCouncil(user_id: $user_id, name: $name, unit_id: $unit_id) {
+    id
+    name
+  }
+}
+`;
+
+const ADD_PRODUCT_SERVICE = gql`
+mutation addProductAndService($name: String!, $unit_id: Int!, $service: Boolean!, $active: Boolean!) {
+  addProductAndService(name: $name, unit_id: $unit_id, service: $service, active: $active) {
+    id
+    name
+  }
+}
+`;
+
 export const UserWizard2 = () => {
   const [moves, setMoves] = useState(false);
   const navigate = useNavigate()
@@ -71,7 +93,8 @@ export const UserWizard2 = () => {
   const [addUnit, { unitData, unitLoading, unitError }] = useMutation(ADD_UNIT)
   const [editUnit, { editUnitData, editUnitLoading, editUnitError }] = useMutation(EDIT_UNIT)
   const [addServiceProductToUnit, { addServiceProductToUnitData, addServiceProductToUnitLoading, addServiceProductToUnitError }] = useMutation(ADD_SERVICE_PRODUCT)
-  // const { result: allUnits, loading, error } = useFetch("", "", "all-units", "GET")
+  const [addCouncil, { newCouncilData, newCouncilLoading, newCouncilError }] = useMutation(ADD_COUNCIL)
+  const [addProductAndService, { newProductData, newProductLoading, newProductError }] = useMutation(ADD_PRODUCT_SERVICE)
   const [currentConfigurationIndex, setCurrentConfigurationIndex] = useState(1);
   let inputData = useRef(null)
   const inputRadioRefs = useRef({});
@@ -111,7 +134,7 @@ export const UserWizard2 = () => {
           });
           if (result.data.addUnit.name) {
             toast.success("Successfully created new working unit.")
-            localStorage.setItem("newUnitId", JSON.stringify(result.data.addUnit.id))
+            localStorage.setItem("unitId", JSON.stringify(result.data.addUnit.id))
             tryExecuted = true
           } else {
             toast.error("Error creating new unit.") // Log the data returned from the mutation
@@ -129,6 +152,7 @@ export const UserWizard2 = () => {
           });
           if (result.data.editUnit.name) {
             toast.success("Successfully edited the production unit.")
+            localStorage.setItem("unitId", JSON.stringify(result.data.editUnit.id))
             tryExecuted = true
           } else {
             toast.error("Error changing production unit.") // Log the data returned from the mutation
@@ -168,51 +192,61 @@ export const UserWizard2 = () => {
 
     if (tryExecuted && data.councilName) {
       try {
-        const requestBodyWithUnit = {
-          ...data,
-          newUnitId: Number(localStorage.getItem("newUnitId")),
-          id: currentUser.id
-        };
-        console.log("Running the fifth function.");
-        const response = await fetch("http://localhost:3001/councils/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBodyWithUnit),
+        console.log("Running the fifth function.")
+        const unit_id = Number(localStorage.getItem("unitId"))
+        const result = await addCouncil({
+          variables: {user_id: requestBody.id, name: requestBody.councilName, unit_id: unit_id},
+          client: councilClient,
+          errorPolicy: "all"
         });
-
-        if (response.ok) {
-          toast.info('Working Council created successfully!');
-          tryExecuted = true;
-          localStorage.removeItem("newUnitId");
+        if (result.data.addCouncil.name) {
+          toast.success("Successfully registered a new council.")
+          tryExecuted = true
         } else {
-          toast.error("Unable to create the working council!");
+          toast.error("Error adding new council.") // Log the data returned from the mutation
         }
       } catch (error) {
-        toast.error("Error saving data to the backend.");
+        console.error('Error adding new council.', error.message);
       }
     }
 
     if (tryExecuted) {
-      if (data.product1title || data.hasService) {
+      if (data.product1title) {
         try {
           console.log("Running the sixth function.")
-          const response = await fetch("http://localhost:3001/units-service-product", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
+          const unit_id = Number(localStorage.getItem("unitId"))
+          const result = await addProductAndService({
+            variables: {name: requestBody.product1title, unit_id: unit_id, service: false, active: false},
+            client: productAndServiceClient,
+            errorPolicy: "all"
           });
-          if (response.ok) {
-            toast.info('Unit data updated successfully!')
+          if (result.data.addProductAndService.name) {
+            toast.success("Successfully added a new product.")
             tryExecuted = true
           } else {
-            toast.error("Failed to edit unit data!");
+            toast.error("Error adding a new product.") // Log the data returned from the mutation
           }
         } catch (error) {
-          toast.error("Error saving data to the backend.");
+          console.error('Error adding a new product.', error.message);
+        }
+      }
+      if (data.hasService) {
+        try {
+          console.log("Running the seventh function.")
+          const unit_id = Number(localStorage.getItem("unitId"))
+          const result = await addProductAndService({
+            variables: {name: requestBody.serviceName, unit_id: unit_id, service: true, active: false},
+            client: productAndServiceClient,
+            errorPolicy: "all"
+          });
+          if (result.data.addProductAndService.name) {
+            toast.success("Successfully added a new service.")
+            tryExecuted = true
+          } else {
+            toast.error("Error adding a new service.") // Log the data returned from the mutation
+          }
+        } catch (error) {
+          console.error('Error adding a new service.', error.message);
         }
       }
     }

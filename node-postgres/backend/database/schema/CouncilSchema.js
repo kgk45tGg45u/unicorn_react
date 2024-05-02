@@ -78,8 +78,6 @@ const Council = new GraphQLObjectType({
   }
 })
 
-
-
 const Query = new GraphQLObjectType({
   name: 'Query',
   description: 'This is a root query',
@@ -114,8 +112,6 @@ const Query = new GraphQLObjectType({
   }
 });
 
-
-
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   description: 'Functions to create and authenticate councils',
@@ -123,32 +119,31 @@ const Mutation = new GraphQLObjectType({
     addCouncil: {
       type: Council,
       args: {
-        name: { type: GraphQLString, defaultValue: null },
-        members: { type: new GraphQLList(GraphQLID), defaultValue: null },
-        responsible_id: { type: GraphQLID, defaultValue: null },
-        phone: { type: GraphQLString, defaultValue: null },
+        name: {
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        user_id: {
+          type: new GraphQLNonNull(GraphQLID)
+        },
+        unit_id: {
+          type: new GraphQLNonNull(GraphQLInt)
+        }
       },
       resolve: (_, args) => {
-        // Logic to create a council using the provided args
-        // You can handle each argument according to its presence or absence
-        // For demonstration purposes, let's assume creating a council directly from the args
         return db.Council.create({
           name: args.name,
-          members: args.members,
-          responsible_id: args.responsible_id,
-          phone: args.phone
-        });
-      },
+          responsible_id: args.user_id,
+          members: [args.user_id],
+          unit_id: args.unit_id
+        })
+      }
     },
-
   })
 });
-
 
 const Schema = new GraphQLSchema({
   query: Query,
   mutation: Mutation
 })
-
 
 export default Schema
