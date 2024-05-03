@@ -1,4 +1,11 @@
 .profile_img {
   width: 20vw;
   max-width: 200px;
+  /* margin-top: 30px; */
+  border-radius: 50%;
+  border: 3px solid black;
+  img{
+    display:block;
+    border-radius: 50%;
+  }
 }

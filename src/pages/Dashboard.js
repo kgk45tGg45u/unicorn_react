@@ -12,6 +12,7 @@ import union from '../assets/SVG/building-flag-solid.svg'
 import savings from '../assets/SVG/piggy-bank-solid.svg'
 import { DashboardCard } from '../components/DashboardCard'
 import { Announcement } from '../components/Announcement'
+import Cropper from '../components/ImageCropper'
 // import unicornSymbol from '../assets/unicorn-symbol-2.png';
 
 import { gql, useQuery } from '@apollo/client';
@@ -143,7 +144,7 @@ export const Dashboard = () => {
                 </div>
               </div>
               <div className="col-auto my-4">
-                <img src={profilePlaceholder} alt="Profile" className="profile_img" />
+                <Cropper />
               </div>
             </div>
             <div className="pb-4 text-center">
