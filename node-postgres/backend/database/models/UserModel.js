@@ -49,20 +49,23 @@ const User = sequelize.define('user', {
     // allowNull: false
   },
   role: {
-    type: Sequelize.ARRAY(Sequelize.STRING) // Define role column as an array of strings
+    type: Sequelize.ARRAY(Sequelize.STRING)
   },
   working: {
     type: Sequelize.BOOLEAN, // Define "working" column as a boolean
     defaultValue: false // Set default value to false
   },
   loan: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER) // Define role column as an array of strings
+    type: Sequelize.ARRAY(Sequelize.INTEGER)
   },
   saving: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER) // Define role column as an array of strings
+    type: Sequelize.ARRAY(Sequelize.INTEGER)
   },
   disability: {
-    type: Sequelize.ARRAY(Sequelize.STRING) // Define role column as an array of strings
+    type: Sequelize.ARRAY(Sequelize.STRING)
+  },
+  avatar: {
+    type: Sequelize.STRING
   },
 })
 

@@ -1,4 +1,7 @@
 import db from '../models/UserModel.js'
+import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
+import { createWriteStream } from 'fs'
+// import fs from 'fs'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -94,6 +97,12 @@ const User = new GraphQLObjectType({
         type: GraphQLBoolean,
         resolve(user) {
           return user.working
+        }
+      },
+      avatar: {
+        type: GraphQLString,
+        resolve(user) {
+          return user.avatar
         }
       },
     }
@@ -247,6 +256,35 @@ const Mutation = new GraphQLObjectType({
         }
       },
     },
+    uploadAvatar: {
+      type: GraphQLString,
+      args: {
+        file: { type: GraphQLUpload }
+      },
+      resolve: async (_, { file }) => {
+        try {
+          // Handle file upload logic here
+          // `file` contains the uploaded file information
+          // Extract file information
+          const { createReadStream, filename } = await file;
+
+          // Specify the path to save the uploaded file
+          const path = `./uploads/${filename}`;
+
+          // Create a write stream to save the file
+          const stream = createReadStream().pipe(createWriteStream(path));
+
+          // Return a promise to indicate when the file upload is complete
+          return new Promise((resolve, reject) => {
+            stream.on('finish', () => resolve(path));
+            stream.on('error', (error) => reject(error));
+          });
+        } catch (error) {
+          console.error('Error uploading avatar:', error);
+          throw new Error('Failed to upload avatar');
+        }
+      }
+    }
   })
 });
 

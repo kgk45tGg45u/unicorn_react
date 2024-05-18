@@ -25,7 +25,7 @@ root.render(
       <StyledEngineProvider injectFirst>
         <ToastContainer
           position="bottom-right"
-          autoClose={1800}
+          autoClose={2000}
           hideProgressBar={false}
           newestOnTop={true}
           closeOnClick

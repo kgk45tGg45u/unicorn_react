@@ -1,10 +1,16 @@
+import { useRef, useState } from "react";
 import { Link } from 'react-router-dom'
 import { Box, Modal, Slider, Button } from "@mui/material";
-import { useRef, useState } from "react";
+import { gql, useMutation } from '@apollo/client';
 import AvatarEditor from "react-avatar-editor";
 import "../assets/Cropper.scss";
 import profilePlaceholder from '../assets/SVG/Unicorn_openmoji.svg'
-
+const user = localStorage.getItem("user")
+const ADD_USER_AVATAR = gql`
+  mutation ($file: Upload!) {
+    uploadAvatar(file: $file)
+  }
+`;
 // Styles
 const boxStyle = {
   width: "300px",
@@ -24,15 +30,31 @@ const modalStyle = {
 const CropperModal = ({ src, modalOpen, setModalOpen, setPreview }) => {
   const [slideValue, setSlideValue] = useState(10);
   const cropRef = useRef(null);
-
+  const [updateAvatar, { data, loading, error }] = useMutation(ADD_USER_AVATAR)
   //handle save
   const handleSave = async () => {
     if (cropRef) {
       const dataUrl = cropRef.current.getImage().toDataURL();
       const result = await fetch(dataUrl);
       const blob = await result.blob();
-      setPreview(URL.createObjectURL(blob));
-      setModalOpen(false);
+      // Save image to server using GraphQL mutation
+      try {
+        const { data } = await updateAvatar({
+          variables: {
+            // id: user.id,
+            file: blob
+          }
+        });
+        // Handle response from server if necessary
+
+      //   // Update UI with preview
+        setPreview(URL.createObjectURL(blob));
+        console.log(URL.createObjectURL(blob))
+        setModalOpen(false);
+      } catch (error) {
+        // Handle error
+        console.error('Error saving profile picture:', error);
+      }
     }
   };
 

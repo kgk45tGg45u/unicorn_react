@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { Loading } from '../components/Loading'
 import ReusablePopover from '../components/ReusablePopover';
-import profilePlaceholder from '../assets/SVG/Unicorn_openmoji.svg'
 import moneyBill from '../assets/SVG/money-bill-solid.svg'
 import unit from '../assets/SVG/industry-solid.svg'
 import council from '../assets/SVG/arrows-to-dot-solid.svg'
