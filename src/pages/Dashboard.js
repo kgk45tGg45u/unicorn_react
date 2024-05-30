@@ -26,8 +26,8 @@ const councilClient = new ApolloClient({
 });
 
 const GET_UNIT = gql`
-  query GetUnit($members: ID!) {
-    GetUnit(members: $members) {
+  query GetUnitByUserId($users: ID!) {
+    GetUnitByUserId(users: $users) {
       name
       id
     }
@@ -50,13 +50,13 @@ export const Dashboard = () => {
   const navigate = useNavigate()
 
   const { loading, error, data } = useQuery(GET_UNIT, {
-    variables: { members: id },
+    variables: { users: id },
     client: unitClient, // Use the unitClient
     errorPolicy: "all",
   });
 
   const { loading: councilLoading, error: councilError, data: councilData } = useQuery(GET_COUNCIL, {
-    variables: { members: [id] },
+    variables: { users: id },
     client: councilClient, // Use the unitClient
     errorPolicy: "all",
   });
@@ -105,10 +105,10 @@ export const Dashboard = () => {
                   <h4 className="mx-2 mb-3"><strong>Welcome, {name}!</strong></h4>
                   <table className="table table-hover">
                     <tbody>
-                      {data.GetUnit[0]?.name &&
+                      {data.GetUnitByUserId[0]?.name &&
                         <tr>
                           <td>Current Unit:</td>
-                          <td><strong>{data.GetUnit[0].name}</strong></td>
+                          <td><strong>{data.GetUnitByUserId[0].name}</strong></td>
                           <td className="fw-bold"><Link to="/unit">Unit Profile</Link></td>
                         </tr>
                       }

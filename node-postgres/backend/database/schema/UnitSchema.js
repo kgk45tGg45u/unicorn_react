@@ -107,7 +107,7 @@ const Query = new GraphQLObjectType({
       GetUnitByUserId: {
         type: new GraphQLList(Unit),
         args: {
-          members: {
+          users: {
             type: new GraphQLNonNull(GraphQLID)
           }
         },
@@ -117,7 +117,7 @@ const Query = new GraphQLObjectType({
           return db.Unit.findAll({
             where: {
               users: {
-                [Op.contains]: [args.members]
+                [Op.contains]: [args.users]
               }
             }
           })
