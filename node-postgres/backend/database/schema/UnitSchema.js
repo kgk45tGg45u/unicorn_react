@@ -72,8 +72,6 @@ const Unit = new GraphQLObjectType({
   }
 })
 
-
-
 const Query = new GraphQLObjectType({
   name: 'Query',
   description: 'This is a root query',
@@ -83,7 +81,10 @@ const Query = new GraphQLObjectType({
         type: new GraphQLList(Unit),
         args: {
           name: {
-            type: new GraphQLNonNull(GraphQLString),
+            type: GraphQLString,
+          },
+          members: {
+            type: new GraphQLNonNull(GraphQLID)
           }
         },
         resolve(root, args) {
@@ -101,6 +102,41 @@ const Query = new GraphQLObjectType({
               console.error('Error retrieving units:', error);
               throw error; // Propagate error to the client
             });
+        }
+      },
+      GetUnitByUserId: {
+        type: new GraphQLList(Unit),
+        args: {
+          members: {
+            type: new GraphQLNonNull(GraphQLID)
+          }
+        },
+        resolve(root, args) {
+          console.log('Querying units with args:', args);
+          // Retrieve units from the database where the users array contains the member ID
+          return db.Unit.findAll({
+            where: {
+              users: {
+                [Op.contains]: [args.members]
+              }
+            }
+          })
+          .then(units => units.map(unit => ({
+            id: unit.id,
+            name: unit.name,
+            address: unit.address,
+            status: unit.status,
+            unit_category_id: unit.unit_category_id,
+            union_id: unit.union_id,
+            has_product: unit.has_product,
+            has_service: unit.has_service,
+            users: unit.users,
+            products: unit.products
+          })))
+          .catch(error => {
+            console.error('Error retrieving units by user ID:', error);
+            throw error;
+          });
         }
       },
       GetAllUnits: {
@@ -161,18 +197,25 @@ const Mutation = new GraphQLObjectType({
       },
       resolve: async (_, args) => {
         try {
-        const unit = await db.Unit.findOne({ where: args.name })
-        const userExistsInUnit = unit.users.includes(args.user_id)
-        if (userExistsInUnit) {
-          // If user already exists in the unit, throw an error
-          throw new Error('User is already in this unit');
-        }
-        // If user doesn't exist in the unit, add the user to the unit's users array
-        unit.users.push(args.user_id);
-        await unit.save(); // Save the updated unit
-        return unit;
+          const unit = await db.Unit.findOne({ where: { name: args.name } })
+          if (!unit) {
+            throw new Error('Could not find the unit.');
+          }
+          // Initialize users array if it is null or undefined
+          if (!Array.isArray(unit.users)) {
+            unit.users = [];
+          }
+          if (unit.users.includes(args.user_id)) {
+            // If user already exists in the unit, throw an error
+            throw new Error('User is already in this unit');
+          }
+          // If user doesn't exist in the unit, add the user to the unit's users array
+          unit.users.push(args.user_id);
+          await unit.save(); // Save the updated unit
+          return unit;
         } catch (error) {
-        throw new Error('Could not find the unit.');
+          console.error('Error in editUnit mutation:', error);
+          throw new Error(error.message || 'An error occurred while editing the unit.');
         }
       }
     },

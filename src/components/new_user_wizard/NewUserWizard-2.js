@@ -230,7 +230,7 @@ export const UserWizard2 = () => {
           console.error('Error adding a new product.', error.message);
         }
       }
-      if (data.hasService) {
+      if (data.hasService === "Yes") {
         try {
           console.log("Running the seventh function.")
           const unit_id = Number(localStorage.getItem("unitId"))

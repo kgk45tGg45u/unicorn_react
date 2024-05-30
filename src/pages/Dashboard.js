@@ -26,8 +26,8 @@ const councilClient = new ApolloClient({
 });
 
 const GET_UNIT = gql`
-  query GetUnit($name: String!) {
-    GetUnit(name: $name) {
+  query GetUnit($members: ID!) {
+    GetUnit(members: $members) {
       name
       id
     }
@@ -50,7 +50,7 @@ export const Dashboard = () => {
   const navigate = useNavigate()
 
   const { loading, error, data } = useQuery(GET_UNIT, {
-    variables: { name: "New Unit" },
+    variables: { members: id },
     client: unitClient, // Use the unitClient
     errorPolicy: "all",
   });

@@ -1,7 +1,15 @@
 import { Link } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
-import Placeholder from '../assets/profile-image-placeholder.jpeg';
+// import Placeholder from '../assets/profile-image-placeholder.jpeg';
+import { Announcement } from '../components/Announcement'
+import { DashboardCard } from '../components/DashboardCard'
+import moneyBill from '../assets/SVG/money-bill-solid.svg'
+import unit from '../assets/SVG/industry-solid.svg'
+import council from '../assets/SVG/arrows-to-dot-solid.svg'
+import union from '../assets/SVG/building-flag-solid.svg'
+import savings from '../assets/SVG/piggy-bank-solid.svg'
+import Cropper from '../components/ImageCropper'
 import { Loading } from '../components/Loading';
 import '../assets/UserProfile.css';
 
@@ -11,8 +19,8 @@ const unitClient = new ApolloClient({
 });
 
 const GET_UNIT = gql`
-  query getUnit($members: [ID]) {
-    getUnit(members: $members) {
+  query GetUnitByUserId($members: ID!) {
+    GetUnitByUserId(members: $members) {
       name
       id
     }
@@ -23,11 +31,10 @@ export const UnitProfile = () => {
   const currentUser = JSON.parse(localStorage.getItem("user"))
   const id = currentUser.id
   const { loading, error, data } = useQuery(GET_UNIT, {
-    variables: { members: [id] },
+    variables: { members: id },
     client: unitClient, // Use the unitClient
     errorPolicy: "all",
   });
-
 
   if (loading) {
     return (<Loading />)
@@ -41,6 +48,7 @@ export const UnitProfile = () => {
     return <div>No unit found</div>;
   }
 
+  console.log(data)
   return (
     // <div className="container">
     //   <div className="row">
@@ -91,7 +99,7 @@ export const UnitProfile = () => {
         </div>
       </div>
       <div className="pb-4 text-center">
-        <button className="btn btn-info" onClick={navigateEditData}>Edit user data</button>
+        {/* <button className="btn btn-info" onClick={navigateEditData}>Edit unit data</button> */}
         {/* <button className="btn btn-warning mx-3" onClick={logOut}>Logout</button> */}
       </div>
     </div>
