@@ -15,6 +15,7 @@ import Cropper from '../components/ImageCropper'
 // import unicornSymbol from '../assets/unicorn-symbol-2.png';
 
 import { gql, useQuery } from '@apollo/client';
+
 // Apollo Client for Unit Schema
 const unitClient = new ApolloClient({
   uri: 'http://localhost:3001/unit/graphql', // Endpoint for unit schema
@@ -24,6 +25,14 @@ const councilClient = new ApolloClient({
   uri: 'http://localhost:3001/council/graphql', // Endpoint for unit schema
   cache: new InMemoryCache(),
 });
+
+const GET_USER = gql`
+  query users($id: ID) {
+    users(id: $id) {
+      firstName
+    }
+  }
+`;
 
 const GET_UNIT = gql`
   query GetUnitByUserId($users: ID!) {
@@ -45,23 +54,25 @@ const GET_COUNCIL = gql`
 
 export const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  const id = user.id
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate()
 
-  const { loading, error, data } = useQuery(GET_UNIT, {
-    variables: { users: id },
+  const { userLoading, userError, data: userData } = useQuery(GET_USER, {
+    variables: { id: user.id },
+    errorPolicy: "all",
+  });
+
+  const { loading, error, data: unitData } = useQuery(GET_UNIT, {
+    variables: { users: user.id },
     client: unitClient, // Use the unitClient
     errorPolicy: "all",
   });
 
   const { loading: councilLoading, error: councilError, data: councilData } = useQuery(GET_COUNCIL, {
-    variables: { users: id },
+    variables: { members: user.id },
     client: councilClient, // Use the unitClient
     errorPolicy: "all",
   });
-
-  const name = user ? user.first_name : ""
 
   const navigateEditData = () => {
     navigate('/user/edit')
@@ -83,18 +94,19 @@ export const Dashboard = () => {
 
   const { logOut } = useAuth()
 
-  if(error || councilError) {
+  if(error || userError || councilError) {
     return (
       error && <div>{error.message}</div>,
       councilError && <div>{councilError.message}</div>
   )}
 
-  if(loading || councilLoading) {
+  if(loading || councilLoading || userLoading) {
     return (
       <Loading />
     )}
 
-  if(data && councilData) {
+  if(unitData && councilData && userData) {
+
     return (
       <section>
         <div className="container">
@@ -102,19 +114,19 @@ export const Dashboard = () => {
             <div className="d-flex justify-content-around">
               <div className="col-7 my-4 infostand">
                 <div className="infostand_data mt-2">
-                  <h4 className="mx-2 mb-3"><strong>Welcome, {name}!</strong></h4>
+                  <h4 className="mx-2 mb-3"><strong>Welcome, {userData.users[0].firstName}!</strong></h4>
                   <table className="table table-hover">
                     <tbody>
-                      {data.GetUnitByUserId[0]?.name &&
+                      {unitData.GetUnitByUserId[0]?.name &&
                         <tr>
                           <td>Current Unit:</td>
-                          <td><strong>{data.GetUnitByUserId[0].name}</strong></td>
+                          <td><strong>{unitData.GetUnitByUserId[0].name}</strong></td>
                           <td className="fw-bold"><Link to="/unit">Unit Profile</Link></td>
                         </tr>
                       }
                       {councilData.GetCouncil[0]?.name &&
                         <tr>
-                          <td>Union:</td>
+                          <td>Council:</td>
                           <td><strong>{councilData.GetCouncil[0].name}</strong></td>
                           <td>go</td>
                         </tr>

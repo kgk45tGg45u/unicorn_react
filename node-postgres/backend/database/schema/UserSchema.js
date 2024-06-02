@@ -269,7 +269,7 @@ const Mutation = new GraphQLObjectType({
           const { createReadStream, filename } = await file;
 
           // Specify the path to save the uploaded file
-          const path = `./uploads/${filename}`;
+          const path = `/Users/balsamico/code/unicorn/node-postgres/backend/database/uploads`;
 
           // Create a write stream to save the file
           const stream = createReadStream().pipe(createWriteStream(path));

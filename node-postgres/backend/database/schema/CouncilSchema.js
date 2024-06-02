@@ -87,7 +87,7 @@ const Query = new GraphQLObjectType({
         type: new GraphQLList(Council),
         args: {
           members: {
-            type: new GraphQLList(GraphQLID), defaultValue: null ,
+            type: new GraphQLList(GraphQLID),
           }
         },
         resolve(root, args) {

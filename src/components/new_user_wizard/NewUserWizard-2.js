@@ -150,9 +150,9 @@ export const UserWizard2 = () => {
             client: unitClient,
             errorPolicy: "all"
           });
-          if (result.data.editUnit.name) {
+          if (result.editUnitData.editUnit.name) {
             toast.success("Successfully edited the production unit.")
-            localStorage.setItem("unitId", JSON.stringify(result.data.editUnit.id))
+            localStorage.setItem("unitId", JSON.stringify(result.editUnitData.editUnit.id))
             tryExecuted = true
           } else {
             toast.error("Error changing production unit.") // Log the data returned from the mutation
