@@ -1,6 +1,7 @@
 import express from 'express';
 import { createHandler } from 'graphql-http/lib/use/express';
 import userSchema from './database/schema/UserSchema.js';
+import unionSchema from './database/schema/UnionSchema.js';
 import unitSchema from './database/schema/UnitSchema.js';
 import councilSchema from './database/schema/CouncilSchema.js';
 import productAndServiceSchema from './database/schema/ProductsAndServicesSchema.js';
@@ -56,6 +57,16 @@ app.use(
   cors({ origin: ['http://localhost:3000', 'https://studio.apollographql.com'] }),
   createHandler({
     schema: unitSchema,
+    rootValue: root,
+  })
+);
+
+// GraphQL endpoint for union schema
+app.use(
+  '/union/graphql',
+  cors({ origin: ['http://localhost:3000', 'https://studio.apollographql.com'] }),
+  createHandler({
+    schema: unionSchema,
     rootValue: root,
   })
 );

@@ -13,7 +13,6 @@ import { DashboardCard } from '../components/DashboardCard'
 import { Announcement } from '../components/Announcement'
 import Cropper from '../components/ImageCropper'
 // import unicornSymbol from '../assets/unicorn-symbol-2.png';
-
 import { gql, useQuery } from '@apollo/client';
 
 // Apollo Client for Unit Schema
@@ -57,12 +56,12 @@ export const Dashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate()
 
-  const { userLoading, userError, data: userData } = useQuery(GET_USER, {
+  const { loading: userLoading, error: userError, data: userData } = useQuery(GET_USER, {
     variables: { id: user.id },
     errorPolicy: "all",
   });
 
-  const { loading, error, data: unitData } = useQuery(GET_UNIT, {
+  const { loading: unitLoading, error: unitError, data: unitData } = useQuery(GET_UNIT, {
     variables: { users: user.id },
     client: unitClient, // Use the unitClient
     errorPolicy: "all",
@@ -94,13 +93,12 @@ export const Dashboard = () => {
 
   const { logOut } = useAuth()
 
-  if(error || userError || councilError) {
+  if(unitError || userError || councilError) {
     return (
-      error && <div>{error.message}</div>,
-      councilError && <div>{councilError.message}</div>
+    <div>Error Returning information from server.</div>
   )}
 
-  if(loading || councilLoading || userLoading) {
+  if(unitLoading || councilLoading || userLoading) {
     return (
       <Loading />
     )}

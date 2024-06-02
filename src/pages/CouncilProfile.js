@@ -1,15 +1,15 @@
 import { useState } from 'react'
-import { useFetch } from '../hooks/useFetch'
 import { useNavigate } from 'react-router-dom'
 import { Loading } from '../components/Loading'
-import { toast } from 'react-toastify';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 
-import profilePlaceholder from '../assets/profile-image-placeholder.jpeg'
+import Cropper from '../components/ImageCropper'
 import moneyBill from '../assets/SVG/money-bill-solid.svg'
 import unit from '../assets/SVG/industry-solid.svg'
 import council from '../assets/SVG/arrows-to-dot-solid.svg'
@@ -20,28 +20,94 @@ import menu from '../assets/SVG/bars-solid.svg'
 import { LatestRequestsCard } from '../components/LatestRequestsCard';
 import { XputCard } from '../components/XputCard';
 
+const unitClient = new ApolloClient({
+  uri: 'http://localhost:3001/unit/graphql', // Endpoint for unit schema
+  cache: new InMemoryCache(),
+});
+const unionClient = new ApolloClient({
+  uri: 'http://localhost:3001/union/graphql', // Endpoint for unit schema
+  cache: new InMemoryCache(),
+});
+const councilClient = new ApolloClient({
+  uri: 'http://localhost:3001/council/graphql', // Endpoint for unit schema
+  cache: new InMemoryCache(),
+});
+
+const GET_USER = gql`
+  query users($id: ID) {
+    users(id: $id) {
+      firstName
+    }
+  }
+`;
+
+const GET_UNION = gql`
+  query GetUnion($members: ID!) {
+    GetUnion(members: $members) {
+      name
+      id
+    }
+  }
+`;
+
+const GET_UNIT = gql`
+  query GetUnitByUserId($users: ID!) {
+    GetUnitByUserId(users: $users) {
+      name
+      id
+    }
+  }
+`;
+
+const GET_COUNCIL = gql`
+  query GetCouncil($members: [ID]) {
+    GetCouncil(members: $members) {
+      name
+      responsible_id
+    }
+  }
+`;
+
 export const CouncilProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  const id = user.id
   const navigate = useNavigate()
-  const { result: currentUnit, loading, error } = useFetch(id, "", "units", "GET");
-  const { result: currentUnion, loading: loadingUnion, error: errorUnion } = useFetch(id, "", "unions", "GET");
-  const { result: currentCouncil, loading: loadingCouncil, error: errorCouncil } = useFetch(id, "", "councils", "GET");
-  const name = user ? user.name : "";
+  const { loading: userLoading, error: userError, data: userData } = useQuery(GET_USER, {
+    variables: { id: user.id },
+    errorPolicy: "all",
+  });
+
+  const { loading: unionLoading, error: unionError, data: unionData } = useQuery(GET_UNION, {
+    variables: { members: user.id },
+    client: unionClient, // Use the unitClient
+    errorPolicy: "all",
+  });
+
+  const { loading: councilLoading, error: councilError, data: councilData } = useQuery(GET_COUNCIL, {
+    variables: { members: user.id },
+    client: councilClient, // Use the unitClient
+    errorPolicy: "all",
+  });
+
+  const { loading: unitLoading, error: unitError, data: unitData } = useQuery(GET_UNIT, {
+    variables: { users: user.id },
+    client: unitClient, // Use the unitClient
+    errorPolicy: "all",
+  });
+
   const [open, setOpen] = useState(false);
 
 
-  if(error || errorUnion || errorCouncil) {
+  if(userError || unitError || councilError) {
     return (
       <div>
         An error occured. Please login.
       </div>
     )}
 
-  if(loading || loadingUnion || loadingCouncil) {
+  if(userLoading || unionLoading || councilLoading) {
     return (<Loading />)}
 
-  if(currentUnit && currentUnion && currentCouncil) {
+  if(userData && unitData && councilData) {
 
     const toggleDrawer = (newOpen) => () => {
       setOpen(newOpen);
@@ -62,9 +128,7 @@ export const CouncilProfile = () => {
         </List>
       </Box>
     );
-    console.log(currentUnit)
-    // toast("Current Unit: loaded.")
-    // toast("Current Union loaded.")
+
     return (
       <section>
         <div className="ticketing_icons">
@@ -82,16 +146,16 @@ export const CouncilProfile = () => {
                 <table className="table table-hover">
                   <tbody>
                     <tr>
-                      <td><h4><strong>{currentCouncil.council.name}</strong></h4></td>
+                      <td><h4><strong>{councilData.GetCouncil[0].name}</strong></h4></td>
                     </tr>
                     <tr>
                       <td>Responsible:</td>
-                      <td>{name}</td>
+                      <td>{councilData.GetCouncil[0].responsible_id}</td>
                       <td>Profile</td>
                     </tr>
                     <tr>
                       <td>Working Unit:</td>
-                      <td><strong>{currentUnit.unit.title}</strong></td>
+                      <td><strong>{unitData.GetUnitByUserId[0].name}</strong></td>
                       <td>Unit profile</td>
                     </tr>
                   </tbody>
@@ -99,8 +163,7 @@ export const CouncilProfile = () => {
               </div>
             </div>
             <div className="col-auto my-4">
-              <img src={profilePlaceholder} alt="Profile" className="profile_img" />
-              {/* <div className="sidebar">bla bal jsdglsjdblgsj nslf jnslfkn lsfk sfln f </div> */}
+              <Cropper />
             </div>
           </div>
         </div>
