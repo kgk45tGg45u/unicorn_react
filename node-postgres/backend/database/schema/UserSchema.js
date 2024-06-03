@@ -1,4 +1,4 @@
-import User from '../models/UserModel.js'
+import db from '../models/UserModel.js'
 import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
 import { createWriteStream } from 'fs'
 // import fs from 'fs'
@@ -16,7 +16,7 @@ const AuthPayload = new GraphQLObjectType({
   })
 });
 
-const UserType = new GraphQLObjectType({
+const User = new GraphQLObjectType({
   name: 'User',
   description: 'this represents a user',
   fields: () => {
@@ -115,7 +115,7 @@ const Query = new GraphQLObjectType({
   fields: () => {
     return {
       users: {
-        type: new GraphQLList(UserType),
+        type: new GraphQLList(User),
         args: {
           id: {
             type: GraphQLID
@@ -135,7 +135,7 @@ const Query = new GraphQLObjectType({
         },
         //validations can go here
         resolve(root, args) {
-          return UserType.findAll({ where: args })
+          return db.User.findAll({ where: args })
         }
       }
     }
@@ -153,13 +153,13 @@ const Mutation = new GraphQLObjectType({
         password: { type: new GraphQLNonNull(GraphQLString) }
       },
       resolve: async (_, { email, password }) => {
-        const existingUser = await User.findOne({ where: { email } });
+        const existingUser = await db.User.findOne({ where: { email } });
         if (existingUser) {
           throw new Error('User already exists');
         }
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await User.create({ email, password: hashedPassword });
+        const newUser = await db.User.create({ email, password: hashedPassword });
         const token = jwt.sign({ email: newUser.email }, `${process.env.JWT_SECRET}`, { expiresIn: '1h' });
         return {token, user: newUser}
       }
@@ -171,7 +171,7 @@ const Mutation = new GraphQLObjectType({
         password: { type: new GraphQLNonNull(GraphQLString) }
       },
       resolve: async (_, { email, password }) => {
-        const existingUser = await User.findOne({ where: { email } });
+        const existingUser = await db.User.findOne({ where: { email } });
         if (!existingUser) {
           throw new Error('User does not exist');
         } else {
@@ -201,7 +201,7 @@ const Mutation = new GraphQLObjectType({
       resolve: async (_, { id, firstName, lastName, email, password, birthday, phone, address, disability, zip, city, country, working }) => {
         try {
           // Find the user by ID
-          const user = await User.findOne({ where: { id } });
+          const user = await db.User.findOne({ where: { id } });
           if (!user) {
             throw new Error('User not found');
           }
@@ -291,7 +291,5 @@ const Mutation = new GraphQLObjectType({
 const Schema = new GraphQLSchema({
   query: Query,
   mutation: Mutation
-});
-
-export { UserType };
-export default Schema;
+})
+export default Schema

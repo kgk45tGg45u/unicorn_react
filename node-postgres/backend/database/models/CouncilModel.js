@@ -1,5 +1,4 @@
 import Sequelize from 'sequelize'
-import { User } from './UserModel.js'
 const sequelize = new Sequelize(`postgres://localhost:5432/medium`)
 
 const Council = sequelize.define('council', {
@@ -33,10 +32,6 @@ const Council = sequelize.define('council', {
   },
   responsible_id: {
     type: Sequelize.UUID,
-    references: {
-      model: User,
-      key: 'id'
-    }
     // allowNull: false
   },
   unit_id: {
@@ -58,5 +53,9 @@ const Council = sequelize.define('council', {
 // User.sync({ alter: true }) - This checks what is the current state of the table in the database (which columns it has, what are their data types, etc), and then performs the necessary changes in the table to make it match the model.
 sequelize.sync({ alter: true })
 
-export default Council;
-export { sequelize };
+const CouncilModel = {
+  sequelize,
+  Council
+};
+
+export default CouncilModel;
