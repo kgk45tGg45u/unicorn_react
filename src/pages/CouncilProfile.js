@@ -33,14 +33,6 @@ const councilClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const GET_USER = gql`
-  query users($id: ID) {
-    users(id: $id) {
-      firstName
-    }
-  }
-`;
-
 const GET_UNION = gql`
   query GetUnion($members: ID!) {
     GetUnion(members: $members) {
@@ -63,7 +55,9 @@ const GET_COUNCIL = gql`
   query GetCouncil($members: [ID]) {
     GetCouncil(members: $members) {
       name
-      responsible_id
+      responsible {
+        firstName
+      }
     }
   }
 `;
@@ -71,10 +65,6 @@ const GET_COUNCIL = gql`
 export const CouncilProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate()
-  const { loading: userLoading, error: userError, data: userData } = useQuery(GET_USER, {
-    variables: { id: user.id },
-    errorPolicy: "all",
-  });
 
   const { loading: unionLoading, error: unionError, data: unionData } = useQuery(GET_UNION, {
     variables: { members: user.id },
@@ -97,17 +87,17 @@ export const CouncilProfile = () => {
   const [open, setOpen] = useState(false);
 
 
-  if(userError || unitError || councilError) {
+  if(unitError || councilError) {
     return (
       <div>
         An error occured. Please login.
       </div>
     )}
 
-  if(userLoading || unionLoading || councilLoading) {
+  if(unionLoading || councilLoading) {
     return (<Loading />)}
 
-  if(userData && unitData && councilData) {
+  if(unitData && councilData) {
 
     const toggleDrawer = (newOpen) => () => {
       setOpen(newOpen);
@@ -150,13 +140,18 @@ export const CouncilProfile = () => {
                     </tr>
                     <tr>
                       <td>Responsible:</td>
-                      <td>{councilData.GetCouncil[0].responsible_id}</td>
+                      <td>{councilData.GetCouncil[0].responsible.firstName}</td>
                       <td>Profile</td>
                     </tr>
                     <tr>
                       <td>Working Unit:</td>
                       <td><strong>{unitData.GetUnitByUserId[0].name}</strong></td>
                       <td>Unit profile</td>
+                    </tr>
+                    <tr>
+                      <td>Union:</td>
+                      <td><strong>{unionData.GetUnion ? unionData.GetUnion[0].name : <p>Register union</p>}</strong></td>
+                      <td>Union profile</td>
                     </tr>
                   </tbody>
                 </table>
