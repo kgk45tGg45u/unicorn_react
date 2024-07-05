@@ -19,8 +19,8 @@ const unitClient = new ApolloClient({
 });
 
 const GET_UNIT = gql`
-  query GetUnitByUserId($members: ID!) {
-    GetUnitByUserId(members: $members) {
+  query GetUnitByUserId($users: ID!) {
+    GetUnitByUserId(users: $users) {
       name
       id
     }
@@ -31,7 +31,7 @@ export const UnitProfile = () => {
   const currentUser = JSON.parse(localStorage.getItem("user"))
   const id = currentUser.id
   const { loading, error, data } = useQuery(GET_UNIT, {
-    variables: { members: id },
+    variables: { users: id },
     client: unitClient, // Use the unitClient
     errorPolicy: "all",
   });
@@ -49,6 +49,7 @@ export const UnitProfile = () => {
   }
 
   console.log(data)
+  if (data){
   return (
     // <div className="container">
     //   <div className="row">
@@ -71,20 +72,20 @@ export const UnitProfile = () => {
             <h4 className="mx-2 mb-3"><strong>Welcome!</strong></h4>
             <table className="table table-hover">
               <tbody>
-                {data.GetUnit[0]?.name &&
+                {data.GetUnitByUserId[0]?.name &&
                   <tr>
                     <td>Current Unit:</td>
-                    <td><strong>{data.getUnit[0].name}</strong></td>
+                    <td><strong>{data.GetUnitByUserId[0].name}</strong></td>
                     <td className="fw-bold"><Link to="/unit">Unit Profile</Link></td>
                   </tr>
                 }
-                {data.GetCouncil[0]?.name &&
+                {/* {data.GetCouncil[0]?.name &&
                   <tr>
                     <td>Union:</td>
-                    <td><strong>{data.getUnit[0].name}</strong></td>
+                    <td><strong>{data.GetUnitByUserId[0].name}</strong></td>
                     <td>go</td>
                   </tr>
-                }
+                } */}
                 <tr>
                   <td>Tokens:</td>
                   <td>14 Unics</td>
@@ -134,3 +135,4 @@ export const UnitProfile = () => {
   </div>
 </section>);
 };
+}

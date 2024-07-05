@@ -55,9 +55,7 @@ const GET_COUNCIL = gql`
   query GetCouncil($members: [ID]) {
     GetCouncil(members: $members) {
       name
-      responsible {
-        firstName
-      }
+      responsible_id
     }
   }
 `;
