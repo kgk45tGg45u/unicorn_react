@@ -33,14 +33,14 @@ const councilClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const GET_UNION = gql`
-  query GetUnion($members: ID!) {
-    GetUnion(members: $members) {
-      name
-      id
-    }
-  }
-`;
+// const GET_UNION = gql`
+//   query GetUnion($members: ID!) {
+//     GetUnion(members: $members) {
+//       name
+//       id
+//     }
+//   }
+// `;
 
 const GET_UNIT = gql`
   query GetUnitByUserId($users: ID!) {
@@ -64,11 +64,11 @@ export const CouncilProfile = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate()
 
-  const { loading: unionLoading, error: unionError, data: unionData } = useQuery(GET_UNION, {
-    variables: { members: user.id },
-    client: unionClient, // Use the unitClient
-    errorPolicy: "all",
-  });
+  // const { loading: unionLoading, error: unionError, data: unionData } = useQuery(GET_UNION, {
+  //   variables: { members: user.id },
+  //   client: unionClient, // Use the unitClient
+  //   errorPolicy: "all",
+  // });
 
   const { loading: councilLoading, error: councilError, data: councilData } = useQuery(GET_COUNCIL, {
     variables: { members: user.id },
@@ -92,7 +92,7 @@ export const CouncilProfile = () => {
       </div>
     )}
 
-  if(unionLoading || councilLoading) {
+  if(councilLoading) {
     return (<Loading />)}
 
   if(unitData && councilData) {
@@ -138,7 +138,7 @@ export const CouncilProfile = () => {
                     </tr>
                     <tr>
                       <td>Responsible:</td>
-                      <td>{councilData.GetCouncil[0].responsible.firstName}</td>
+                      <td>{councilData.GetCouncil[0].responsible_id}</td>
                       <td>Profile</td>
                     </tr>
                     <tr>
@@ -146,11 +146,11 @@ export const CouncilProfile = () => {
                       <td><strong>{unitData.GetUnitByUserId[0].name}</strong></td>
                       <td>Unit profile</td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                       <td>Union:</td>
                       <td><strong>{unionData.GetUnion ? unionData.GetUnion[0].name : <p>Register union</p>}</strong></td>
                       <td>Union profile</td>
-                    </tr>
+                    </tr> */}
                   </tbody>
                 </table>
               </div>
